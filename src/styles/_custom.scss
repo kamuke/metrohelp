@@ -1,0 +1,63 @@
+// Fonts:
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../assets/font/Open_Sans/OpenSans-Light.ttf');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../assets/font/Open_Sans/OpenSans-Regular.ttf');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../assets/font/Open_Sans/OpenSans-Medium.ttf');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../assets/font/Open_Sans/OpenSans-SemiBold.ttf');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Roboto Slab';
+  src: url('../assets/font/Roboto_Slab/RobotoSlab-Regular.ttf');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Roboto Slab';
+  src: url('../assets/font/Roboto_Slab/RobotoSlab-SemiBold.ttf');
+  font-weight: 600;
+}
+
+// Font variable overrides:
+$font-family-sans-serif: 'Open Sans', sans-serif !default;
+$font-family-base: $font-family-sans-serif !default;
+$font-weight-normal: 400;
+$headings-font-family: 'Roboto Slab', serif;
+$headings-font-weight: 600;
+$btn-font-weight: 500;
+
+// Metropolia's brand colors
+$orange:rgb(255, 80, 0);
+$grey: rgb(83, 86, 90);
+$light: rgb(230, 230, 230);
+$dark: rgb(30, 30, 30);
+$red: rgb(203, 34, 40);
+$blue: rgb(64, 70, 168);
+$yellow: rgb(255, 240, 0);
+$pink: rgb(227, 132, 196);
+$cyan: rgb(93, 177, 228);
+$green: rgb(59, 168, 143);
+
+$primary: $orange;
+$secondary: $grey;
+$success: $green;
+$danger: $red;
+$warning: $yellow;
+$info: $cyan;
