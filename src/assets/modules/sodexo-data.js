@@ -7,14 +7,14 @@
 
 'use strict';
 
-import {doFetch, getWeeklyIndex} from './network';
+import {doFetch} from './network';
 
 // DAILY URL:
-// const today = new Date().toISOString().split('T')[0];
-// const dailyUrl ='https://www.sodexo.fi/ruokalistat/output/daily_json/152/' + today;
+const today = new Date().toISOString().split('T')[0];
+const dailyUrl = 'https://www.sodexo.fi/ruokalistat/output/daily_json/';
 
 // WEEKLY URL:
-const weeklyUrl = 'https://www.sodexo.fi/ruokalistat/output/weekly_json/';
+// const weeklyUrl = 'https://www.sodexo.fi/ruokalistat/output/weekly_json/';
 
 /**
  * Get daily menu from Sodexo API
@@ -24,26 +24,59 @@ const weeklyUrl = 'https://www.sodexo.fi/ruokalistat/output/weekly_json/';
  */
 const getDailyMenu = async (restaurantId) => {
   try {
-    let menuFi, menuEn;
+    let menu;
+
     // using dailyUrl
-    // const menu = await doFetch(dailyUrl);
+    const menuResponse = await doFetch(`${dailyUrl}${restaurantId}/${today}`);
 
     // using weeklyUrl
-    const weeklyMenu = await doFetch(weeklyUrl + restaurantId);
-    const menu = weeklyMenu.mealdates[getWeeklyIndex()];
+    // const weeklyMenu = await doFetch(weeklyUrl + restaurantId);
+    // const menuResponse = weeklyMenu.mealdates[getWeeklyIndex()];
 
-    if (menu) {
-      // Convert Menu.courses to array and get only titles
-      menuFi = Object.values(menu.courses).map((course) => course.title_fi);
-      menuEn = Object.values(menu.courses).map((course) => course.title_en);
+    if (menuResponse.courses) {
+      // Convert menuResponse.courses to array of objects that have dish, dietcodes and price.
+      menu = Object.values(menuResponse.courses).map((course) => {
+        const dietcodes = course.dietcodes.toUpperCase().split(', ');
+        if (course.category.toLowerCase().includes('vegan')) {
+          dietcodes.push('VEG');
+        }
+        return {
+          fi: course.title_fi,
+          en: course.title_en,
+          dietcodes: dietcodes,
+          price: course.price,
+        };
+      });
     } else {
-      menuFi = ['Ei menua tälle päivälle.'];
-      menuEn = ['No menu for today.'];
+      menu = [{fi: 'Ei menua tälle päivälle.', en: 'No menu for today.'}];
     }
 
+    // const dietExplanations = {
+    //   fi: [
+    //     {code: 'G', explanation: 'Gluteeniton'},
+    //     {code: 'L', explanation: 'Laktoositon'},
+    //     {code: 'M', explanation: 'Maidoton'},
+    //     {code: 'VEG', explanation: 'Vegaaninen'},
+    //     {code: 'VL', explanation: 'Vähälaktoosinen'},
+    //   ],
+    //   en: [
+    //     {code: 'G', explanation: 'Gluten free'},
+    //     {code: 'L', explanation: 'Lactose free'},
+    //     {code: 'M', explanation: 'Milk free'},
+    //     {code: 'VEG', explanation: 'Vegan'},
+    //     {code: 'VL', explanation: 'Low lactose'},
+    //   ],
+    // };
+
+    const dietExplanations = {
+      fi: '(G) Gluteeniton, (L) Laktoositon, (M) Maidoton, (VEG) Vegaaninen, (VL) Vähälaktoosinen',
+      en: '(G) Gluten free, (L) Lactose free, (M) Milk free, (VEG) Vegan, (VL) Low lactose',
+    };
+
     return {
-      fi: menuFi,
-      en: menuEn,
+      title: 'Sodexo',
+      menus: menu,
+      dietcodeExplanations: dietExplanations,
     };
   } catch (e) {
     throw new Error('getDailyMenu error: ' + e);

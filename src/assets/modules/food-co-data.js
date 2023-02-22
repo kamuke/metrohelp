@@ -13,6 +13,9 @@ const today = new Date().toISOString().split('T')[0];
 const menuUrlFi = 'https://www.compass-group.fi/menuapi/week-menus?costCenter=';
 const menuUrlEn = 'https://www.compass-group.fi/menuapi/week-menus?costCenter=';
 
+// https://www.compass-group.fi/menuapi/week-menus?costCenter=3087&language=fi&date=2023-02-22
+// https://www.compass-group.fi/menuapi/feed/json?costNumber=3087&language=fi
+
 /**
  * Get daily menu from Food & Co API
  *
@@ -49,9 +52,21 @@ const getDailyMenu = async (restaurantId) => {
       menuEn = ['No menu for today.'];
     }
 
+    const dietExplanations = {
+      fi: '(G) Gluteeniton, (L) Laktoositon, (VL) Vähälaktoosinen, (M) Maidoton, (*) Suomalaisten ravitsemussuositusten mukainen, (VEG) Soveltuu vegaaniruokavalioon, (ILM) Ilmastoystävällinen, (VS) Sis. tuoretta valkosipulia, (A) Sis. Allergeeneja',
+      en: '(G) Gluten-free, (L) Lactose-free, (VL) Low lactose, (M) Dairy-free, (*) Comply with Finnish nutrition recommendations, (VEG) Suitable for vegans, (ILM) Climate-friendly, (VS) Contains fresh garlic, (A) Contains allergens',
+    };
+
+    // return {
+    //   title: 'Food & Co',
+    //   menus: menu,
+    //   dietcode_explanations: dietExplanations,
+    // };
+
     return {
       fi: menuFi,
       en: menuEn,
+      dietcodeExplanations: dietExplanations,
     };
   } catch (e) {
     throw new Error('getDailyMenu error: ' + e);
