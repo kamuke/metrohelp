@@ -10,7 +10,7 @@
  * Fetch request to a given API url.
  *
  * @param {string} url - API url
- * @param {boolean} useProxy - Use allorigins roxy
+ * @param {boolean} useProxy - Use allorigins proxy
  * @param {object} options - Fetch options
  * @returns JSON data
  */

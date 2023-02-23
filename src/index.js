@@ -6,7 +6,7 @@
 import './styles/style.scss';
 import 'bootstrap';
 import ServiceWorker from './assets/modules/service-worker';
-// import Sodexo from './assets/modules/sodexo-data';
+import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
 
 // let restaurants = [
@@ -20,8 +20,10 @@ import FoodCo from './assets/modules/food-co-data';
  * App initialization.
  */
 const init = async () => {
-  const menu = await FoodCo.getDailyMenu(3087);
-  console.log(menu);
+  const menu1 = await FoodCo.getDailyMenu(3208);
+  const menu2 = await Sodexo.getDailyMenu(152);
+  console.log('Food & Co', menu1);
+  console.log('Sodexo', menu2);
   ServiceWorker.register();
 };
 

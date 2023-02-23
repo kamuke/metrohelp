@@ -20,7 +20,7 @@ const dailyUrl = 'https://www.sodexo.fi/ruokalistat/output/daily_json/';
  * Get daily menu from Sodexo API
  *
  * @param {int} restaurantId - The id of the restaurant to get daily menu from
- * @returns Menu object
+ * @returns Object
  */
 const getDailyMenu = async (restaurantId) => {
   try {
@@ -36,13 +36,15 @@ const getDailyMenu = async (restaurantId) => {
     if (menuResponse.courses) {
       // Convert menuResponse.courses to array of objects that have dish, dietcodes and price.
       menu = Object.values(menuResponse.courses).map((course) => {
-        const dietcodes = course.dietcodes.toUpperCase().split(', ');
+        const dietcodes = course.dietcodes ? course.dietcodes.toUpperCase().split(', ') : [];
+
         if (course.category.toLowerCase().includes('vegan')) {
           dietcodes.push('VEG');
         }
+
         return {
-          fi: course.title_fi,
-          en: course.title_en,
+          nameFi: course.title_fi,
+          nameEn: course.title_en,
           dietcodes: dietcodes,
           price: course.price,
         };
@@ -75,7 +77,7 @@ const getDailyMenu = async (restaurantId) => {
 
     return {
       title: 'Sodexo',
-      menus: menu,
+      menu: menu,
       dietcodeExplanations: dietExplanations,
     };
   } catch (e) {
