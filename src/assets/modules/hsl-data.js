@@ -19,46 +19,30 @@ const apiUrl =
  */
 const getQueryRoutesByLocation = (lat, lon) => {
   return `{
-  nearest(lat: ${lat}, lon: ${lon}, maxDistance: 400, filterByPlaceTypes: DEPARTURE_ROW) {
+  stopsByRadius(lat:${lat}, lon:${lon}, radius: 400) {
     edges {
       node {
-        place {
-          ...on DepartureRow {
-            stop {
-              lat
-              lon
-              code
-              name
-            }
-            stoptimes {
-              scheduledDeparture
-              realtimeDeparture
-              trip {
-                route {
-                  shortName
-                  longName
-                  mode
-                }
+        stop {
+          lat
+          lon
+          code
+          name
+          stoptimesWithoutPatterns(numberOfDepartures: 2) {
+            realtimeDeparture
+            serviceDay
+            trip {
+              route {
+                shortName
+                mode
               }
-              headsign
             }
+            headsign
           }
         }
       }
     }
   }
 }`;
-};
-
-/**
- * Converts HSL time from secconds to 00:00 format
- * @param {number} seconds
- * @returns time string in 00:00 format
- */
-const convertTime = (seconds) => {
-  const hours = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3606) / 60);
-  return `${hours == 24 ? '00' : hours}:${mins < 10 ? '0' + mins : mins}`;
 };
 
 /**
@@ -76,20 +60,17 @@ const getRoutesByLocation = async (lat, lon) => {
     body: getQueryRoutesByLocation(lat, lon),
   };
   const routeData = await doFetch(apiUrl, false, options);
-  return routeData.data.nearest.edges.map((routes) => {
-    return {
-      mode: routes.node.place.stoptimes[0].trip.route.mode,
-      stopCode: routes.node.place.stop.code,
-      stopName: routes.node.place.stop.name,
-      routeNumber: routes.node.place.stoptimes[0].trip.route.shortName,
-      destination: routes.node.place.stoptimes[0].headsign,
-      routeScheduledDeparture: convertTime(
-        routes.node.place.stoptimes[0].scheduledDeparture
-      ),
-      routeRealtimeDeparture: convertTime(
-        routes.node.place.stoptimes[0].realtimeDeparture
-      ),
-    };
+  return routeData.data.stopsByRadius.edges.map((stops) => {
+    return stops.node.stop.stoptimesWithoutPatterns.map((routes) => {
+      return {
+        mode: routes.trip.route.mode,
+        stopCode: stops.node.stop.code,
+        stopName: stops.node.stop.name,
+        routeNumber: routes.trip.route.shortName,
+        destination: routes.headsign,
+        routeRealtimeDeparture: routes.realtimeDeparture,
+      };
+    });
   });
 };
 const HSL = {getRoutesByLocation};
