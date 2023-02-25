@@ -1,5 +1,5 @@
 /**
- * Module for Food & Co menu data parsing
+ * Module for Food & Co menu data parsing.
  *
  * @module: Food & Co
  * @author: Kerttu
@@ -9,31 +9,118 @@
 
 import {doFetch} from './network';
 
-const today = '2023-02-16'; // TODO: Change the real date, this is only for developing.
+const today = '2023-02-16'; // TODO: Change to real date, this is only for developing.
 // new Date().toISOString().split('T')[0];
-const menuUrlFi = 'https://www.compass-group.fi/menuapi/week-menus?costCenter=';
-// const menuUrlEn = 'https://www.compass-group.fi/menuapi/week-menus?costCenter=';
+const weeklyUrl = 'https://www.compass-group.fi/menuapi/week-menus?costCenter=';
 // https://www.compass-group.fi/menuapi/week-menus?costCenter=3087&language=fi&date=2023-02-22
-// https://www.compass-group.fi/menuapi/feed/json?costNumber=3087&language=fi
+
+/**
+ * Get daily menu from Food & Co API.
+ *
+ * @param {int} restaurantId - The id of the restaurant to get daily menu from
+ * @returns Object
+ */
+const getDailyMenu = async (restaurantId) => {
+  try {
+    let menu;
+
+    // Fetch the finnish weekly menu
+    const weeklyMenuFi = await doFetch(
+      `${weeklyUrl}${restaurantId}&language=fi&date=${today}`,
+      true
+    );
+
+    // Get the finnish daily menu according to the date
+    const dailyMenuFi = weeklyMenuFi.menus.filter((menu) =>
+      menu.date.includes(today)
+    );
+
+    // Fetch the english weekly menu
+    const weeklyMenuEn = await doFetch(
+      `${weeklyUrl}${restaurantId}&language=en&date=${today}`,
+      true
+    );
+
+    // Get the english daily menu according to the date
+    const dailyMenuEn = weeklyMenuEn.menus.filter((menu) =>
+      menu.date.includes(today)
+    );
+
+    // Check if menus exists
+    if (dailyMenuFi && dailyMenuEn) {
+      // Create menu from menuPackages
+      menu = dailyMenuFi[0].menuPackages.map((menuPackage) => {
+        const name = getFormattedStringFromArray(
+          'fi',
+          menuPackage.meals.map((meal) => meal.name)
+        );
+
+        // Dietcodes to array
+        const dietcodes = getCommonValues(
+          menuPackage.meals.map((meal) => meal.diets)
+        );
+
+        // Price in '2,95 € / 6,50 € / 7,85 €' format
+        const price = menuPackage.price.split('/').join(' € / ') + ' €';
+
+        return {
+          nameFi: name,
+          dietcodes: dietcodes,
+          price: price,
+        };
+      });
+
+      // Get the english menu from dailyMenuEn
+      const menuEn = dailyMenuEn[0].menuPackages.map((menuPackage) => {
+        return getFormattedStringFromArray(
+          'en',
+          menuPackage.meals.map((meal) => meal.name)
+        );
+      });
+
+      // Loop the english menu names to menu
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].nameEn = menuEn[i];
+      }
+    } else {
+      // If there is no menu for the day
+      menu = [{fi: 'Ei menua tälle päivälle.', en: 'No menu for today.'}];
+    }
+
+    // Dietcode explanations from Food & Co's site
+    const dietExplanations = {
+      fi: '(G) Gluteeniton, (L) Laktoositon, (VL) Vähälaktoosinen, (M) Maidoton, (*) Suomalaisten ravitsemussuositusten mukainen, (VEG) Soveltuu vegaaniruokavalioon, (ILM) Ilmastoystävällinen, (VS) Sis. tuoretta valkosipulia, (A) Sis. Allergeeneja',
+      en: '(G) Gluten-free, (L) Lactose-free, (VL) Low lactose, (M) Dairy-free, (*) Comply with Finnish nutrition recommendations, (VEG) Suitable for vegans, (ILM) Climate-friendly, (VS) Contains fresh garlic, (A) Contains allergens',
+    };
+
+    return {
+      title: 'Food & Co',
+      menu: menu,
+      dietcodeExplanations: dietExplanations,
+    };
+  } catch (e) {
+    throw new Error('getDailyMenu error: ' + e);
+  }
+};
 
 /**
  * Get values that are included in all arrays of the array param.
  *
- * @param {*} arrays - An array of containing arrays
+ * @param {array} array - An array containing arrays.
  * @returns Array
  */
-const getCommonValues = (arrays) => {
+const getCommonValues = (array) => {
   // Create an array to hold the common values
   let commonValues = [];
 
   // Loop through each value in the first array
-  for (const array of arrays[0]) {
-    let value = array;
+  for (const arr of array[0]) {
+    let value = arr;
     let isInAllArrays = true;
 
     // Loop through each of the other arrays and check if the value is present
-    for (let i = 1; i < arrays.length; i++) {
-      if (!arrays[i].includes(value)) {
+    for (let i = 1; i < array.length; i++) {
+      if (!array[i].includes(value)) {
         isInAllArrays = false;
         break;
       }
@@ -49,110 +136,25 @@ const getCommonValues = (arrays) => {
 };
 
 /**
- * Get daily menu from Food & Co API.
+ * Get array as a one string in language sensitive format.
+ * Example output: "Hash, chili mayonnaise and pickled cucumber"
  *
- * @param {int} restaurantId - The id of the restaurant to get daily menu from
- * @returns Object
+ * @param {string} lang - String, example 'fi', 'en'
+ * @param {array} array - The array to format into one string
+ * @returns String
  */
-const getDailyMenu = async (restaurantId) => {
-  try {
-    let menu;
+const getFormattedStringFromArray = (lang, array) => {
+  // Create the formatter
+  const formatter = new Intl.ListFormat(lang, {
+    style: 'long',
+    type: 'conjunction',
+  });
 
-    // Get the finnish weekly meny
-    const weeklyMenuFi = await doFetch(
-      `${menuUrlFi}${restaurantId}&language=fi&date=${today}`,
-      true
-    );
+  // Format the array and make it lower case
+  const formatted = formatter.format(array).toLowerCase();
 
-    // Get the daily menu filtering with date
-    const dailyMenuFi = weeklyMenuFi.menus.filter((menu) =>
-      menu.date.includes(today)
-    );
-
-    // Get the english weekly meny
-    const weeklyMenuEn = await doFetch(
-      `${menuUrlFi}${restaurantId}&language=en&date=${today}`,
-      true
-    );
-
-    // Get the daily menu filtering with date
-    const dailyMenuEn = weeklyMenuEn.menus.filter((menu) =>
-      menu.date.includes(today)
-    );
-
-    if (dailyMenuFi && dailyMenuEn) {
-      menu = dailyMenuFi[0].menuPackages.map((menuPackage) => {
-        // The formatter to format meals to "Meal1, meal2 and meal3" format
-        const formatter = new Intl.ListFormat('fi', {
-          style: 'long',
-          type: 'conjunction',
-        });
-
-        let fi = formatter.format(
-          menuPackage.meals.map((meal) => meal.name.toLowerCase())
-        );
-
-        fi = fi.charAt(0).toUpperCase() + fi.slice(1);
-
-        let dietcodes = getCommonValues(
-          menuPackage.meals.map((meal) => meal.diets)
-        );
-
-        return {
-          nameFi: fi,
-          nameEn: fi,
-          dietcodes: dietcodes,
-          price: menuPackage.price,
-        };
-      });
-    } else {
-      console.log('Ei menua!');
-    }
-
-    // const dailyMenuFi = weeklyMenuFi.menus[getWeeklyIndex()];
-
-    // const weeklyMenuEn = await doFetch(
-    //   `${menuUrlEn}${restaurantId}&language=en&date=${today}`,
-    //   true
-    // );
-
-    // const dailyMenuEn = weeklyMenuEn.menus[getWeeklyIndex()];
-
-    // if (dailyMenuFi) {
-    //   menuFi = Object.values(dailyMenuFi.menuPackages).map((menuPackage) => {
-    //     return menuPackage.meals.map((meal) => meal.name).join(', ');
-    //   });
-    // } else {
-    //   menuFi = ['Ei menua tälle päivälle.'];
-    // }
-
-    // if (dailyMenuEn) {
-    //   menuEn = Object.values(dailyMenuEn.menuPackages).map((menuPackage) => {
-    //     return menuPackage.meals.map((meal) => meal.name).join(', ');
-    //   });
-    // } else {
-    //   menuEn = ['No menu for today.'];
-    // }
-
-    const dietExplanations = {
-      fi: '(G) Gluteeniton, (L) Laktoositon, (VL) Vähälaktoosinen, (M) Maidoton, (*) Suomalaisten ravitsemussuositusten mukainen, (VEG) Soveltuu vegaaniruokavalioon, (ILM) Ilmastoystävällinen, (VS) Sis. tuoretta valkosipulia, (A) Sis. Allergeeneja',
-      en: '(G) Gluten-free, (L) Lactose-free, (VL) Low lactose, (M) Dairy-free, (*) Comply with Finnish nutrition recommendations, (VEG) Suitable for vegans, (ILM) Climate-friendly, (VS) Contains fresh garlic, (A) Contains allergens',
-    };
-
-    // return {
-    //   title: 'Food & Co',
-    //   menus: menu,
-    //   dietcode_explanations: dietExplanations,
-    // };
-
-    return {
-      title: 'Food & Co',
-      menu: menu,
-      dietcodeExplanations: dietExplanations,
-    };
-  } catch (e) {
-    throw new Error('getDailyMenu error: ' + e);
-  }
+  // Return formatted with capitalized first letter
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 };
 
 const FoodCo = {getDailyMenu};

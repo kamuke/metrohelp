@@ -43,10 +43,10 @@ $headings-font-family: 'Roboto Slab', serif;
 $headings-font-weight: 600;
 $btn-font-weight: 500;
 
-// Metropolia's brand colors
-$orange:rgb(255, 80, 0);
+// Metropolia's brand colors:
+$orange: rgb(255, 80, 0);
 $grey: rgb(83, 86, 90);
-$light: rgb(230, 230, 230);
+$light: rgb(240, 240, 240);
 $dark: rgb(30, 30, 30);
 $red: rgb(203, 34, 40);
 $blue: rgb(64, 70, 168);
@@ -61,3 +61,6 @@ $success: $green;
 $danger: $red;
 $warning: $yellow;
 $info: $cyan;
+
+// Other:
+$border-radius: 0.5rem;

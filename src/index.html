@@ -5,32 +5,64 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <section class="container">
+    <section id="menus-section" class="container">
       <h2>Ruokalistat - Food & Co</h2>
       <p>Keskiviiko 22.02.2022</p>
-      <div class="row">
-        <article class="col card text-bg-light">
-          <div class="card-body">
-            <h3>Kasvislounas</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut
-              minima beatae explicabo laborum asperiores. Animi et quasi ab
-              maxime commodi aliquid odit iste tempora inventore sint fuga
-              temporibus, iure reiciendis.
+      <ul id="menus" class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center p-3"
+        >
+          <div class="me-3">
+            <p class="fw-bold mb-1">
+              Kasviswokkia ja höyrytettyä tummaa riisiä
             </p>
+            <p class="mb-0">2,95 € / 6,50 € / 7,85 €</p>
           </div>
-        </article>
-        <article class="col card text-bg-light">
-          <div class="card-body">
-            <h3>Kasvislounas</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut
-              minima beatae explicabo laborum asperiores. Animi et quasi ab
-              maxime commodi aliquid odit iste tempora inventore sint fuga
-              temporibus, iure reiciendis.
+          <div class="menu-dietcodes">
+            <span class="badge bg-primary">*</span>
+            <span class="badge bg-primary">G</span>
+            <span class="badge bg-primary">L</span>
+            <span class="badge bg-primary">M</span>
+            <span class="badge bg-primary">VEG</span>
+          </div>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center p-3"
+        >
+          <div class="me-3">
+            <p class="fw-bold mb-1">
+              Pyttipannua, chilimajoneesia ja etikkakurkkua
             </p>
+            <p class="mb-0">2,95 € / 6,50 € / 7,85 €</p>
           </div>
-        </article>
+          <div class="menu-dietcodes">
+            <span class="badge bg-primary">G</span>
+            <span class="badge bg-primary">L</span>
+          </div>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center p-3"
+        >
+          <div class="me-3">
+            <p class="fw-bold mb-1">
+              Haukipyöryköitä, piparjuurismetanaa ja perunasosetta
+            </p>
+            <p class="mb-0">2,95 € / 6,50 € / 7,85 €</p>
+          </div>
+          <div class="menu-dietcodes">
+            <span class="badge bg-primary">A</span>
+            <span class="badge bg-primary">G</span>
+            <span class="badge bg-primary">L</span>
+          </div>
+        </li>
+      </ul>
+      <div id="dietcode-explanations" class="mt-3">
+        <p>
+          (G) Gluteeniton, (L) Laktoositon, (VL) Vähälaktoosinen, (M) Maidoton,
+          (*) Suomalaisten ravitsemussuositusten mukainen, (VEG) Soveltuu
+          vegaaniruokavalioon, (ILM) Ilmastoystävällinen, (VS) Sis. tuoretta
+          valkosipulia, (A) Sis. Allergeeneja
+        </p>
       </div>
     </section>
   </body>
