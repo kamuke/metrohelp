@@ -22,7 +22,7 @@ const getDailyMenu = async (restaurantId) => {
   try {
     let menu;
 
-    // Fetch the daily manu
+    // Fetch the daily menu
     const dailyMenu = await doFetch(`${dailyUrl}${restaurantId}/${today}`);
 
     // If dailyMenu exists
