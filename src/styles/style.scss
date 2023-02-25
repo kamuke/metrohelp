@@ -2,15 +2,53 @@
 @import 'custom'; // Bootstrap customization
 @import '~bootstrap/scss/bootstrap'; // Bootstrap and its default variables
 
-#menus {
-  padding: 1rem;
+#menus-list {
   background-color: custom.$light;
+  padding: 1rem 1.25rem;
+
+  .menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(custom.$black, 0.125);
+    gap: 0.5rem;
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+      border: 0;
+    }
+
+    &-name {
+      font-family: 'Roboto Slab', serif;
+      margin-bottom: 0.25rem;
+    }
+
+    &-price {
+      margin-bottom: 0;
+    }
+
+    &-dietcodes {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.25rem;
+    }
+
+    @media screen and (max-width: 575px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
 }
 
-.menu-dietcodes {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.25rem;
+#dietcode-exp-body {
+  margin: 0;
 }

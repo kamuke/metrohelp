@@ -40,8 +40,8 @@ const getDailyMenu = async (restaurantId) => {
         }
 
         return {
-          nameFi: course.title_fi,
-          nameEn: course.title_en,
+          fi: course.title_fi,
+          en: course.title_en,
           dietcodes: dietcodes,
           price: course.price,
         };

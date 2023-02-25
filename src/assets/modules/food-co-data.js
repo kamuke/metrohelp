@@ -9,10 +9,9 @@
 
 import {doFetch} from './network';
 
-const today = '2023-02-16'; // TODO: Change to real date, this is only for developing.
-// new Date().toISOString().split('T')[0];
+// If testing on weekend, use hard coded date as '2023-02-16'
+const today = new Date().toISOString().split('T')[0];
 const weeklyUrl = 'https://www.compass-group.fi/menuapi/week-menus?costCenter=';
-// https://www.compass-group.fi/menuapi/week-menus?costCenter=3087&language=fi&date=2023-02-22
 
 /**
  * Get daily menu from Food & Co API.
@@ -47,7 +46,7 @@ const getDailyMenu = async (restaurantId) => {
     );
 
     // Check if menus exists
-    if (dailyMenuFi && dailyMenuEn) {
+    if (dailyMenuFi[0] && dailyMenuEn[0]) {
       // Create menu from menuPackages
       menu = dailyMenuFi[0].menuPackages.map((menuPackage) => {
         const name = getFormattedStringFromArray(
@@ -56,15 +55,20 @@ const getDailyMenu = async (restaurantId) => {
         );
 
         // Dietcodes to array
-        const dietcodes = getCommonValues(
+        let dietcodes = getCommonValues(
           menuPackage.meals.map((meal) => meal.diets)
         );
 
+        dietcodes = dietcodes.map(dietcode => dietcode.toUpperCase());
+
         // Price in '2,95 € / 6,50 € / 7,85 €' format
-        const price = menuPackage.price.split('/').join(' € / ') + ' €';
+        // Note: Arabia's restaurant doesn't have prices
+        const price = menuPackage.price
+          ? menuPackage.price.split('/').join(' € / ') + ' €'
+          : '2,95 € / 6,50 € / 7,85 €';
 
         return {
-          nameFi: name,
+          fi: name,
           dietcodes: dietcodes,
           price: price,
         };
@@ -80,7 +84,7 @@ const getDailyMenu = async (restaurantId) => {
 
       // Loop the english menu names to menu
       for (let i = 0; i < menu.length; i++) {
-        menu[i].nameEn = menuEn[i];
+        menu[i].en = menuEn[i];
       }
     } else {
       // If there is no menu for the day
