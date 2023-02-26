@@ -8,14 +8,31 @@ import 'bootstrap';
 import ServiceWorker from './assets/modules/service-worker';
 import HSL from './assets/modules/hsl-data';
 
-/* Later use???
-const campusInfo = [
-  {name: 'Karaportti', lat: 60.22415039513893, lon: 24.75847098313348},
-  {name: 'Myyrmäki', lat: , lon: },
-  {name: 'Myllypuro', lat: 60.223603108546165, lon: 25.077924598408583,},
-  {name: 'Arabia', lat: , lon: 2},
+const campuses = [
+  {
+    name: 'Arabia',
+    restaurant: {
+      id: 1251,
+      chain: 'Food & Co',
+    },
+    location: {lat: 60.2100515020518, lon: 24.97677582883559},
+  },
+  {
+    name: 'Karaportti',
+    restaurant: {id: 3208, chain: 'Food & Co'},
+    location: {lat: 60.22412908302269, lon: 24.7584602544428},
+  },
+  {
+    name: 'Myllypuro',
+    restaurant: {id: 158, chain: 'Sodexo'},
+    location: {lat: 60.223621756949434, lon: 25.077913869785164},
+  },
+  {
+    name: 'Myyrmäki',
+    restaurant: {id: 152, chain: 'Sodexo'},
+    location: {lat: 60.258843352326785, lon: 24.84484968512866},
+  },
 ];
-*/
 
 /**
  * Converts HSL time from secconds to 00:00 format
@@ -28,18 +45,41 @@ const convertTime = (seconds) => {
   return `${hours == 24 ? '00' : hours}:${mins < 10 ? '0' + mins : mins}`;
 };
 
+// User settings
+// TODO: Save to localStorage + load from localStorage
+let settings = {
+  lang: 'fi',
+  campus: 'Karaportti',
+  darkmode: false,
+};
+
+// To store routes
+let routes;
+
 /**
- * Renders route info from HSL-data
- *
  * @author Eeli
+ * @param {string} selectedCampus - Selected campus to get HSL routes
+ * @param {array} allCampuses - List of all campuses and infos.
+ * @returns Object
  */
-const renderRouteInfo = async () => {
-  //TODO: campusInfo lat and lon values by campus name
-  const routeData = await HSL.getRoutesByLocation(60.223, 25.077);
+const getRoutes = async (selectedCampus, allCampuses) => {
+  for (const campus of allCampuses) {
+    if (selectedCampus === campus.name) {
+      return await HSL.getRoutesByLocation(
+        campus.location.lat,
+        campus.location.lon
+      );
+    }
+  }
+};
 
-  const target = document.querySelector('.hsl-container');
-
-  for (const stop of routeData) {
+/**
+ *
+ * @param {Object} routes - Object containing HSL routes data from specific location.
+ */
+const renderRouteInfo = async (routes) => {
+  const target = document.querySelector('#hsl-section');
+  for (const stop of routes) {
     for (const route of stop) {
       const routeContainer = document.createElement('div');
       routeContainer.classList = 'route-info container';
@@ -61,7 +101,6 @@ const renderRouteInfo = async () => {
       destination.classList = 'badge bg-dark';
       const routeRealtimeDeparture = document.createElement('p');
       routeRealtimeDeparture.classList = 'badge bg-success';
-
       stopCode.textContent = route.stopCode;
       // stopName.textContent = route.stopName;
       routeNumber.textContent = route.routeNumber;
@@ -85,9 +124,8 @@ const renderRouteInfo = async () => {
  * App initialization.
  */
 const init = async () => {
-  console.log('Karaportti', HSL.getRoutesByLocation(60.224, 24.758));
-  console.log('Myllypuro', HSL.getRoutesByLocation(60.223, 25.077));
-  renderRouteInfo();
+  routes = await getRoutes(settings.campus, campuses);
+  renderRouteInfo(routes);
   ServiceWorker.register();
 };
 
