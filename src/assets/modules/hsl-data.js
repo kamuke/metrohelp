@@ -17,7 +17,7 @@ const apiUrl =
  * @param {number} lat Campus latitude value
  * @param {number} lon Campus longitude value
  */
-const getQueryRoutesByLocation = (lat, lon) => {
+const getQueryRoutesByLocation = (lat, lon, maxDepartures) => {
   return `{
   stopsByRadius(lat:${lat}, lon:${lon}, radius: 400) {
     edges {
@@ -27,7 +27,7 @@ const getQueryRoutesByLocation = (lat, lon) => {
           lon
           code
           name
-          stoptimesWithoutPatterns(numberOfDepartures: 2) {
+          stoptimesWithoutPatterns(numberOfDepartures: ${maxDepartures}) {
             realtimeDeparture
             serviceDay
             trip {
@@ -51,13 +51,13 @@ const getQueryRoutesByLocation = (lat, lon) => {
  * @param {number} lon Campus longitude value
  * @returns Route data
  */
-const getRoutesByLocation = async (lat, lon) => {
+const getRoutesByLocation = async (lat, lon, maxDepartures) => {
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/graphql',
     },
-    body: getQueryRoutesByLocation(lat, lon),
+    body: getQueryRoutesByLocation(lat, lon, maxDepartures),
   };
   const routeData = await doFetch(apiUrl, false, options);
   return routeData.data.stopsByRadius.edges.map((stops) => {

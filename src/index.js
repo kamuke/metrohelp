@@ -41,7 +41,7 @@ const campuses = [
  */
 const convertTime = (seconds) => {
   const hours = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3606) / 60);
+  const mins = Math.floor((seconds % 3600) / 60);
   return `${hours == 24 ? '00' : hours}:${mins < 10 ? '0' + mins : mins}`;
 };
 
@@ -49,8 +49,9 @@ const convertTime = (seconds) => {
 // TODO: Save to localStorage + load from localStorage
 let settings = {
   lang: 'fi',
-  campus: 'Karaportti',
+  campus: 'Myllypuro',
   darkmode: false,
+  departures: 2,
 };
 
 // To store routes
@@ -60,66 +61,74 @@ let routes;
  * @author Eeli
  * @param {string} selectedCampus - Selected campus to get HSL routes
  * @param {array} allCampuses - List of all campuses and infos.
- * @returns Object
+ * @returns Sorted array
  */
+
 const getRoutes = async (selectedCampus, allCampuses) => {
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
-      return await HSL.getRoutesByLocation(
+      const routesData = await HSL.getRoutesByLocation(
         campus.location.lat,
-        campus.location.lon
+        campus.location.lon,
+        settings.departures
       );
+      let routesArray = [];
+      for (const route of routesData) {
+        for (let i = 0; i < settings.departures; i++) {
+          routesArray.push(route[i]);
+        }
+      }
+      return routesArray.sort((a, b) => {
+        return a.routeRealtimeDeparture - b.routeRealtimeDeparture;
+      });
     }
   }
 };
 
 /**
  *
- * @param {Object} routes - Object containing HSL routes data from specific location.
+ * @param {array} routes - Array of sorted routes
  */
 const renderRouteInfo = async (routes) => {
   const target = document.querySelector('#hsl-section');
-  for (const stop of routes) {
-    for (const route of stop) {
-      const routeContainer = document.createElement('div');
-      routeContainer.classList = 'route-info container';
-      const stopCode = document.createElement('p');
-      stopCode.classList = 'badge bg-secondary';
-      // const stopName = document.createElement('p');
-      const routeNumber = document.createElement('p');
-      if (route.mode == 'BUS') {
-        routeNumber.classList = 'badge bg-info';
-      } else if (route.mode == 'SUBWAY') {
-        routeNumber.classList = 'badge bg-primary';
-      } else if (route.mode == 'TRAM') {
-        routeNumber.classList = 'badge bg-success';
-      } else if (route.mode == 'RAIL') {
-        routeNumber.classList = 'badge bg-light';
-      }
-
-      const destination = document.createElement('p');
-      destination.classList = 'badge bg-dark';
-      const routeRealtimeDeparture = document.createElement('p');
-      routeRealtimeDeparture.classList = 'badge bg-success';
-      stopCode.textContent = route.stopCode;
-      // stopName.textContent = route.stopName;
-      routeNumber.textContent = route.routeNumber;
-      destination.textContent = route.destination;
-      routeRealtimeDeparture.textContent = convertTime(
-        route.routeRealtimeDeparture
-      );
-      routeContainer.append(
-        stopCode,
-        routeNumber,
-        //stopName,
-        destination,
-        routeRealtimeDeparture
-      );
-      target.append(routeContainer);
+  for (const route of routes) {
+    const routeContainer = document.createElement('div');
+    routeContainer.classList = 'route-info container';
+    const stopCode = document.createElement('p');
+    stopCode.classList = 'badge bg-secondary';
+    // const stopName = document.createElement('p');
+    const routeNumber = document.createElement('p');
+    if (route.mode == 'BUS') {
+      routeNumber.classList = 'badge bg-info';
+    } else if (route.mode == 'SUBWAY') {
+      routeNumber.classList = 'badge bg-primary';
+    } else if (route.mode == 'TRAM') {
+      routeNumber.classList = 'badge bg-success';
+    } else if (route.mode == 'RAIL') {
+      routeNumber.classList = 'badge bg-light';
     }
+
+    const destination = document.createElement('p');
+    destination.classList = 'badge bg-dark';
+    const routeRealtimeDeparture = document.createElement('p');
+    routeRealtimeDeparture.classList = 'badge bg-success';
+    stopCode.textContent = route.stopCode;
+    // stopName.textContent = route.stopName;
+    routeNumber.textContent = route.routeNumber;
+    destination.textContent = route.destination;
+    routeRealtimeDeparture.textContent = convertTime(
+      route.routeRealtimeDeparture
+    );
+    routeContainer.append(
+      stopCode,
+      routeNumber,
+      //stopName,
+      destination,
+      routeRealtimeDeparture
+    );
+    target.append(routeContainer);
   }
 };
-
 /**
  * App initialization.
  */
