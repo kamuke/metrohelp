@@ -59,7 +59,7 @@ const getDailyMenu = async (restaurantId) => {
           menuPackage.meals.map((meal) => meal.diets)
         );
 
-        dietcodes = dietcodes.map(dietcode => dietcode.toUpperCase());
+        dietcodes = dietcodes.map((dietcode) => dietcode.toUpperCase());
 
         // Price in '2,95 € / 6,50 € / 7,85 €' format
         // Note: Arabia's restaurant doesn't have prices
