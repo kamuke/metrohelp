@@ -5,38 +5,154 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <section id="hsl-section" class="container"><h2>HSL</h2></section>
-    <section id="menus-section" class="container">
-      <h2 id="menus-heading">Ruokalista</h2>
-      <p id="menus-date" class="fw-bold mb-3">Keskiviiko 22.02.2022</p>
-      <ul id="menus-list" class="list-group mt-3 mb-3">
-      </ul>
-      <div id="dietcode-explanations" class="accordion">
-        <div class="accordion-item">
-          <h3 id="dietcode-exp-heading" class="accordion-header">
+    <main class="container-lg">
+      <section class="announcements-section">
+        <h2 id="announcements-heading">Tiedotteet</h2>
+        <div id="announcements-carousel" class="carousel slide">
+          <div class="carousel-inner">
             <button
-              id="dietcode-exp-btn"
-              class="accordion-button collapsed"
+              class="carousel-item active"
               type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseOne"
-              aria-expanded="true"
-              aria-controls="collapseOne"
+              data-bs-toggle="modal"
+              data-bs-target="#modal-one"
             >
-              Ruokavaliokoodit
+              <img
+                src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/zone_fi.PNG"
+                class="d-block w-100"
+                alt="..."
+              />
             </button>
-          </h3>
-          <div
-            id="collapseOne"
-            class="accordion-collapse collapse"
-            aria-labelledby="dietcode-heading"
-            data-bs-parent="#dietcode-explanations"
-          >
-            <p id="dietcode-exp-body" class="accordion-body">
-            </p>
+            <div
+              class="modal fade"
+              id="modal-one"
+              tabindex="-1"
+              aria-labelledby="modal-one-label"
+              aria-hidden="true"
+            >
+              <article class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title" id="modal-one-label">
+                      Ohjattua ryhmäliikuntaa, palloilua, kursseja ja
+                      kuntosaleja
+                    </h3>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <img
+                      src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/zone_fi.PNG"
+                      class="d-block w-100"
+                      alt="..."
+                    />
+                    <p>
+                      Tutustu liikuntatarjontaamme ja tule mukaan liikkumaan!
+                      <a href="https://zonesports.fi/">www.zonesports.fi</a>
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <button class="carousel-item">
+              <img
+                src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/metka_fi.PNG"
+                class="d-block w-100"
+                alt="..."
+              />
+            </button>
+            <button class="carousel-item">
+              <img
+                src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/3amk_fi.PNG"
+                class="d-block w-100"
+                alt="..."
+              />
+            </button>
+          </div>
+          <div class="carousel-controls">
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#announcements-carousel"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Edellinen/Previous</span>
+            </button>
+            <div class="carousel-indicators">
+              <button
+                type="button"
+                data-bs-target="#announcements-carousel"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Slide 1"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#announcements-carousel"
+                data-bs-slide-to="1"
+                aria-label="Slide 2"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#announcements-carousel"
+                data-bs-slide-to="2"
+                aria-label="Slide 3"
+              ></button>
+            </div>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#announcements-carousel"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Seuraava/Next</span>
+            </button>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section id="menus-section">
+        <h2 id="menus-heading">Ruokalista</h2>
+        <p id="menus-date" class="fw-bold mb-3"></p>
+        <ul id="menus-list" class="list-group mt-3 mb-3"></ul>
+        <div id="dietcode-explanations" class="accordion">
+          <div class="accordion-item">
+            <h3 id="dietcode-exp-heading" class="accordion-header">
+              <button
+                id="dietcode-exp-btn"
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#dietcode-collapse"
+                aria-expanded="true"
+                aria-controls="dietcode-collapse"
+              >
+                Ruokavaliokoodit
+              </button>
+            </h3>
+            <div
+              id="dietcode-collapse"
+              class="accordion-collapse collapse"
+              aria-labelledby="dietcode-exp-heading"
+              data-bs-parent="#dietcode-explanations"
+            >
+              <p id="dietcode-exp-body" class="accordion-body"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="hsl-section"><h2>HSL</h2></section>
+    </main>
   </body>
 </html>

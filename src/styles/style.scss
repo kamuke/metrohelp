@@ -2,6 +2,77 @@
 @import 'custom'; // Bootstrap customization
 @import '~bootstrap/scss/bootstrap'; // Bootstrap and its default variables
 
+section {
+  margin: 3rem 0;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  position: static;
+  background-color: custom.$primary;
+  border-radius: custom.$border-radius;
+  width: 2rem;
+  height: 2rem;
+}
+
+.carousel-indicators {
+  position: static;
+  margin: 0;
+
+  button {
+    border: 0;
+    border-radius: 50%;
+  }
+}
+
+.carousel-item {
+  border: 0;
+  padding: 0;
+  border-radius: custom.$border-radius;
+  overflow: hidden;
+
+  img {
+    transition: all 0.2s ease-in-out;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+}
+
+.modal-dialog {
+  @media screen and (max-width: 991px) {
+    margin-right: 0.75rem;
+    margin-left: 0.75rem;
+  }
+}
+
+.modal-header {
+  align-items: start;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+}
+
+.modal-body p {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.btn-close {
+  width: 1.5em;
+  height: 1.5em;
+}
+
 #menus-list {
   background-color: custom.$light;
   padding: 1rem 1.25rem;
