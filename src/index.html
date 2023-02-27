@@ -5,21 +5,37 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <h1>Testi</h1>
-    <button type="button" class="btn btn-primary">Primary</button>
-    <button type="button" class="btn btn-secondary">Secondary</button>
-    <button type="button" class="btn btn-success">Success</button>
-    <button type="button" class="btn btn-danger">Danger</button>
-    <button type="button" class="btn btn-warning">Warning</button>
-    <button type="button" class="btn btn-info">Info</button>
-    <button type="button" class="btn btn-light">Light</button>
-    <button type="button" class="btn btn-dark">Dark</button>
-    <button type="button" class="btn btn-link">Link</button>
-    <p>
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate, a
-      vero unde rerum nisi tempore earum accusantium excepturi architecto
-      obcaecati, aliquid iure veniam eos voluptatum nulla. Sunt obcaecati optio
-      impedit.
-    </p>
+    <section id="menus-section" class="container">
+      <h2 id="menus-heading">Ruokalista</h2>
+      <p id="menus-date" class="fw-bold mb-3">Keskiviiko 22.02.2022</p>
+      <ul id="menus-list" class="list-group mt-3 mb-3">
+      </ul>
+      <div id="dietcode-explanations" class="accordion">
+        <div class="accordion-item">
+          <h3 id="dietcode-exp-heading" class="accordion-header">
+            <button
+              id="dietcode-exp-btn"
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              Ruokavaliokoodit
+            </button>
+          </h3>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse"
+            aria-labelledby="dietcode-heading"
+            data-bs-parent="#dietcode-explanations"
+          >
+            <p id="dietcode-exp-body" class="accordion-body">
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </body>
 </html>
