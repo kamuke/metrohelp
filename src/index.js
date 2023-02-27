@@ -38,7 +38,6 @@ const campuses = [
 ];
 
 // User settings
-// TODO: Save to localStorage + load from localStorage
 let settings = {
   lang: 'fi',
   campus: 'Myllypuro',
@@ -250,6 +249,29 @@ const renderRouteInfo = async (routes) => {
     target.append(routeContainer);
   }
 };
+
+/**
+ * @author Catrina
+ */
+
+/**
+ * Stores user setting to local storage
+ */
+// eslint-disable-next-line no-unused-vars
+const saveSettings = () => {
+  //TODO: clear previous settings key or just override settings?
+  const userSettings = settings;
+  localStorage.setItem('settings', JSON.stringify(userSettings));
+};
+
+/**
+ * Reads user setting from local storage
+ */
+const loadSettings = () => {
+  localStorage.getItem('settings');
+  console.log(JSON.parse(localStorage.getItem('settings')));
+};
+
 /**
  * App initialization.
  */
@@ -259,6 +281,7 @@ const init = async () => {
   renderMenuSection(menu);
   renderRouteInfo(routes);
   ServiceWorker.register();
+  loadSettings();
 };
 
 init();
