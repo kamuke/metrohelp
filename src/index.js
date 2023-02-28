@@ -6,7 +6,7 @@
 import './styles/style.scss';
 import 'bootstrap';
 import ServiceWorker from './assets/modules/service-worker';
-import HSL from './assets/modules/hsl-data';
+//import HSL from './assets/modules/hsl-data';
 import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
 
@@ -52,7 +52,7 @@ let settings = {
 
 // To store menu, routes and city
 let menu;
-let routes;
+//let routes;
 let weather;
 
 /**
@@ -177,19 +177,20 @@ const renderMenuSection = async (menu) => {
  * @param {number} seconds
  * @returns time string in 00:00 format
  */
+/*
 const convertTime = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
   return `${hours == 24 ? '00' : hours}:${mins < 10 ? '0' + mins : mins}`;
 };
-
+*/
 /**
  * @author Eeli
  * @param {string} selectedCampus - Selected campus to get HSL routes
  * @param {array} allCampuses - List of all campuses and infos.
  * @returns Sorted array
  */
-
+/*
 const getRoutes = async (selectedCampus, allCampuses) => {
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
@@ -209,12 +210,13 @@ const getRoutes = async (selectedCampus, allCampuses) => {
       });
     }
   }
-};
+};*/
 
 /**
  *
  * @param {array} routes - Array of sorted routes
  */
+/*
 const renderRouteInfo = async (routes) => {
   const target = document.querySelector('#hsl-section');
   for (const route of routes) {
@@ -255,24 +257,22 @@ const renderRouteInfo = async (routes) => {
     target.append(routeContainer);
   }
 };
+*/
 
 /**
+ * Get current weather from the selected campus' city
+ *
  * @author Catrina
- */
-
-/**
- * @author Catrina
- * @param {string} selectedCampus - Selected campus to get HSL routes
+ * @param {string} selectedCampus - Selected campus to get it's city
  * @param {array} allCampuses - List of all campuses and infos.
  * @returns Selected campus' weather
  */
 const getWeather = async (selectedCampus, allCampuses) => {
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
-      let weatherAPI = 'http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q='+campus.city+'&days=1&aqi=no&alerts=no';
       try {
         //start fetch
-        const response = await fetch(weatherAPI);
+        const response = await fetch('http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q='+campus.city+'&days=1&aqi=no&alerts=no');
         //If error
         if (!response.ok) throw new Error('Something went wrong.');
         //JSON to JavaScript object/array
@@ -291,6 +291,13 @@ const getWeather = async (selectedCampus, allCampuses) => {
   }
 };
 
+/**
+ * Render current weather
+ *
+ * @author Catrina
+ * @param weather
+ * @returns {Promise<void>}
+ */
 const renderWeather = async(weather) => {
   const weatherSection = document.querySelector('#weather-section');
   const weatherDiv = document.createElement('div');
@@ -302,23 +309,15 @@ const renderWeather = async(weather) => {
   weatherText.textContent = weather.current.temp_c;
 };
 
-/*
-const renderWeather = async (city) => {
-
-  console.log(city);
-  console.log(weatherAPI);
-
-};*/
-
 /**
  * App initialization.
  */
 const init = async () => {
   menu = await getMenu(settings.campus, campuses);
-  routes = await getRoutes(settings.campus, campuses);
+  //routes = await getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
   renderMenuSection(menu);
-  renderRouteInfo(routes);
+  //renderRouteInfo(routes);
   renderWeather(weather);
   ServiceWorker.register();
 };
