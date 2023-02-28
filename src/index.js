@@ -41,7 +41,7 @@ const campuses = [
 // User settings
 // TODO: Save to localStorage + load from localStorage
 let settings = {
-  lang: 'fi',
+  lang: 'en',
   campus: 'Myllypuro',
   darkmode: false,
   departures: 2,
