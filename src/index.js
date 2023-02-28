@@ -19,21 +19,25 @@ const campuses = [
       chain: 'Food & Co',
     },
     location: {lat: 60.2100515020518, lon: 24.97677582883559},
+    city: 'Helsinki',
   },
   {
     name: 'Karaportti',
     restaurant: {id: 3208, chain: 'Food & Co'},
     location: {lat: 60.22412908302269, lon: 24.7584602544428},
+    city: 'Espoo',
   },
   {
     name: 'Myllypuro',
     restaurant: {id: 158, chain: 'Sodexo'},
     location: {lat: 60.223621756949434, lon: 25.077913869785164},
+    city: 'Helsinki',
   },
   {
     name: 'Myyrmäki',
     restaurant: {id: 152, chain: 'Sodexo'},
     location: {lat: 60.258843352326785, lon: 24.84484968512866},
+    city: 'Vantaa',
   },
 ];
 
@@ -46,9 +50,10 @@ let settings = {
   departures: 2,
 };
 
-// To store menu and routes
+// To store menu, routes and city
 let menu;
 let routes;
+let weather;
 
 /**
  * Get menu from Sodexo or Food & Co module.
@@ -250,14 +255,71 @@ const renderRouteInfo = async (routes) => {
     target.append(routeContainer);
   }
 };
+
+/**
+ * @author Catrina
+ */
+
+/**
+ * @author Catrina
+ * @param {string} selectedCampus - Selected campus to get HSL routes
+ * @param {array} allCampuses - List of all campuses and infos.
+ * @returns Selected campus' weather
+ */
+const getWeather = async (selectedCampus, allCampuses) => {
+  for (const campus of allCampuses) {
+    if (selectedCampus === campus.name) {
+      let weatherAPI = 'http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q='+campus.city+'&days=1&aqi=no&alerts=no';
+      try {
+        //start fetch
+        const response = await fetch(weatherAPI);
+        //If error
+        if (!response.ok) throw new Error('Something went wrong.');
+        //JSON to JavaScript object/array
+        const weather = await response.json();
+
+        //TODO: delete console logs
+        console.log(weather);
+        console.log('current temp: '+weather.current.temp_c+'C');
+
+        return weather;
+
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  }
+};
+
+const renderWeather = async(weather) => {
+  const weatherSection = document.querySelector('#weather-section');
+  const weatherDiv = document.createElement('div');
+  const weatherText = document.createElement('p');
+
+  weatherSection.appendChild(weatherDiv);
+  weatherDiv.appendChild(weatherText);
+
+  weatherText.textContent = weather.current.temp_c;
+};
+
+/*
+const renderWeather = async (city) => {
+
+  console.log(city);
+  console.log(weatherAPI);
+
+};*/
+
 /**
  * App initialization.
  */
 const init = async () => {
   menu = await getMenu(settings.campus, campuses);
   routes = await getRoutes(settings.campus, campuses);
+  weather = await getWeather(settings.campus, campuses);
   renderMenuSection(menu);
   renderRouteInfo(routes);
+  renderWeather(weather);
   ServiceWorker.register();
 };
 
