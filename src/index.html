@@ -9,125 +9,79 @@
       <section class="announcements-section">
         <h2 id="announcements-heading">Tiedotteet</h2>
         <div id="announcements-carousel" class="carousel slide">
-          <div class="carousel-inner">
-            <button
+          <div id="announcements-carousel-inner" class="carousel-inner">
+            <!-- <a
+              href=""
               class="card carousel-item active"
-              type="button"
               data-bs-toggle="modal"
               data-bs-target="#modal-one"
             >
-              <img
-                src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/zone_fi.PNG"
-                class="d-block w-100"
-                alt="..."
-              />
-              <div class="card-body p-3 text-start">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content...
-                </p>
-                <a href="#">Näytä lisää...</a>
-              </div>
-            </button>
-            <div
-              class="modal fade"
-              id="modal-one"
-              tabindex="-1"
-              aria-labelledby="modal-one-label"
-              aria-hidden="true"
-            >
-              <article class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h3 class="modal-title" id="modal-one-label">
+              <div class="row g-1">
+                <div class="col-md-8 card-img-container">
+                  <img
+                    src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/zone_fi.PNG"
+                    class="img-fluid"
+                    alt="..."
+                  />
+                </div>
+                <div class="col-md-4 card-content">
+                  <div class="card-body">
+                    <h3 class="card-title fs-4">Zone</h3>
+                    <p class="card-text">
                       Ohjattua ryhmäliikuntaa, palloilua, kursseja ja
-                      kuntosaleja
-                    </h3>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <img
-                      src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/zone_fi.PNG"
-                      class="d-block w-100"
-                      alt="..."
-                    />
-                    <p>
-                      Tutustu liikuntatarjontaamme ja tule mukaan liikkumaan!
-                      <a href="https://zonesports.fi/">www.zonesports.fi</a>
+                      kuntosaleja...
+                    </p>
+                    <p class="text-primary fs-6">
+                      <u> Näytä lisää <i class="bi bi-arrow-right"></i> </u>
                     </p>
                   </div>
                 </div>
-              </article>
-            </div>
-            <button class="carousel-item">
-              <img
-                src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/metka_fi.PNG"
-                class="d-block w-100"
-                alt="..."
-              />
-            </button>
-            <button class="carousel-item">
-              <img
-                src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/3amk_fi.PNG"
-                class="d-block w-100"
-                alt="..."
-              />
-            </button>
+              </div>
+            </a> -->
           </div>
-          <div class="carousel-controls">
-            <button
-              class="carousel-control-prev"
-              type="button"
-              data-bs-target="#announcements-carousel"
-              data-bs-slide="prev"
-            >
-              <span
-                class="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Edellinen/Previous</span>
-            </button>
-            <div class="carousel-indicators">
-              <button
-                type="button"
-                data-bs-target="#announcements-carousel"
-                data-bs-slide-to="0"
-                class="active"
-                aria-current="true"
-                aria-label="Slide 1"
-              ></button>
-              <button
-                type="button"
-                data-bs-target="#announcements-carousel"
-                data-bs-slide-to="1"
-                aria-label="Slide 2"
-              ></button>
-              <button
-                type="button"
-                data-bs-target="#announcements-carousel"
-                data-bs-slide-to="2"
-                aria-label="Slide 3"
-              ></button>
+          <nav
+            class="mt-3 d-flex justify-content-center"
+            aria-label="Tiedotteiden navigaatio/Announcement's navigation"
+          >
+            <ul
+              id="carousel-navigation"
+              class="pagination carousel-indicators"
+            ></ul>
+          </nav>
+        </div>
+        <div
+          class="modal fade"
+          id="modal-one"
+          tabindex="-1"
+          aria-labelledby="modal-one-label"
+          aria-hidden="true"
+        >
+          <article class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title" id="modal-one-label">
+                  Ohjattua ryhmäliikuntaa, palloilua, kursseja ja kuntosaleja
+                </h3>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <img
+                  src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/zone_fi.PNG"
+                  class="d-block w-100"
+                  alt="..."
+                />
+                <p>
+                  Tutustu liikuntatarjontaamme ja tule mukaan liikkumaan!
+                  <a href="https://zonesports.fi/">www.zonesports.fi</a>
+                </p>
+              </div>
             </div>
-            <button
-              class="carousel-control-next"
-              type="button"
-              data-bs-target="#announcements-carousel"
-              data-bs-slide="next"
-            >
-              <span
-                class="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Seuraava/Next</span>
-            </button>
-          </div>
+          </article>
         </div>
       </section>
       <section id="menus-section">
