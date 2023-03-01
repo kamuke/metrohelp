@@ -5,12 +5,15 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <section id="hsl-section" class="container"><h2>HSL</h2></section>
+    <section id="hsl-section" class="container">
+      <h2>HSL</h2>
+      <ul id="routes" class="list-group mt-3 mb-3"></ul>
+      <div id="route-map"></div>
+    </section>
     <section id="menus-section" class="container">
       <h2 id="menus-heading">Ruokalista</h2>
-      <p id="menus-date" class="fw-bold mb-3">Keskiviiko 22.02.2022</p>
-      <ul id="menus-list" class="list-group mt-3 mb-3">
-      </ul>
+      <p id="menus-date" class="fw-bold mb-3">Keskiviikko 22.02.2022</p>
+      <ul id="menus-list" class="list-group mt-3 mb-3"></ul>
       <div id="dietcode-explanations" class="accordion">
         <div class="accordion-item">
           <h3 id="dietcode-exp-heading" class="accordion-header">
@@ -32,8 +35,7 @@
             aria-labelledby="dietcode-heading"
             data-bs-parent="#dietcode-explanations"
           >
-            <p id="dietcode-exp-body" class="accordion-body">
-            </p>
+            <p id="dietcode-exp-body" class="accordion-body"></p>
           </div>
         </div>
       </div>
