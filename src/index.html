@@ -5,7 +5,59 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <section id="weather-section" class="container">
+    <main class="container-lg">
+      <section id="announcements-section" class="mt-5 mb-5">
+        <h2 id="announcements-heading">Tiedotteet</h2>
+        <div id="announcements-carousel" class="carousel slide mt-4">
+          <div id="announcements-carousel-inner" class="carousel-inner"></div>
+          <nav
+            class="mt-4 d-flex justify-content-center"
+            aria-label="Tiedotteiden navigaatio/Announcement's navigation"
+          >
+            <ul
+              id="carousel-navigation"
+              class="pagination carousel-indicators m-0"
+            ></ul>
+          </nav>
+        </div>
+        <div id="announcement-modals"></div>
+      </section>
+      <section id="menus-section" class="mt-5 mb-5">
+        <h2 id="menus-heading">Ruokalista</h2>
+        <p id="menus-date" class="fw-bold mb-3"></p>
+        <ul id="menus-list" class="list-group mt-4 mb-4"></ul>
+        <div id="dietcode-explanations" class="accordion">
+          <div class="accordion-item">
+            <h3 id="dietcode-exp-heading" class="accordion-header">
+              <button
+                id="dietcode-exp-btn"
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#dietcode-collapse"
+                aria-expanded="true"
+                aria-controls="dietcode-collapse"
+              >
+                Ruokavaliokoodit
+              </button>
+            </h3>
+            <div
+              id="dietcode-collapse"
+              class="accordion-collapse collapse"
+              aria-labelledby="dietcode-exp-heading"
+              data-bs-parent="#dietcode-explanations"
+            >
+              <p id="dietcode-exp-body" class="accordion-body"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="hsl-section" class="container">
+      <h2>HSL</h2>
+      <ul id="routes" class="list-group mt-3 mb-3"></ul>
+      <div id="route-map"></div>
+    </section>
+     <section id="weather-section" class="container">
       <h2>Sää</h2>
       <div id="weather-info">
         <figure>
@@ -14,38 +66,6 @@
         </figure>
       </div>
     </section>
-    <section id="hsl-section" class="container"><h2>HSL</h2></section>
-    <section id="menus-section" class="container">
-      <h2 id="menus-heading">Ruokalista</h2>
-      <p id="menus-date" class="fw-bold mb-3">Keskiviiko 22.02.2022</p>
-      <ul id="menus-list" class="list-group mt-3 mb-3">
-      </ul>
-      <div id="dietcode-explanations" class="accordion">
-        <div class="accordion-item">
-          <h3 id="dietcode-exp-heading" class="accordion-header">
-            <button
-              id="dietcode-exp-btn"
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseOne"
-              aria-expanded="true"
-              aria-controls="collapseOne"
-            >
-              Ruokavaliokoodit
-            </button>
-          </h3>
-          <div
-            id="collapseOne"
-            class="accordion-collapse collapse"
-            aria-labelledby="dietcode-heading"
-            data-bs-parent="#dietcode-explanations"
-          >
-            <p id="dietcode-exp-body" class="accordion-body">
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+    </main>
   </body>
 </html>

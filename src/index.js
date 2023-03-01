@@ -9,35 +9,37 @@ import ServiceWorker from './assets/modules/service-worker';
 import HSL from './assets/modules/hsl-data';
 import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
+import Announcement from './assets/modules/announcement';
+import {renderAnnouncements} from './assets/modules/announcement-render';
 
 // Metropolia's campuses and needed info
 const campuses = [
   {
     name: 'Arabia',
+    city: 'Helsinki',
     restaurant: {
       id: 1251,
       chain: 'Food & Co',
     },
     location: {lat: 60.2100515020518, lon: 24.97677582883559},
-    city: 'Helsinki',
   },
   {
     name: 'Karaportti',
+    city: 'Espoo',
     restaurant: {id: 3208, chain: 'Food & Co'},
     location: {lat: 60.22412908302269, lon: 24.7584602544428},
-    city: 'Espoo',
   },
   {
     name: 'Myllypuro',
+    city: 'Helsinki',
     restaurant: {id: 158, chain: 'Sodexo'},
     location: {lat: 60.223621756949434, lon: 25.077913869785164},
-    city: 'Helsinki',
   },
   {
     name: 'Myyrmäki',
+    city: 'Vantaa',
     restaurant: {id: 152, chain: 'Sodexo'},
     location: {lat: 60.258843352326785, lon: 24.84484968512866},
-    city: 'Vantaa',
   },
 ];
 
@@ -47,13 +49,15 @@ let settings = {
   lang: 'fi',
   campus: 'Myllypuro',
   darkmode: false,
-  departures: 2,
+  departures: 1,
 };
 
-// To store menu, routes and weather
+
+// To store menu, routes, weather and announcements
 let menu;
 let routes;
 let weather;
+let announcements;
 
 /**
  * Get menu from Sodexo or Food & Co module.
@@ -173,7 +177,7 @@ const renderMenuSection = async (menu) => {
 };
 
 /**
- * Converts HSL time from secconds to 00:00 format
+ * Converts HSL time from seconds to 00:00 format
  * @param {number} seconds
  * @returns time string in 00:00 format
  */
@@ -190,7 +194,6 @@ const convertTime = (seconds) => {
  * @param {array} allCampuses - List of all campuses and infos.
  * @returns Sorted array
  */
-
 const getRoutes = async (selectedCampus, allCampuses) => {
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
@@ -218,14 +221,22 @@ const getRoutes = async (selectedCampus, allCampuses) => {
  */
 
 const renderRouteInfo = async (routes) => {
-  const target = document.querySelector('#hsl-section');
+  const target = document.querySelector('#routes');
   for (const route of routes) {
-    const routeContainer = document.createElement('div');
-    routeContainer.classList = 'route-info container';
-    const stopCode = document.createElement('p');
+    const routeContainer = document.createElement('li');
+    routeContainer.classList = 'route-info';
+    const stopContainer = document.createElement('div');
+    stopContainer.classList = 'stop-info col';
+    const routeDestination = document.createElement('div');
+    routeDestination.classList = 'destination-info col';
+    const stopCode = document.createElement('div');
+    stopCode.id = 'stopcode';
     stopCode.classList = 'badge bg-secondary';
-    // const stopName = document.createElement('p');
-    const routeNumber = document.createElement('p');
+    const stopName = document.createElement('div');
+    stopName.id = 'stopname';
+    stopName.classList = 'fw-bold mb-3';
+    const routeNumber = document.createElement('div');
+    routeNumber.id = 'routenumber';
     if (route.mode == 'BUS') {
       routeNumber.classList = 'badge bg-info';
     } else if (route.mode == 'SUBWAY') {
@@ -236,22 +247,24 @@ const renderRouteInfo = async (routes) => {
       routeNumber.classList = 'badge bg-light';
     }
 
-    const destination = document.createElement('p');
-    destination.classList = 'badge bg-dark';
-    const routeRealtimeDeparture = document.createElement('p');
-    routeRealtimeDeparture.classList = 'badge bg-success';
+    const destination = document.createElement('div');
+    destination.id = 'destination';
+    destination.classList = 'fw-bold mb-3';
+    const routeRealtimeDeparture = document.createElement('div');
+    routeRealtimeDeparture.id = 'departure';
+    routeRealtimeDeparture.classList = 'fw-bold mb-3';
     stopCode.textContent = route.stopCode;
-    // stopName.textContent = route.stopName;
+    stopName.textContent = route.stopName;
     routeNumber.textContent = route.routeNumber;
     destination.textContent = route.destination;
     routeRealtimeDeparture.textContent = convertTime(
       route.routeRealtimeDeparture
     );
+    stopContainer.append(stopCode, stopName);
+    routeDestination.append(routeNumber, destination);
     routeContainer.append(
-      stopCode,
-      routeNumber,
-      //stopName,
-      destination,
+      stopContainer,
+      routeDestination,
       routeRealtimeDeparture
     );
     target.append(routeContainer);
@@ -313,6 +326,8 @@ const init = async () => {
   menu = await getMenu(settings.campus, campuses);
   routes = await getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
+  announcements = await Announcement.getAnnouncements();
+  renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
   renderRouteInfo(routes);
   renderWeather(weather);
