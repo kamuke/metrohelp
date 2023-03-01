@@ -11,6 +11,7 @@ import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
 import Announcement from './assets/modules/announcement';
 import {renderAnnouncements} from './assets/modules/announcement-render';
+import Navigation from './assets/modules/navigation';
 
 // Metropolia's campuses and needed info
 const campuses = [
@@ -51,7 +52,6 @@ let settings = {
   darkmode: false,
   departures: 1,
 };
-
 
 // To store menu, routes, weather and announcements
 let menu;
@@ -284,7 +284,11 @@ const getWeather = async (selectedCampus, allCampuses) => {
     if (selectedCampus === campus.name) {
       try {
         //start fetch
-        const response = await fetch('http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q='+campus.city+'&days=1&aqi=no&alerts=no');
+        const response = await fetch(
+          'http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q=' +
+            campus.city +
+            '&days=1&aqi=no&alerts=no'
+        );
         //If error
         if (!response.ok) throw new Error('Something went wrong.');
         const weather = await response.json();
@@ -304,25 +308,32 @@ const getWeather = async (selectedCampus, allCampuses) => {
  * @param weather
  * @returns {Promise<void>}
  */
-const renderWeather = async(weather) => {
+const renderWeather = async (weather) => {
   const weatherImg = document.querySelector('#weather-img');
   const weatherCaption = document.querySelector('#weather-caption');
   const weatherCity = document.createElement('p');
 
   //insert img and alt txt (in english) TODO: translate current condition text into finnish?
-  weatherImg.src=weather.current.condition.icon;
-  weatherImg.alt=weather.current.condition.text;
+  weatherImg.src = weather.current.condition.icon;
+  weatherImg.alt = weather.current.condition.text;
   //current weather
-  weatherCaption.textContent = weather.current.temp_c+' °C';
+  weatherCaption.textContent = weather.current.temp_c + ' °C';
   //display selected campus' city
   weatherCaption.appendChild(weatherCity);
-  weatherCity.textContent=weather.location.name;
+  weatherCity.textContent = weather.location.name;
 };
+
+// When window scrolls
+window.addEventListener('scroll', () =>
+  Navigation.changeActiveStateOnNavLinksWhenScrolling()
+);
 
 /**
  * App initialization.
  */
 const init = async () => {
+  Navigation.addClickListenersToNavLinks();
+  Navigation.checkIfUrlHasHash();
   menu = await getMenu(settings.campus, campuses);
   routes = await getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
