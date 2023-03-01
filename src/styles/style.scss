@@ -159,3 +159,29 @@ a.card {
 #dietcode-exp-body {
   margin: 0;
 }
+
+#routes {
+  background-color: custom.$light;
+  padding: 1rem 1.25rem;
+}
+
+.route-info {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(custom.$black, 0.125);
+  gap: 0.5rem;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+    border: 0;
+  }
+}
+
+

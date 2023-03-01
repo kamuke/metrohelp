@@ -45,7 +45,7 @@ let settings = {
   lang: 'fi',
   campus: 'Myllypuro',
   darkmode: false,
-  departures: 2,
+  departures: 1,
 };
 
 // To store menu, routes and announcements
@@ -213,14 +213,22 @@ const getRoutes = async (selectedCampus, allCampuses) => {
  * @param {array} routes - Array of sorted routes
  */
 const renderRouteInfo = async (routes) => {
-  const target = document.querySelector('#hsl-section');
+  const target = document.querySelector('#routes');
   for (const route of routes) {
-    const routeContainer = document.createElement('div');
-    routeContainer.classList = 'route-info container';
-    const stopCode = document.createElement('p');
+    const routeContainer = document.createElement('li');
+    routeContainer.classList = 'route-info';
+    const stopContainer = document.createElement('div');
+    stopContainer.classList = 'stop-info col';
+    const routeDestination = document.createElement('div');
+    routeDestination.classList = 'destination-info col';
+    const stopCode = document.createElement('div');
+    stopCode.id = 'stopcode';
     stopCode.classList = 'badge bg-secondary';
-    // const stopName = document.createElement('p');
-    const routeNumber = document.createElement('p');
+    const stopName = document.createElement('div');
+    stopName.id = 'stopname';
+    stopName.classList = 'fw-bold mb-3';
+    const routeNumber = document.createElement('div');
+    routeNumber.id = 'routenumber';
     if (route.mode == 'BUS') {
       routeNumber.classList = 'badge bg-info';
     } else if (route.mode == 'SUBWAY') {
@@ -231,22 +239,24 @@ const renderRouteInfo = async (routes) => {
       routeNumber.classList = 'badge bg-light';
     }
 
-    const destination = document.createElement('p');
-    destination.classList = 'badge bg-dark';
-    const routeRealtimeDeparture = document.createElement('p');
-    routeRealtimeDeparture.classList = 'badge bg-success';
+    const destination = document.createElement('div');
+    destination.id = 'destination';
+    destination.classList = 'fw-bold mb-3';
+    const routeRealtimeDeparture = document.createElement('div');
+    routeRealtimeDeparture.id = 'departure';
+    routeRealtimeDeparture.classList = 'fw-bold mb-3';
     stopCode.textContent = route.stopCode;
-    // stopName.textContent = route.stopName;
+    stopName.textContent = route.stopName;
     routeNumber.textContent = route.routeNumber;
     destination.textContent = route.destination;
     routeRealtimeDeparture.textContent = convertTime(
       route.routeRealtimeDeparture
     );
+    stopContainer.append(stopCode, stopName);
+    routeDestination.append(routeNumber, destination);
     routeContainer.append(
-      stopCode,
-      routeNumber,
-      //stopName,
-      destination,
+      stopContainer,
+      routeDestination,
       routeRealtimeDeparture
     );
     target.append(routeContainer);
