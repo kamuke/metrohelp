@@ -3,21 +3,7 @@
 @import '~bootstrap/scss/bootstrap'; // Bootstrap and its default variables
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css'); // Bootstrap icons
 
-// TODO: CLEAN
-
-a.card {
-  text-decoration: none;
-  color: custom.$dark;
-  overflow: hidden;
-  min-height: 280px;
-  max-height: 480.5px;
-
-  @media screen and (max-width: 767px) {
-    min-height: 100%;
-    max-height: 100%;
-  }
-}
-
+// Carousel:
 .carousel-indicators {
   position: static;
 }
@@ -46,29 +32,8 @@ a.card {
   border-color: var(--bs-pagination-active-border-color);
 }
 
-.card-body {
-  padding: 0.75rem 1.25rem;
-}
-
-.card-content {
-  align-items: center;
-  display: flex;
-
-  @media screen and (max-width: 767px) {
-    align-items: start;
-  }
-
-  @media screen and (max-width: 575px) {
-    hyphens: auto;
-    height: 204px;
-  }
-}
-
 .carousel-item {
   border: 0;
-  padding: 0;
-  border-radius: custom.$border-radius;
-  overflow: hidden;
 
   img {
     object-fit: cover;
@@ -81,11 +46,48 @@ a.card {
   }
 }
 
+// Cards:
+a.card {
+  text-decoration: none;
+  color: custom.$dark;
+  overflow: hidden;
+  min-height: 280px;
+  max-height: 480.5px;
+
+  @media screen and (max-width: 767px) {
+    min-height: 100%;
+    max-height: 100%;
+  }
+
+  .card-content {
+    align-items: center;
+    display: flex;
+
+    @media screen and (max-width: 767px) {
+      align-items: start;
+    }
+
+    @media screen and (max-width: 575px) {
+      height: 148px;
+    }
+  }
+
+  .card-body {
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+  }
+
+  @media screen and (max-width: 1199px) {
+    hyphens: auto;
+  }
+}
+
 .card-img-container {
   overflow: hidden;
   padding: 0;
 }
 
+// Modal:
 .modal-dialog {
   @media screen and (max-width: 991px) {
     margin-right: 0.75rem;
@@ -106,11 +108,7 @@ a.card {
   margin-bottom: 0;
 }
 
-.btn-close {
-  width: 1.5em;
-  height: 1.5em;
-}
-
+// Menus:
 #menus-list {
   background-color: custom.$light;
   padding: 1rem 1.25rem;

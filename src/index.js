@@ -6,10 +6,11 @@
 import './styles/style.scss';
 import 'bootstrap';
 import ServiceWorker from './assets/modules/service-worker';
-// import HSL from './assets/modules/hsl-data';
+import HSL from './assets/modules/hsl-data';
 import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
 import Announcement from './assets/modules/announcement';
+import {renderAnnouncements} from './assets/modules/announcement-render';
 
 // Metropolia's campuses and needed info
 const campuses = [
@@ -41,16 +42,16 @@ const campuses = [
 // User settings
 // TODO: Save to localStorage + load from localStorage
 let settings = {
-  lang: 'en',
+  lang: 'fi',
   campus: 'Myllypuro',
   darkmode: false,
   departures: 2,
 };
 
-// To store menu, routes and annoucements
+// To store menu, routes and announcements
 let menu;
-// let routes;
-let annoucements;
+let routes;
+let announcements;
 
 /**
  * Get menu from Sodexo or Food & Co module.
@@ -174,11 +175,11 @@ const renderMenuSection = async (menu) => {
  * @param {number} seconds
  * @returns time string in 00:00 format
  */
-// const convertTime = (seconds) => {
-//   const hours = Math.floor(seconds / 3600);
-//   const mins = Math.floor((seconds % 3600) / 60);
-//   return `${hours == 24 ? '00' : hours}:${mins < 10 ? '0' + mins : mins}`;
-// };
+const convertTime = (seconds) => {
+  const hours = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  return `${hours == 24 ? '00' : hours}:${mins < 10 ? '0' + mins : mins}`;
+};
 
 /**
  * @author Eeli
@@ -186,190 +187,69 @@ const renderMenuSection = async (menu) => {
  * @param {array} allCampuses - List of all campuses and infos.
  * @returns Sorted array
  */
-// const getRoutes = async (selectedCampus, allCampuses) => {
-//   for (const campus of allCampuses) {
-//     if (selectedCampus === campus.name) {
-//       const routesData = await HSL.getRoutesByLocation(
-//         campus.location.lat,
-//         campus.location.lon,
-//         settings.departures
-//       );
-//       let routesArray = [];
-//       for (const route of routesData) {
-//         for (let i = 0; i < settings.departures; i++) {
-//           routesArray.push(route[i]);
-//         }
-//       }
-//       return routesArray.sort((a, b) => {
-//         return a.routeRealtimeDeparture - b.routeRealtimeDeparture;
-//       });
-//     }
-//   }
-// };
+const getRoutes = async (selectedCampus, allCampuses) => {
+  for (const campus of allCampuses) {
+    if (selectedCampus === campus.name) {
+      const routesData = await HSL.getRoutesByLocation(
+        campus.location.lat,
+        campus.location.lon,
+        settings.departures
+      );
+      let routesArray = [];
+      for (const route of routesData) {
+        for (let i = 0; i < settings.departures; i++) {
+          routesArray.push(route[i]);
+        }
+      }
+      return routesArray.sort((a, b) => {
+        return a.routeRealtimeDeparture - b.routeRealtimeDeparture;
+      });
+    }
+  }
+};
 
 /**
  *
  * @param {array} routes - Array of sorted routes
  */
-// const renderRouteInfo = async (routes) => {
-//   const target = document.querySelector('#hsl-section');
-//   for (const route of routes) {
-//     const routeContainer = document.createElement('div');
-//     routeContainer.classList = 'route-info container';
-//     const stopCode = document.createElement('p');
-//     stopCode.classList = 'badge bg-secondary';
-//     // const stopName = document.createElement('p');
-//     const routeNumber = document.createElement('p');
-//     if (route.mode == 'BUS') {
-//       routeNumber.classList = 'badge bg-info';
-//     } else if (route.mode == 'SUBWAY') {
-//       routeNumber.classList = 'badge bg-primary';
-//     } else if (route.mode == 'TRAM') {
-//       routeNumber.classList = 'badge bg-success';
-//     } else if (route.mode == 'RAIL') {
-//       routeNumber.classList = 'badge bg-light';
-//     }
-
-//     const destination = document.createElement('p');
-//     destination.classList = 'badge bg-dark';
-//     const routeRealtimeDeparture = document.createElement('p');
-//     routeRealtimeDeparture.classList = 'badge bg-success';
-//     stopCode.textContent = route.stopCode;
-//     // stopName.textContent = route.stopName;
-//     routeNumber.textContent = route.routeNumber;
-//     destination.textContent = route.destination;
-//     routeRealtimeDeparture.textContent = convertTime(
-//       route.routeRealtimeDeparture
-//     );
-//     routeContainer.append(
-//       stopCode,
-//       routeNumber,
-//       //stopName,
-//       destination,
-//       routeRealtimeDeparture
-//     );
-//     target.append(routeContainer);
-//   }
-// };
-
-/**
- * Helper for setting different attributes to an element.
- *
- */
-const setAttributes = (element, attrs) => {
-  for (const key in attrs) {
-    element.setAttribute(key, attrs[key]);
-  }
-};
-
-const renderAnnouncementCarouselSlide = (
-  announcement,
-  index,
-  targetElement
-) => {
-  const rowDiv = document.createElement('div');
-  const colDivImg = document.createElement('div');
-  const colDivContent = document.createElement('div');
-  const cardBodyDiv = document.createElement('div');
-  const aLink = document.createElement('a');
-  const img = document.createElement('img');
-  const title = document.createElement('h3');
-  const text = document.createElement('p');
-  const showMore = document.createElement('p');
-
-  aLink.classList =
-    index === 0 ? 'card carousel-item active' : 'card carousel-item';
-  rowDiv.classList = 'row g-1';
-  colDivImg.classList = 'col-md-8 card-img-container';
-  colDivContent.classList = 'col-md-4 card-content';
-  cardBodyDiv.classList = 'card-body';
-  img.classList = 'img-fluid';
-  title.classList = 'card-title fs-4';
-  text.classList = 'card-text';
-  showMore.classList = 'text-primary fs-6';
-
-  setAttributes(img, {
-    src: announcement.imgUrl,
-    alt: announcement.title,
-  });
-  setAttributes(aLink, {
-    'data-bs-toggle': 'modal',
-    'data-bs-target': '#modal-' + (index + 1),
-  });
-
-  text.textContent = announcement.body;
-  title.textContent = announcement.title;
-  showMore.innerHTML = `<u> ${
-    settings.lang && settings.lang === 'en' ? 'Show more' : 'Näytä lisää'
-  } <i class="bi bi-arrow-right"></i> </u>`;
-
-  cardBodyDiv.append(title, text, showMore);
-  colDivContent.append(cardBodyDiv);
-  colDivImg.append(img);
-  rowDiv.append(colDivImg, colDivContent);
-  aLink.append(rowDiv);
-  targetElement.append(aLink);
-};
-
-const renderAnnouncementCarousel = (announcements) => {
-  const annCarousel = document.querySelector('#announcements-carousel-inner');
-  const carouselNavBtns = document.querySelector('#carousel-navigation');
-  annCarousel.innerHTML = '';
-  carouselNavBtns.innerHTML = '';
-
-  for (let i = 0; i < announcements.length; i++) {
-    const announcement =
-      settings.lang && settings.lang === 'en'
-        ? announcements[i].en
-        : announcements[i].fi;
-    renderAnnouncementCarouselSlide(announcement, i, annCarousel);
-    const li = document.createElement('li');
-    const button = document.createElement('button');
-    li.classList = 'page-item';
-    button.classList = i === 0 ? 'page-link active' : 'page-link';
-    setAttributes(button, {
-      type: 'button',
-      'data-bs-target': '#announcements-carousel',
-      'data-bs-slide-to': i,
-      'aria-label': 'Slide ' + (i + 1),
-    });
-    if (i === 0) {
-      button.setAttribute('aria-current', 'true');
+const renderRouteInfo = async (routes) => {
+  const target = document.querySelector('#hsl-section');
+  for (const route of routes) {
+    const routeContainer = document.createElement('div');
+    routeContainer.classList = 'route-info container';
+    const stopCode = document.createElement('p');
+    stopCode.classList = 'badge bg-secondary';
+    // const stopName = document.createElement('p');
+    const routeNumber = document.createElement('p');
+    if (route.mode == 'BUS') {
+      routeNumber.classList = 'badge bg-info';
+    } else if (route.mode == 'SUBWAY') {
+      routeNumber.classList = 'badge bg-primary';
+    } else if (route.mode == 'TRAM') {
+      routeNumber.classList = 'badge bg-success';
+    } else if (route.mode == 'RAIL') {
+      routeNumber.classList = 'badge bg-light';
     }
-    button.innerHTML = i + 1;
-    li.append(button);
-    carouselNavBtns.append(li);
-  }
 
-  console.log(announcements.length);
-
-  if (announcements.length > 1) {
-    const previousLi = document.createElement('li');
-    const previousBtn = document.createElement('button');
-    const nextLi = document.createElement('li');
-    const nextBtn = document.createElement('button');
-    previousLi.classList = 'page-item';
-    nextLi.classList = 'page-item';
-    previousBtn.classList = 'page-link';
-    nextBtn.classList = 'page-link';
-    setAttributes(previousBtn, {
-      type: 'button',
-      'data-bs-target': '#announcements-carousel',
-      'data-bs-slide': 'prev',
-      'aria-label': 'Edellinen/Previous',
-    });
-    setAttributes(nextBtn, {
-      type: 'button',
-      'data-bs-target': '#announcements-carousel',
-      'data-bs-slide': 'next',
-      'aria-label': 'Seuraava/Next',
-    });
-    previousBtn.innerHTML = '<span aria-hidden="true">&laquo;</span>';
-    nextBtn.innerHTML = '<span aria-hidden="true">&raquo;</span>';
-    previousLi.append(previousBtn);
-    nextLi.append(nextBtn);
-    carouselNavBtns.prepend(previousLi);
-    carouselNavBtns.append(nextLi);
+    const destination = document.createElement('p');
+    destination.classList = 'badge bg-dark';
+    const routeRealtimeDeparture = document.createElement('p');
+    routeRealtimeDeparture.classList = 'badge bg-success';
+    stopCode.textContent = route.stopCode;
+    // stopName.textContent = route.stopName;
+    routeNumber.textContent = route.routeNumber;
+    destination.textContent = route.destination;
+    routeRealtimeDeparture.textContent = convertTime(
+      route.routeRealtimeDeparture
+    );
+    routeContainer.append(
+      stopCode,
+      routeNumber,
+      //stopName,
+      destination,
+      routeRealtimeDeparture
+    );
+    target.append(routeContainer);
   }
 };
 
@@ -378,12 +258,11 @@ const renderAnnouncementCarousel = (announcements) => {
  */
 const init = async () => {
   menu = await getMenu(settings.campus, campuses);
-  // routes = await getRoutes(settings.campus, campuses);
-  annoucements = await Announcement.getAnnouncements();
-  console.log(annoucements);
+  routes = await getRoutes(settings.campus, campuses);
+  announcements = await Announcement.getAnnouncements();
+  renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
-  renderAnnouncementCarousel(annoucements);
-  // renderRouteInfo(routes);
+  renderRouteInfo(routes);
   ServiceWorker.register();
 };
 

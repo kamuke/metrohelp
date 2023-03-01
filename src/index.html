@@ -6,88 +6,26 @@
   </head>
   <body>
     <main class="container-lg">
-      <section class="announcements-section">
+      <section id="announcements-section" class="mt-5 mb-5">
         <h2 id="announcements-heading">Tiedotteet</h2>
-        <div id="announcements-carousel" class="carousel slide">
-          <div id="announcements-carousel-inner" class="carousel-inner">
-            <!-- <a
-              href=""
-              class="card carousel-item active"
-              data-bs-toggle="modal"
-              data-bs-target="#modal-one"
-            >
-              <div class="row g-1">
-                <div class="col-md-8 card-img-container">
-                  <img
-                    src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/zone_fi.PNG"
-                    class="img-fluid"
-                    alt="..."
-                  />
-                </div>
-                <div class="col-md-4 card-content">
-                  <div class="card-body">
-                    <h3 class="card-title fs-4">Zone</h3>
-                    <p class="card-text">
-                      Ohjattua ryhmäliikuntaa, palloilua, kursseja ja
-                      kuntosaleja...
-                    </p>
-                    <p class="text-primary fs-6">
-                      <u> Näytä lisää <i class="bi bi-arrow-right"></i> </u>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </a> -->
-          </div>
+        <div id="announcements-carousel" class="carousel slide mt-4">
+          <div id="announcements-carousel-inner" class="carousel-inner"></div>
           <nav
-            class="mt-3 d-flex justify-content-center"
+            class="mt-4 d-flex justify-content-center"
             aria-label="Tiedotteiden navigaatio/Announcement's navigation"
           >
             <ul
               id="carousel-navigation"
-              class="pagination carousel-indicators"
+              class="pagination carousel-indicators m-0"
             ></ul>
           </nav>
         </div>
-        <div
-          class="modal fade"
-          id="modal-one"
-          tabindex="-1"
-          aria-labelledby="modal-one-label"
-          aria-hidden="true"
-        >
-          <article class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title" id="modal-one-label">
-                  Ohjattua ryhmäliikuntaa, palloilua, kursseja ja kuntosaleja
-                </h3>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <img
-                  src="https://users.metropolia.fi/~veerakek/metrohelp_announcements/img/zone_fi.PNG"
-                  class="d-block w-100"
-                  alt="..."
-                />
-                <p>
-                  Tutustu liikuntatarjontaamme ja tule mukaan liikkumaan!
-                  <a href="https://zonesports.fi/">www.zonesports.fi</a>
-                </p>
-              </div>
-            </div>
-          </article>
-        </div>
+        <div id="announcement-modals"></div>
       </section>
-      <section id="menus-section">
+      <section id="menus-section" class="mt-5 mb-5">
         <h2 id="menus-heading">Ruokalista</h2>
         <p id="menus-date" class="fw-bold mb-3"></p>
-        <ul id="menus-list" class="list-group mt-3 mb-3"></ul>
+        <ul id="menus-list" class="list-group mt-4 mb-4"></ul>
         <div id="dietcode-explanations" class="accordion">
           <div class="accordion-item">
             <h3 id="dietcode-exp-heading" class="accordion-header">
@@ -114,7 +52,7 @@
           </div>
         </div>
       </section>
-      <section id="hsl-section"><h2>HSL</h2></section>
+      <section id="hsl-section" class="mt-5 mb-5"><h2>HSL</h2></section>
     </main>
   </body>
 </html>
