@@ -16,6 +16,7 @@ import {renderAnnouncements} from './assets/modules/announcement-render';
 const campuses = [
   {
     name: 'Arabia',
+    city: 'Helsinki',
     restaurant: {
       id: 1251,
       chain: 'Food & Co',
@@ -24,16 +25,19 @@ const campuses = [
   },
   {
     name: 'Karaportti',
+    city: 'Espoo',
     restaurant: {id: 3208, chain: 'Food & Co'},
     location: {lat: 60.22412908302269, lon: 24.7584602544428},
   },
   {
     name: 'Myllypuro',
+    city: 'Helsinki',
     restaurant: {id: 158, chain: 'Sodexo'},
     location: {lat: 60.223621756949434, lon: 25.077913869785164},
   },
   {
     name: 'Myyrmäki',
+    city: 'Vantaa',
     restaurant: {id: 152, chain: 'Sodexo'},
     location: {lat: 60.258843352326785, lon: 24.84484968512866},
   },
@@ -48,9 +52,11 @@ let settings = {
   departures: 1,
 };
 
-// To store menu, routes and announcements
+
+// To store menu, routes, weather and announcements
 let menu;
 let routes;
+let weather;
 let announcements;
 
 /**
@@ -171,10 +177,11 @@ const renderMenuSection = async (menu) => {
 };
 
 /**
- * Converts HSL time from secconds to 00:00 format
+ * Converts HSL time from seconds to 00:00 format
  * @param {number} seconds
  * @returns time string in 00:00 format
  */
+
 const convertTime = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
@@ -212,6 +219,7 @@ const getRoutes = async (selectedCampus, allCampuses) => {
  *
  * @param {array} routes - Array of sorted routes
  */
+
 const renderRouteInfo = async (routes) => {
   const target = document.querySelector('#routes');
   for (const route of routes) {
@@ -264,15 +272,65 @@ const renderRouteInfo = async (routes) => {
 };
 
 /**
+ * Get current weather from the selected campus' city
+ *
+ * @author Catrina
+ * @param {string} selectedCampus - Selected campus to get it's city
+ * @param {array} allCampuses - List of all campuses and infos.
+ * @returns Selected campus' weather
+ */
+const getWeather = async (selectedCampus, allCampuses) => {
+  for (const campus of allCampuses) {
+    if (selectedCampus === campus.name) {
+      try {
+        //start fetch
+        const response = await fetch('http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q='+campus.city+'&days=1&aqi=no&alerts=no');
+        //If error
+        if (!response.ok) throw new Error('Something went wrong.');
+        const weather = await response.json();
+        //return weather json
+        return weather;
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  }
+};
+
+/**
+ * Render current weather
+ *
+ * @author Catrina
+ * @param weather
+ * @returns {Promise<void>}
+ */
+const renderWeather = async(weather) => {
+  const weatherImg = document.querySelector('#weather-img');
+  const weatherCaption = document.querySelector('#weather-caption');
+  const weatherCity = document.createElement('p');
+
+  //insert img and alt txt (in english) TODO: translate current condition text into finnish?
+  weatherImg.src=weather.current.condition.icon;
+  weatherImg.alt=weather.current.condition.text;
+  //current weather
+  weatherCaption.textContent = weather.current.temp_c+' °C';
+  //display selected campus' city
+  weatherCaption.appendChild(weatherCity);
+  weatherCity.textContent=weather.location.name;
+};
+
+/**
  * App initialization.
  */
 const init = async () => {
   menu = await getMenu(settings.campus, campuses);
   routes = await getRoutes(settings.campus, campuses);
+  weather = await getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
   renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
   renderRouteInfo(routes);
+  renderWeather(weather);
   ServiceWorker.register();
 };
 
