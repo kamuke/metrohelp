@@ -5,9 +5,89 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
+    <nav class="navbar navbar-expand-md">
+      <div class="collapse navbar-collapse" id="navbar-toggler">
+        <div class="container-lg d-md-flex justify-content-between">
+          <ul class="navbar-nav mb-0">
+            <li class="nav-item">
+              <!-- TODO: Logo -->
+              <a class="nav-link navbar-brand" href="index.html">LOGO</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#announcements-section">
+                <i class="bi bi-bell-fill"></i>
+                <span>Tiedotteet</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#menus-section">
+                <i class="bi bi-card-list"></i>
+                <span>Ruokalista</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#hsl-section">
+                <i class="bi bi-bus-front"></i>
+                <span>HSL</span>
+              </a>
+            </li>
+          </ul>
+          <div class="d-md-flex">
+            <select
+              id="select-lang"
+              class="form-select"
+              aria-label="Valitse kieli/Select language"
+            >
+              <option value="fi" aria-label="Suomi" selected>FI</option>
+              <option value="en" aria-label="English">EN</option>
+            </select>
+            <select
+              id="select-campus"
+              class="form-select"
+              aria-label="Valitse kampus/Select campus"
+            >
+              <option value="Arabia" selected>Arabia</option>
+              <option value="Karaportti">Karaportti</option>
+              <option value="Myllypuro">Myllypuro</option>
+              <option value="Myyrmäki">Myyrmäki</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="navbar-mobile">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar-toggler"
+          aria-controls="navbar-toggler"
+          aria-expanded="false"
+          aria-label="Näytä tai sulje navigaatio/Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="navbar-mobile-nav m-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#announcements-section"
+              ><i class="bi bi-bell-fill"></i><span>Tiedotteet</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#menus-section"
+              ><i class="bi bi-card-list"></i><span>Ruokalista</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#hsl-section"
+              ><i class="bi bi-bus-front"></i><span>HSL</span></a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
     <main class="container-lg">
-      <section id="announcements-section" class="mt-5 mb-5">
-        <h2 id="announcements-heading">Tiedotteet</h2>
+      <section id="announcements-section" class="pt-3 pb-4 pt-md-5 pb-md-0">
+        <h2 id="announcements-heading" class="pt-0 pt-md-4">Tiedotteet</h2>
         <div id="announcements-carousel" class="carousel slide mt-4">
           <div id="announcements-carousel-inner" class="carousel-inner"></div>
           <nav
@@ -22,8 +102,8 @@
         </div>
         <div id="announcement-modals"></div>
       </section>
-      <section id="menus-section" class="mt-5 mb-5">
-        <h2 id="menus-heading">Ruokalista</h2>
+      <section id="menus-section" class="pt-3 pb-4 pt-md-5 pb-md-0">
+        <h2 id="menus-heading" class="pt-0 pt-md-4">Ruokalista</h2>
         <p id="menus-date" class="fw-bold mb-3"></p>
         <ul id="menus-list" class="list-group mt-4 mb-4"></ul>
         <div id="dietcode-explanations" class="accordion">
@@ -52,20 +132,20 @@
           </div>
         </div>
       </section>
-      <section id="hsl-section" class="container">
-      <h2>HSL</h2>
-      <ul id="routes" class="list-group mt-3 mb-3"></ul>
-      <div id="route-map"></div>
-    </section>
-     <section id="weather-section" class="container">
-      <h2>Sää</h2>
-      <div id="weather-info">
-        <figure>
-          <img src="" id="weather-img"/>
-          <figcaption id="weather-caption"></figcaption>
-        </figure>
-      </div>
-    </section>
+      <section id="hsl-section" class="pt-3 pb-5 pt-md-5 mb-3 mb-md-0">
+        <h2 class="pt-0 pt-md-4">HSL</h2>
+        <ul id="routes" class="list-group mt-3 mb-3"></ul>
+        <div id="route-map"></div>
+      </section>
+      <section id="weather-section">
+        <h2>Sää</h2>
+        <div id="weather-info">
+          <figure>
+            <img src="" id="weather-img" />
+            <figcaption id="weather-caption"></figcaption>
+          </figure>
+        </div>
+      </section>
     </main>
   </body>
 </html>
