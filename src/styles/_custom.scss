@@ -66,5 +66,22 @@ $danger: $red;
 $warning: $yellow;
 $info: $cyan;
 
+// Card;
+$card-bg: $light;
+
+// Modal:
+$modal-md: 967px;
+$modal-inner-padding: 0 1rem 1rem 1rem;
+$modal-header-padding: 1rem;
+$modal-content-border-width: 0;
+$modal-header-border-width: 0;
+
 // Other:
 $border-radius: 0.5rem;
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1100px,
+  xxl: 1200px,
+);

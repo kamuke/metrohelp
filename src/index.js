@@ -9,6 +9,8 @@ import ServiceWorker from './assets/modules/service-worker';
 import HSL from './assets/modules/hsl-data';
 import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
+import Announcement from './assets/modules/announcement';
+import {renderAnnouncements} from './assets/modules/announcement-render';
 
 // Metropolia's campuses and needed info
 const campuses = [
@@ -46,9 +48,10 @@ let settings = {
   departures: 1,
 };
 
-// To store menu and routes
+// To store menu, routes and announcements
 let menu;
 let routes;
+let announcements;
 
 /**
  * Get menu from Sodexo or Food & Co module.
@@ -184,7 +187,6 @@ const convertTime = (seconds) => {
  * @param {array} allCampuses - List of all campuses and infos.
  * @returns Sorted array
  */
-
 const getRoutes = async (selectedCampus, allCampuses) => {
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
@@ -260,12 +262,15 @@ const renderRouteInfo = async (routes) => {
     target.append(routeContainer);
   }
 };
+
 /**
  * App initialization.
  */
 const init = async () => {
   menu = await getMenu(settings.campus, campuses);
   routes = await getRoutes(settings.campus, campuses);
+  announcements = await Announcement.getAnnouncements();
+  renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
   renderRouteInfo(routes);
   ServiceWorker.register();
