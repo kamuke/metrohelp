@@ -332,8 +332,6 @@ window.addEventListener('scroll', () =>
  * App initialization.
  */
 const init = async () => {
-  Navigation.addClickListenersToNavLinks();
-  Navigation.checkIfUrlHasHash();
   menu = await getMenu(settings.campus, campuses);
   routes = await getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
