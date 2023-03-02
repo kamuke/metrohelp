@@ -45,7 +45,6 @@ const campuses = [
 ];
 
 // User settings
-// TODO: Save to localStorage + load from localStorage
 let settings = {
   lang: 'fi',
   campus: 'Myllypuro',
