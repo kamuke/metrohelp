@@ -9,11 +9,15 @@ import ServiceWorker from './assets/modules/service-worker';
 import HSL from './assets/modules/hsl-data';
 import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
+import Announcement from './assets/modules/announcement';
+import {renderAnnouncements} from './assets/modules/announcement-render';
+import Navigation from './assets/modules/navigation';
 
 // Metropolia's campuses and needed info
 const campuses = [
   {
     name: 'Arabia',
+    city: 'Helsinki',
     restaurant: {
       id: 1251,
       chain: 'Food & Co',
@@ -22,16 +26,19 @@ const campuses = [
   },
   {
     name: 'Karaportti',
+    city: 'Espoo',
     restaurant: {id: 3208, chain: 'Food & Co'},
     location: {lat: 60.22412908302269, lon: 24.7584602544428},
   },
   {
     name: 'Myllypuro',
+    city: 'Helsinki',
     restaurant: {id: 158, chain: 'Sodexo'},
     location: {lat: 60.223621756949434, lon: 25.077913869785164},
   },
   {
     name: 'Myyrmäki',
+    city: 'Vantaa',
     restaurant: {id: 152, chain: 'Sodexo'},
     location: {lat: 60.258843352326785, lon: 24.84484968512866},
   },
@@ -42,12 +49,14 @@ let settings = {
   lang: 'fi',
   campus: 'Myllypuro',
   darkmode: false,
-  departures: 2,
+  departures: 1,
 };
 
-// To store menu and routes
+// To store menu, routes, weather and announcements
 let menu;
 let routes;
+let weather;
+let announcements;
 
 /**
  * Get menu from Sodexo or Food & Co module.
@@ -167,10 +176,11 @@ const renderMenuSection = async (menu) => {
 };
 
 /**
- * Converts HSL time from secconds to 00:00 format
+ * Converts HSL time from seconds to 00:00 format
  * @param {number} seconds
  * @returns time string in 00:00 format
  */
+
 const convertTime = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
@@ -183,7 +193,6 @@ const convertTime = (seconds) => {
  * @param {array} allCampuses - List of all campuses and infos.
  * @returns Sorted array
  */
-
 const getRoutes = async (selectedCampus, allCampuses) => {
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
@@ -209,15 +218,24 @@ const getRoutes = async (selectedCampus, allCampuses) => {
  *
  * @param {array} routes - Array of sorted routes
  */
+
 const renderRouteInfo = async (routes) => {
-  const target = document.querySelector('#hsl-section');
+  const target = document.querySelector('#routes');
   for (const route of routes) {
-    const routeContainer = document.createElement('div');
-    routeContainer.classList = 'route-info container';
-    const stopCode = document.createElement('p');
+    const routeContainer = document.createElement('li');
+    routeContainer.classList = 'route-info';
+    const stopContainer = document.createElement('div');
+    stopContainer.classList = 'stop-info col';
+    const routeDestination = document.createElement('div');
+    routeDestination.classList = 'destination-info col';
+    const stopCode = document.createElement('div');
+    stopCode.id = 'stopcode';
     stopCode.classList = 'badge bg-secondary';
-    // const stopName = document.createElement('p');
-    const routeNumber = document.createElement('p');
+    const stopName = document.createElement('div');
+    stopName.id = 'stopname';
+    stopName.classList = 'fw-bold mb-3';
+    const routeNumber = document.createElement('div');
+    routeNumber.id = 'routenumber';
     if (route.mode == 'BUS') {
       routeNumber.classList = 'badge bg-info';
     } else if (route.mode == 'SUBWAY') {
@@ -228,22 +246,24 @@ const renderRouteInfo = async (routes) => {
       routeNumber.classList = 'badge bg-light';
     }
 
-    const destination = document.createElement('p');
-    destination.classList = 'badge bg-dark';
-    const routeRealtimeDeparture = document.createElement('p');
-    routeRealtimeDeparture.classList = 'badge bg-success';
+    const destination = document.createElement('div');
+    destination.id = 'destination';
+    destination.classList = 'fw-bold mb-3';
+    const routeRealtimeDeparture = document.createElement('div');
+    routeRealtimeDeparture.id = 'departure';
+    routeRealtimeDeparture.classList = 'fw-bold mb-3';
     stopCode.textContent = route.stopCode;
-    // stopName.textContent = route.stopName;
+    stopName.textContent = route.stopName;
     routeNumber.textContent = route.routeNumber;
     destination.textContent = route.destination;
     routeRealtimeDeparture.textContent = convertTime(
       route.routeRealtimeDeparture
     );
+    stopContainer.append(stopCode, stopName);
+    routeDestination.append(routeNumber, destination);
     routeContainer.append(
-      stopCode,
-      routeNumber,
-      //stopName,
-      destination,
+      stopContainer,
+      routeDestination,
       routeRealtimeDeparture
     );
     target.append(routeContainer);
@@ -251,15 +271,75 @@ const renderRouteInfo = async (routes) => {
 };
 
 /**
+ * Get current weather from the selected campus' city
+ *
+ * @author Catrina
+ * @param {string} selectedCampus - Selected campus to get it's city
+ * @param {array} allCampuses - List of all campuses and infos.
+ * @returns Selected campus' weather
+ */
+const getWeather = async (selectedCampus, allCampuses) => {
+  for (const campus of allCampuses) {
+    if (selectedCampus === campus.name) {
+      try {
+        //start fetch
+        const response = await fetch(
+          'http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q=' +
+            campus.city +
+            '&days=1&aqi=no&alerts=no'
+        );
+        //If error
+        if (!response.ok) throw new Error('Something went wrong.');
+        const weather = await response.json();
+        //return weather json
+        return weather;
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  }
+};
+
+/**
+ * Render current weather
+ *
+ * @author Catrina
+ * @param weather
+ * @returns {Promise<void>}
+ */
+const renderWeather = async (weather) => {
+  const weatherImg = document.querySelector('#weather-img');
+  const weatherCaption = document.querySelector('#weather-caption');
+  const weatherCity = document.createElement('p');
+
+  //insert img and alt txt (in english) TODO: translate current condition text into finnish?
+  weatherImg.src = weather.current.condition.icon;
+  weatherImg.alt = weather.current.condition.text;
+  //current weather
+  weatherCaption.textContent = weather.current.temp_c + ' °C';
+  //display selected campus' city
+  weatherCaption.appendChild(weatherCity);
+  weatherCity.textContent = weather.location.name;
+};
+
+// When window scrolls
+window.addEventListener('scroll', () =>
+  Navigation.changeActiveStateOnNavLinksWhenScrolling()
+);
+
+/**
  * App initialization.
  */
 const init = async () => {
   menu = await getMenu(settings.campus, campuses);
   routes = await getRoutes(settings.campus, campuses);
+  weather = await getWeather(settings.campus, campuses);
+  announcements = await Announcement.getAnnouncements();
+  renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
   renderRouteInfo(routes);
+  renderWeather(weather);
   ServiceWorker.register();
-  loadSettings();
 };
 
 init();

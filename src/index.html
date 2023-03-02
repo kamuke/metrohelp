@@ -5,38 +5,155 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <section id="hsl-section" class="container"><h2>HSL</h2></section>
-    <section id="menus-section" class="container">
-      <h2 id="menus-heading">Ruokalista</h2>
-      <p id="menus-date" class="fw-bold mb-3">Keskiviiko 22.02.2022</p>
-      <ul id="menus-list" class="list-group mt-3 mb-3">
-      </ul>
-      <div id="dietcode-explanations" class="accordion">
-        <div class="accordion-item">
-          <h3 id="dietcode-exp-heading" class="accordion-header">
-            <button
-              id="dietcode-exp-btn"
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseOne"
-              aria-expanded="true"
-              aria-controls="collapseOne"
+    <nav class="navbar navbar-expand-md">
+      <div class="collapse navbar-collapse" id="navbar-toggler">
+        <div
+          class="container-lg pt-3 pb-3 pt-md-0 pb-md-0 d-md-flex justify-content-between align-items-center"
+        >
+          <!-- TODO: Logo -->
+          <a class="navbar-brand" href="index.html">LOGO</a>
+          <ul class="navbar-nav mb-0 me-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="#announcements-section"
+              >
+                <i class="bi bi-bell-fill icon"></i>
+                <span>Tiedotteet</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#menus-section">
+                <i class="bi bi-card-list icon"></i>
+                <span>Ruokalista</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#hsl-section">
+                <i class="bi bi-bus-front-fill icon"></i>
+                <span>HSL</span>
+              </a>
+            </li>
+          </ul>
+          <div class="d-md-flex">
+            <select
+              id="select-lang"
+              class="form-select me-md-2"
+              aria-label="Valitse kieli/Select language"
             >
-              Ruokavaliokoodit
-            </button>
-          </h3>
-          <div
-            id="collapseOne"
-            class="accordion-collapse collapse"
-            aria-labelledby="dietcode-heading"
-            data-bs-parent="#dietcode-explanations"
-          >
-            <p id="dietcode-exp-body" class="accordion-body">
-            </p>
+              <option value="fi" selected>FI</option>
+              <option value="en">EN</option>
+            </select>
+            <select
+              id="select-campus"
+              class="form-select"
+              aria-label="Valitse kampus/Select campus"
+            >
+              <option value="Arabia" selected>Arabia</option>
+              <option value="Karaportti">Karaportti</option>
+              <option value="Myllypuro">Myllypuro</option>
+              <option value="Myyrmäki">Myyrmäki</option>
+            </select>
           </div>
         </div>
       </div>
-    </section>
+      <div class="navbar-mobile">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar-toggler"
+          aria-controls="navbar-toggler"
+          aria-expanded="false"
+          aria-label="Näytä tai sulje navigaatio/Toggle navigation"
+        >
+          <i class="bi bi-list open"></i>
+          <i class="bi bi-x-lg close"></i>
+        </button>
+        <ul class="navbar-mobile-nav m-0">
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href="#announcements-section"
+              ><i class="bi bi-bell-fill icon"></i><span>Tiedotteet</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#menus-section"
+              ><i class="bi bi-card-list icon"></i><span>Ruokalista</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#hsl-section"
+              ><i class="bi bi-bus-front-fill icon"></i><span>HSL</span></a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <main class="container-lg">
+      <section id="announcements-section" class="pt-3 pb-4 pt-md-5 pb-md-0">
+        <h2 id="announcements-heading" class="pt-0 pt-md-4">Tiedotteet</h2>
+        <div id="announcements-carousel" class="carousel slide mt-4">
+          <div id="announcements-carousel-inner" class="carousel-inner"></div>
+          <nav
+            class="mt-4 d-flex justify-content-center"
+            aria-label="Tiedotteiden navigaatio/Announcement's navigation"
+          >
+            <ul
+              id="carousel-navigation"
+              class="pagination carousel-indicators m-0"
+            ></ul>
+          </nav>
+        </div>
+        <div id="announcement-modals"></div>
+      </section>
+      <section id="menus-section" class="pt-3 pb-4 pt-md-5 pb-md-0">
+        <h2 id="menus-heading" class="pt-0 pt-md-4">Ruokalista</h2>
+        <p id="menus-date" class="fw-bold mb-3"></p>
+        <ul id="menus-list" class="list-group mt-4 mb-4"></ul>
+        <div id="dietcode-explanations" class="accordion">
+          <div class="accordion-item">
+            <h3 id="dietcode-exp-heading" class="accordion-header">
+              <button
+                id="dietcode-exp-btn"
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#dietcode-collapse"
+                aria-expanded="true"
+                aria-controls="dietcode-collapse"
+              >
+                Ruokavaliokoodit
+              </button>
+            </h3>
+            <div
+              id="dietcode-collapse"
+              class="accordion-collapse collapse"
+              aria-labelledby="dietcode-exp-heading"
+              data-bs-parent="#dietcode-explanations"
+            >
+              <p id="dietcode-exp-body" class="accordion-body"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="hsl-section" class="pt-3 pb-5 pt-md-5 mb-3 mb-md-0">
+        <h2 class="pt-0 pt-md-4">HSL</h2>
+        <ul id="routes" class="list-group mt-3 mb-3"></ul>
+        <div id="route-map"></div>
+      </section>
+      <section id="weather-section">
+        <h2>Sää</h2>
+        <div id="weather-info">
+          <figure>
+            <img src="" id="weather-img" />
+            <figcaption id="weather-caption"></figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
