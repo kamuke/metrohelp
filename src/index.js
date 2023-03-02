@@ -50,28 +50,6 @@ let menu;
 let routes;
 
 /**
- * @author Catrina
- */
-
-/**
- * Stores user setting to local storage
- */
-// eslint-disable-next-line no-unused-vars
-const saveSettings = () => {
-  //TODO: clear previous settings key or just override settings?
-  //const userSettings = settings;
-  localStorage.setItem('settings', JSON.stringify(settings));
-};
-
-/**
- * Reads user setting from local storage
- */
-const loadSettings = () => {
-  localStorage.getItem('settings');
-  console.log(JSON.parse(localStorage.getItem('settings')));
-};
-
-/**
  * Get menu from Sodexo or Food & Co module.
  *
  * @author Kerttu
