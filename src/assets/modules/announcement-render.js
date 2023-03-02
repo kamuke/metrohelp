@@ -21,6 +21,7 @@ const renderAnnouncements = (announcements, lang) => {
   heading.innerHTML = lang === 'fi' ? 'Tiedotteet' : 'Announcements';
   carousel.innerHTML = '';
   carouselNavBtns.innerHTML = '';
+  modalContainer.innerHTML = '';
 
   for (let i = 0; i < announcements.length; i++) {
     const announcement =

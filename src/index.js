@@ -13,15 +13,14 @@ import Announcement from './assets/modules/announcement';
 import {renderAnnouncements} from './assets/modules/announcement-render';
 import Navigation from './assets/modules/navigation';
 
+const selectLang = document.querySelector('#select-lang');
+
 // Metropolia's campuses and needed info
 const campuses = [
   {
     name: 'Arabia',
     city: 'Helsinki',
-    restaurant: {
-      id: 1251,
-      chain: 'Food & Co',
-    },
+    restaurant: {id: 1251, chain: 'Food & Co'},
     location: {lat: 60.2100515020518, lon: 24.97677582883559},
   },
   {
@@ -58,6 +57,44 @@ let menu;
 let routes;
 let weather;
 let announcements;
+
+/**
+ * Change UI language between 'fi' and 'en'
+ *
+ * @author Kerttu
+ */
+const changeLang = (selectedLang) => {
+  settings.lang = selectedLang;
+  renderNavLinkNames(settings.lang);
+  renderAnnouncements(announcements, settings.lang);
+  renderMenuSection(menu);
+};
+
+/**
+ * Render navigation link names
+ */
+const renderNavLinkNames = (selectedLang) => {
+  const navLinkNames = {
+    fi: ['Tiedotteet', 'Ruokalista', 'HSL'],
+    en: ['Announcements', 'Menu', 'HSL'],
+  };
+
+  const desNavLinks = document.querySelectorAll(
+    '#navbar-toggler .nav-link-name'
+  );
+
+  const mobNavLinks = document.querySelectorAll(
+    '.navbar-mobile .nav-link-name'
+  );
+
+  for (let i = 0; i < desNavLinks.length; i++) {
+    console.log('möi');
+    desNavLinks[i].innerHTML =
+      selectedLang === 'fi' ? navLinkNames.fi[i] : navLinkNames.en[i];
+    mobNavLinks[i].innerHTML =
+      selectedLang === 'fi' ? navLinkNames.fi[i] : navLinkNames.en[i];
+  }
+};
 
 /**
  * Get menu from Sodexo or Food & Co module.
@@ -181,7 +218,6 @@ const renderMenuSection = async (menu) => {
  * @param {number} seconds
  * @returns time string in 00:00 format
  */
-
 const convertTime = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
@@ -219,7 +255,6 @@ const getRoutes = async (selectedCampus, allCampuses) => {
  *
  * @param {array} routes - Array of sorted routes
  */
-
 const renderRouteInfo = async (routes) => {
   const target = document.querySelector('#routes');
   for (const route of routes) {
@@ -328,6 +363,10 @@ window.addEventListener('scroll', () =>
   Navigation.changeActiveStateOnNavLinksWhenScrolling()
 );
 
+selectLang.addEventListener('change', () => {
+  changeLang(selectLang.value);
+});
+
 /**
  * App initialization.
  */
@@ -336,6 +375,7 @@ const init = async () => {
   routes = await getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
+  renderNavLinkNames(settings.lang);
   renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
   renderRouteInfo(routes);
