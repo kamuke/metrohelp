@@ -11,9 +11,18 @@ import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
 import Announcement from './assets/modules/announcement';
 import {renderAnnouncements} from './assets/modules/announcement-render';
-import Navigation from './assets/modules/navigation';
+import {
+  changeActiveStateOnNavLinksWhenScrolling,
+  renderNav,
+} from './assets/modules/navigation';
 
-const selectLang = document.querySelector('#select-lang');
+// Select language and select campus node elements
+const selectLangEl = document.querySelector('#select-lang');
+const selectCampusEl = document.querySelector('#select-campus');
+// All links in navigation
+const navLinks = document.querySelectorAll('.nav-link');
+// All sections
+const sections = document.querySelectorAll('section');
 
 // Metropolia's campuses and needed info
 const campuses = [
@@ -46,8 +55,8 @@ const campuses = [
 // User settings
 // TODO: Save to localStorage + load from localStorage
 let settings = {
-  lang: 'fi',
-  campus: 'Myllypuro',
+  lang: 'en',
+  campus: 'Myyrmäki',
   darkmode: false,
   departures: 1,
 };
@@ -65,35 +74,9 @@ let announcements;
  */
 const changeLang = (selectedLang) => {
   settings.lang = selectedLang;
-  renderNavLinkNames(settings.lang);
+  renderNav(settings.lang, settings.campus, selectLangEl, selectCampusEl);
   renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
-};
-
-/**
- * Render navigation link names
- */
-const renderNavLinkNames = (selectedLang) => {
-  const navLinkNames = {
-    fi: ['Tiedotteet', 'Ruokalista', 'HSL'],
-    en: ['Announcements', 'Menu', 'HSL'],
-  };
-
-  const desNavLinks = document.querySelectorAll(
-    '#navbar-toggler .nav-link-name'
-  );
-
-  const mobNavLinks = document.querySelectorAll(
-    '.navbar-mobile .nav-link-name'
-  );
-
-  for (let i = 0; i < desNavLinks.length; i++) {
-    console.log('möi');
-    desNavLinks[i].innerHTML =
-      selectedLang === 'fi' ? navLinkNames.fi[i] : navLinkNames.en[i];
-    mobNavLinks[i].innerHTML =
-      selectedLang === 'fi' ? navLinkNames.fi[i] : navLinkNames.en[i];
-  }
 };
 
 /**
@@ -360,11 +343,12 @@ const renderWeather = async (weather) => {
 
 // When window scrolls
 window.addEventListener('scroll', () =>
-  Navigation.changeActiveStateOnNavLinksWhenScrolling()
+  changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
 
-selectLang.addEventListener('change', () => {
-  changeLang(selectLang.value);
+selectLangEl.addEventListener('change', () => {
+  changeLang(selectLangEl.value);
+  // TODO: Save settings to localstorage
 });
 
 /**
@@ -375,7 +359,7 @@ const init = async () => {
   routes = await getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
-  renderNavLinkNames(settings.lang);
+  renderNav(settings.lang, settings.campus, selectLangEl, selectCampusEl);
   renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
   renderRouteInfo(routes);
