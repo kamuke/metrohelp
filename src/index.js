@@ -69,7 +69,7 @@ let announcements;
 /**
  * Stores user's settings into local storage
  * @author Catrina
- * @param userSettings
+ * @param userSettings - current settings made by user
  */
 // eslint-disable-next-line no-unused-vars
 const saveSettings = (userSettings) => {
@@ -84,8 +84,6 @@ const saveSettings = (userSettings) => {
 const loadSettings = () => {
   //check if local storage is not empty
   if (!(localStorage.length === 0)) {
-    //TODO: delete console log
-    console.log(JSON.parse(localStorage.getItem('settings')));
     settings = JSON.parse(localStorage.getItem('settings'));
   }
 };
@@ -100,7 +98,6 @@ const changeLang = (selectedLang) => {
   renderNav(settings.lang, settings.campus, selectLangEl, selectCampusEl);
   renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
-
 };
 
 /**
@@ -278,7 +275,8 @@ window.addEventListener('scroll', () =>
 
 selectLangEl.addEventListener('change', () => {
   changeLang(selectLangEl.value);
-  // TODO: Save settings to localstorage
+  //save settings
+  saveSettings(settings);
 });
 
 /**
