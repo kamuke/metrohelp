@@ -6,9 +6,7 @@
  */
 
 'use strict';
-
 import {doFetch} from './network';
-
 const apiUrl =
   'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql';
 
@@ -27,7 +25,9 @@ const getQueryRoutesByLocation = (lat, lon, maxDepartures) => {
           lon
           code
           name
-          stoptimesWithoutPatterns(numberOfDepartures: ${maxDepartures}) {
+          stoptimesWithoutPatterns(numberOfDepartures: ${maxDepartures}, startTime: ${Math.floor(
+    new Date().getTime() / 1000 + 240
+  )}) {
             realtimeDeparture
             serviceDay
             trip {
@@ -69,9 +69,12 @@ const getRoutesByLocation = async (lat, lon, maxDepartures) => {
         routeNumber: routes.trip.route.shortName,
         destination: routes.headsign,
         routeRealtimeDeparture: routes.realtimeDeparture,
+        lat: stops.node.stop.lat,
+        lon: stops.node.stop.lon,
       };
     });
   });
 };
+
 const HSL = {getRoutesByLocation};
 export default HSL;

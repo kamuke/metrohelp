@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
   </head>
   <body>
     <main class="container-lg">
@@ -52,20 +58,20 @@
           </div>
         </div>
       </section>
-      <section id="hsl-section" class="container">
-      <h2>HSL</h2>
-      <ul id="routes" class="list-group mt-3 mb-3"></ul>
-      <div id="route-map"></div>
-    </section>
-     <section id="weather-section" class="container">
-      <h2>Sää</h2>
-      <div id="weather-info">
-        <figure>
-          <img src="" id="weather-img"/>
-          <figcaption id="weather-caption"></figcaption>
-        </figure>
-      </div>
-    </section>
+      <section id="hsl-section" class="container row">
+        <h2>HSL</h2>
+        <ul id="routes" class="list-group mt-3 mb-3 col"></ul>
+        <div id="routes-map" class="list-group mt-3 mb-3 col"></div>
+      </section>
+      <section id="weather-section" class="container">
+        <h2>Sää</h2>
+        <div id="weather-info">
+          <figure>
+            <img src="" id="weather-img" />
+            <figcaption id="weather-caption"></figcaption>
+          </figure>
+        </div>
+      </section>
     </main>
   </body>
 </html>

@@ -159,7 +159,10 @@ a.card {
 #dietcode-exp-body {
   margin: 0;
 }
+// HSL:
+#hsl-section{
 
+}
 #routes {
   background-color: custom.$light;
   padding: 1rem 1.25rem;
@@ -184,4 +187,7 @@ a.card {
   }
 }
 
+#map {
+height: auto;
+}
 

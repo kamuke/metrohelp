@@ -6,9 +6,9 @@
 import './styles/style.scss';
 import 'bootstrap';
 import ServiceWorker from './assets/modules/service-worker';
-import HSL from './assets/modules/hsl-data';
 import Sodexo from './assets/modules/sodexo-data';
 import FoodCo from './assets/modules/food-co-data';
+import HSLRender from './assets/modules/hsl-render';
 import Announcement from './assets/modules/announcement';
 import {renderAnnouncements} from './assets/modules/announcement-render';
 
@@ -47,11 +47,10 @@ const campuses = [
 // TODO: Save to localStorage + load from localStorage
 let settings = {
   lang: 'fi',
-  campus: 'Myllypuro',
+  campus: 'Myyrmäki',
   darkmode: false,
   departures: 1,
 };
-
 
 // To store menu, routes, weather and announcements
 let menu;
@@ -177,101 +176,6 @@ const renderMenuSection = async (menu) => {
 };
 
 /**
- * Converts HSL time from seconds to 00:00 format
- * @param {number} seconds
- * @returns time string in 00:00 format
- */
-
-const convertTime = (seconds) => {
-  const hours = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  return `${hours == 24 ? '00' : hours}:${mins < 10 ? '0' + mins : mins}`;
-};
-
-/**
- * @author Eeli
- * @param {string} selectedCampus - Selected campus to get HSL routes
- * @param {array} allCampuses - List of all campuses and infos.
- * @returns Sorted array
- */
-const getRoutes = async (selectedCampus, allCampuses) => {
-  for (const campus of allCampuses) {
-    if (selectedCampus === campus.name) {
-      const routesData = await HSL.getRoutesByLocation(
-        campus.location.lat,
-        campus.location.lon,
-        settings.departures
-      );
-      let routesArray = [];
-      for (const route of routesData) {
-        for (let i = 0; i < settings.departures; i++) {
-          routesArray.push(route[i]);
-        }
-      }
-      return routesArray.sort((a, b) => {
-        return a.routeRealtimeDeparture - b.routeRealtimeDeparture;
-      });
-    }
-  }
-};
-
-/**
- *
- * @param {array} routes - Array of sorted routes
- */
-
-const renderRouteInfo = async (routes) => {
-  const target = document.querySelector('#routes');
-  for (const route of routes) {
-    const routeContainer = document.createElement('li');
-    routeContainer.classList = 'route-info';
-    const stopContainer = document.createElement('div');
-    stopContainer.classList = 'stop-info col';
-    const routeDestination = document.createElement('div');
-    routeDestination.classList = 'destination-info col';
-    const stopCode = document.createElement('div');
-    stopCode.id = 'stopcode';
-    stopCode.classList = 'badge bg-secondary';
-    const stopName = document.createElement('div');
-    stopName.id = 'stopname';
-    stopName.classList = 'fw-bold mb-3';
-    const routeNumber = document.createElement('div');
-    routeNumber.id = 'routenumber';
-    if (route.mode == 'BUS') {
-      routeNumber.classList = 'badge bg-info';
-    } else if (route.mode == 'SUBWAY') {
-      routeNumber.classList = 'badge bg-primary';
-    } else if (route.mode == 'TRAM') {
-      routeNumber.classList = 'badge bg-success';
-    } else if (route.mode == 'RAIL') {
-      routeNumber.classList = 'badge bg-light';
-    }
-
-    const destination = document.createElement('div');
-    destination.id = 'destination';
-    destination.classList = 'fw-bold mb-3';
-    const routeRealtimeDeparture = document.createElement('div');
-    routeRealtimeDeparture.id = 'departure';
-    routeRealtimeDeparture.classList = 'fw-bold mb-3';
-    stopCode.textContent = route.stopCode;
-    stopName.textContent = route.stopName;
-    routeNumber.textContent = route.routeNumber;
-    destination.textContent = route.destination;
-    routeRealtimeDeparture.textContent = convertTime(
-      route.routeRealtimeDeparture
-    );
-    stopContainer.append(stopCode, stopName);
-    routeDestination.append(routeNumber, destination);
-    routeContainer.append(
-      stopContainer,
-      routeDestination,
-      routeRealtimeDeparture
-    );
-    target.append(routeContainer);
-  }
-};
-
-/**
  * Get current weather from the selected campus' city
  *
  * @author Catrina
@@ -284,7 +188,11 @@ const getWeather = async (selectedCampus, allCampuses) => {
     if (selectedCampus === campus.name) {
       try {
         //start fetch
-        const response = await fetch('http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q='+campus.city+'&days=1&aqi=no&alerts=no');
+        const response = await fetch(
+          'http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q=' +
+            campus.city +
+            '&days=1&aqi=no&alerts=no'
+        );
         //If error
         if (!response.ok) throw new Error('Something went wrong.');
         const weather = await response.json();
@@ -304,19 +212,19 @@ const getWeather = async (selectedCampus, allCampuses) => {
  * @param weather
  * @returns {Promise<void>}
  */
-const renderWeather = async(weather) => {
+const renderWeather = async (weather) => {
   const weatherImg = document.querySelector('#weather-img');
   const weatherCaption = document.querySelector('#weather-caption');
   const weatherCity = document.createElement('p');
 
   //insert img and alt txt (in english) TODO: translate current condition text into finnish?
-  weatherImg.src=weather.current.condition.icon;
-  weatherImg.alt=weather.current.condition.text;
+  weatherImg.src = weather.current.condition.icon;
+  weatherImg.alt = weather.current.condition.text;
   //current weather
-  weatherCaption.textContent = weather.current.temp_c+' °C';
+  weatherCaption.textContent = weather.current.temp_c + ' °C';
   //display selected campus' city
   weatherCaption.appendChild(weatherCity);
-  weatherCity.textContent=weather.location.name;
+  weatherCity.textContent = weather.location.name;
 };
 
 /**
@@ -324,14 +232,17 @@ const renderWeather = async(weather) => {
  */
 const init = async () => {
   menu = await getMenu(settings.campus, campuses);
-  routes = await getRoutes(settings.campus, campuses);
+  routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
   renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
-  renderRouteInfo(routes);
+  HSLRender.renderRouteInfo(routes);
   renderWeather(weather);
+  HSLRender.renderMap(routes, settings.campus, campuses);
   ServiceWorker.register();
 };
 
 init();
+
+export default settings;
