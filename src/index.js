@@ -11,17 +11,25 @@ import FoodCo from './assets/modules/food-co-data';
 import HSLRender from './assets/modules/hsl-render';
 import Announcement from './assets/modules/announcement';
 import {renderAnnouncements} from './assets/modules/announcement-render';
-import Navigation from './assets/modules/navigation';
+import {
+  changeActiveStateOnNavLinksWhenScrolling,
+  renderNav,
+} from './assets/modules/navigation';
+
+// Select language and select campus node elements
+const selectLangEl = document.querySelector('#select-lang');
+const selectCampusEl = document.querySelector('#select-campus');
+// All links in navigation
+const navLinks = document.querySelectorAll('.nav-link');
+// All sections
+const sections = document.querySelectorAll('section');
 
 // Metropolia's campuses and needed info
 const campuses = [
   {
     name: 'Arabia',
     city: 'Helsinki',
-    restaurant: {
-      id: 1251,
-      chain: 'Food & Co',
-    },
+    restaurant: {id: 1251, chain: 'Food & Co'},
     location: {lat: 60.2100515020518, lon: 24.97677582883559},
   },
   {
@@ -46,8 +54,8 @@ const campuses = [
 
 // User settings
 let settings = {
-  lang: 'fi',
-  campus: 'Myyrmäki',
+  lang: 'en',
+  campus: 'Arabia',
   darkmode: false,
   departures: 1,
 };
@@ -57,6 +65,18 @@ let menu;
 let routes;
 let weather;
 let announcements;
+
+/**
+ * Change UI language between 'fi' and 'en'
+ *
+ * @author Kerttu
+ */
+const changeLang = (selectedLang) => {
+  settings.lang = selectedLang;
+  renderNav(settings.lang, settings.campus, selectLangEl, selectCampusEl);
+  renderAnnouncements(announcements, settings.lang);
+  renderMenuSection(menu);
+};
 
 /**
  * Get menu from Sodexo or Food & Co module.
@@ -228,8 +248,13 @@ const renderWeather = async (weather) => {
 
 // When window scrolls
 window.addEventListener('scroll', () =>
-  Navigation.changeActiveStateOnNavLinksWhenScrolling()
+  changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
+
+selectLangEl.addEventListener('change', () => {
+  changeLang(selectLangEl.value);
+  // TODO: Save settings to localstorage
+});
 
 /**
  * App initialization.
@@ -239,6 +264,7 @@ const init = async () => {
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
+  renderNav(settings.lang, settings.campus, selectLangEl, selectCampusEl);
   renderAnnouncements(announcements, settings.lang);
   renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);

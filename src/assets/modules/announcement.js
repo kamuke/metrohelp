@@ -1,8 +1,8 @@
 /**
  * Module for announcement data.
  *
- * @module: Network
- * @author: Kerttu
+ * @module Announcement
+ * @author Kerttu
  */
 'use strict';
 
