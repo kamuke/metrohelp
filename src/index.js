@@ -11,6 +11,7 @@ import FoodCo from './assets/modules/food-co-data';
 import HSLRender from './assets/modules/hsl-render';
 import Announcement from './assets/modules/announcement';
 import {renderAnnouncements} from './assets/modules/announcement-render';
+import Navigation from './assets/modules/navigation';
 
 // Metropolia's campuses and needed info
 const campuses = [
@@ -44,7 +45,6 @@ const campuses = [
 ];
 
 // User settings
-// TODO: Save to localStorage + load from localStorage
 let settings = {
   lang: 'fi',
   campus: 'Myyrmäki',
@@ -189,7 +189,7 @@ const getWeather = async (selectedCampus, allCampuses) => {
       try {
         //start fetch
         const response = await fetch(
-          'http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q=' +
+          'https://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q=' +
             campus.city +
             '&days=1&aqi=no&alerts=no'
         );
@@ -209,8 +209,7 @@ const getWeather = async (selectedCampus, allCampuses) => {
  * Render current weather
  *
  * @author Catrina
- * @param weather
- * @returns {Promise<void>}
+ * @param weather - current weather
  */
 const renderWeather = async (weather) => {
   const weatherImg = document.querySelector('#weather-img');
@@ -226,6 +225,11 @@ const renderWeather = async (weather) => {
   weatherCaption.appendChild(weatherCity);
   weatherCity.textContent = weather.location.name;
 };
+
+// When window scrolls
+window.addEventListener('scroll', () =>
+  Navigation.changeActiveStateOnNavLinksWhenScrolling()
+);
 
 /**
  * App initialization.
