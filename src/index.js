@@ -78,8 +78,8 @@ const saveSettings = (userSettings) => {
  * @author Catrina
  */
 const loadSettings = () => {
-  //check if local storage is not empty
-  if (!(localStorage.length === 0)) {
+  //check that settings exists in localStorage
+  if (localStorage.getItem('settings')) {
     settings = JSON.parse(localStorage.getItem('settings'));
   }
 };
