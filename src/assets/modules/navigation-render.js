@@ -1,7 +1,7 @@
 /**
- * Navigation funtionalities.
+ * Navigation render funtionalities.
  *
- * @module Navigation
+ * @module NavRender
  * @author Kerttu
  */
 
@@ -85,5 +85,9 @@ const renderNav = (lang, campus, selectLangEl, selectCampusEl) => {
     }
   }
 };
+const NavRender = {
+  changeActiveStateOnNavLinksWhenScrolling,
+  renderNav,
+};
 
-export {changeActiveStateOnNavLinksWhenScrolling, renderNav};
+export default NavRender;

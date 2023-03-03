@@ -208,4 +208,8 @@ const setAttributes = (element, attrs) => {
   }
 };
 
-export {renderAnnouncements};
+const AnnouncementRender = {
+  renderAnnouncements,
+};
+
+export default AnnouncementRender;
