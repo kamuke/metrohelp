@@ -78,10 +78,10 @@ $modal-header-border-width: 0;
 
 // Other:
 $border-radius: 0.5rem;
-$container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1100px,
-  xxl: 1200px,
-);
+$form-select-indicator-color: $primary;
+
+// Navbar:
+$navbar-toggler-padding-y: 0;
+$navbar-toggler-padding-x: 0;
+$navbar-toggler-focus-width: 0;
+$navbar-light-toggler-icon-bg: none;
