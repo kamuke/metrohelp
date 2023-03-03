@@ -66,6 +66,7 @@ let routes;
 let weather;
 let announcements;
 
+/**
  * Stores user's settings into local storage
  * @author Catrina
  * @param userSettings
@@ -82,12 +83,14 @@ const saveSettings = (userSettings) => {
  */
 const loadSettings = () => {
   //check if local storage is not empty
-  if(!(localStorage.length===0)){
-   //TODO: delete console log
-   console.log(JSON.parse(localStorage.getItem('settings')));
-   settings = JSON.parse(localStorage.getItem('settings'));
+  if (!(localStorage.length === 0)) {
+    //TODO: delete console log
+    console.log(JSON.parse(localStorage.getItem('settings')));
+    settings = JSON.parse(localStorage.getItem('settings'));
   }
+};
 
+/**
  * Change UI language between 'fi' and 'en'
  *
  * @author Kerttu
@@ -282,7 +285,6 @@ selectLangEl.addEventListener('change', () => {
  * App initialization.
  */
 const init = async () => {
-  //saveSettings(settings);
   loadSettings();
   menu = await getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
