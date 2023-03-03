@@ -1,8 +1,8 @@
 /**
  * Module for Sodexo menu data parsing.
  *
- * @module: Sodexo
- * @author: Kerttu
+ * @module Sodexo
+ * @author Kerttu
  */
 
 'use strict';
@@ -15,7 +15,7 @@ const dailyUrl = 'https://www.sodexo.fi/ruokalistat/output/daily_json/';
 /**
  * Get daily menu from Sodexo API.
  *
- * @param {int} restaurantId - The id of the restaurant to get daily menu from
+ * @param {Number} restaurantId - The id of the restaurant to get daily menu from
  * @returns Object
  */
 const getDailyMenu = async (restaurantId) => {

@@ -1,6 +1,7 @@
 /**
  * Rendering functions for announcements.
  *
+ * @module AnnouncementRender
  * @author Kerttu
  */
 
@@ -9,8 +10,8 @@
 /**
  * Render announcements carousel slides and modals.
  *
- * @param {array} announcements
- * @param {string} lang - 'fi'/'en'
+ * @param {Array} announcements
+ * @param {String} lang - 'fi'/'en'
  */
 const renderAnnouncements = (announcements, lang) => {
   const heading = document.querySelector('#announcements-heading');
@@ -21,6 +22,7 @@ const renderAnnouncements = (announcements, lang) => {
   heading.innerHTML = lang === 'fi' ? 'Tiedotteet' : 'Announcements';
   carousel.innerHTML = '';
   carouselNavBtns.innerHTML = '';
+  modalContainer.innerHTML = '';
 
   for (let i = 0; i < announcements.length; i++) {
     const announcement =
@@ -87,10 +89,10 @@ const renderAnnouncements = (announcements, lang) => {
 /**
  * Render carousel slide for an announcement to a target element.
  *
- * @param {object} announcement
- * @param {number} index
- * @param {node} targetElement
- * @param {string} lang - 'fi'/'en'
+ * @param {Object} announcement
+ * @param {Number} index
+ * @param {Node} targetElement
+ * @param {String} lang - 'fi'/'en'
  */
 const renderAnnCarouselSlide = (announcement, index, targetElement, lang) => {
   const rowDiv = document.createElement('div');
@@ -138,9 +140,9 @@ const renderAnnCarouselSlide = (announcement, index, targetElement, lang) => {
 /**
  * Render modal for an announcement to a target element.
  *
- * @param {object} announcement
- * @param {number} index
- * @param {node} targetElement
+ * @param {Object} announcement
+ * @param {Number} index
+ * @param {Node} targetElement
  */
 const renderAnnModal = (announcement, index, targetElement) => {
   const modal = document.createElement('div');
@@ -197,8 +199,8 @@ const renderAnnModal = (announcement, index, targetElement) => {
 /**
  * Set multipleattributes to a node element.
  *
- * @param {node} element
- * @param {object} attrs
+ * @param {Node} element
+ * @param {Object} attrs
  */
 const setAttributes = (element, attrs) => {
   for (const key in attrs) {

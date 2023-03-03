@@ -1,17 +1,17 @@
 /**
  * Network functions and API calls.
  *
- * @module: Network
- * @author: Kerttu
+ * @module Network
+ * @author Kerttu
  */
 'use strict';
 
 /**
  * Fetch request to a given API url.
  *
- * @param {string} url - API url
- * @param {boolean} useProxy - Use allorigins proxy
- * @param {object} options - Fetch options
+ * @param {String} url - API url
+ * @param {Noolean} useProxy - Use allorigins proxy
+ * @param {Object} options - Fetch options
  * @returns JSON data
  */
 const doFetch = async (url, useProxy = false, options) => {
