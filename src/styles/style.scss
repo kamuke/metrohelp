@@ -31,7 +31,6 @@
     align-items: center;
     gap: 0.5rem;
     color: custom.$dark;
-    width: 8.5rem;
 
     &:hover {
       font-weight: 600;
@@ -308,7 +307,10 @@ a.card {
 #dietcode-exp-body {
   margin: 0;
 }
+// HSL:
+#hsl-section{
 
+}
 #routes {
   background-color: custom.$light;
   padding: 1rem 1.25rem;
@@ -331,4 +333,8 @@ a.card {
     padding-bottom: 0;
     border: 0;
   }
+}
+
+#routes-map {
+height: auto;
 }

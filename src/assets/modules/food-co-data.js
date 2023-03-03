@@ -1,8 +1,8 @@
 /**
  * Module for Food & Co menu data parsing.
  *
- * @module: Food & Co
- * @author: Kerttu
+ * @module Food&Co
+ * @author Kerttu
  */
 
 'use strict';
@@ -16,7 +16,7 @@ const weeklyUrl = 'https://www.compass-group.fi/menuapi/week-menus?costCenter=';
 /**
  * Get daily menu from Food & Co API.
  *
- * @param {int} restaurantId - The id of the restaurant to get daily menu from
+ * @param {Number} restaurantId - The id of the restaurant to get daily menu from
  * @returns Object
  */
 const getDailyMenu = async (restaurantId) => {
@@ -110,7 +110,7 @@ const getDailyMenu = async (restaurantId) => {
 /**
  * Get values that are included in all arrays of the array param.
  *
- * @param {array} array - An array containing arrays.
+ * @param {Array} array - An array containing arrays.
  * @returns Array
  */
 const getCommonValues = (array) => {
@@ -143,8 +143,8 @@ const getCommonValues = (array) => {
  * Get array as a one string in language sensitive format.
  * Example output: "Hash, chili mayonnaise and pickled cucumber"
  *
- * @param {string} lang - String, example 'fi', 'en'
- * @param {array} array - The array to format into one string
+ * @param {String} lang - String, example 'fi', 'en'
+ * @param {Array} array - The array to format into one string
  * @returns String
  */
 const getFormattedStringFromArray = (lang, array) => {

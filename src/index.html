@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
   </head>
   <body>
     <nav class="navbar navbar-expand-md">
@@ -20,19 +26,19 @@
                 href="#announcements-section"
               >
                 <i class="bi bi-bell-fill icon"></i>
-                <span>Tiedotteet</span>
+                <span class="nav-link-name">Tiedotteet</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#menus-section">
                 <i class="bi bi-card-list icon"></i>
-                <span>Ruokalista</span>
+                <span class="nav-link-name">Ruokalista</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#hsl-section">
                 <i class="bi bi-bus-front-fill icon"></i>
-                <span>HSL</span>
+                <span class="nav-link-name">HSL</span>
               </a>
             </li>
           </ul>
@@ -42,7 +48,7 @@
               class="form-select me-md-2"
               aria-label="Valitse kieli/Select language"
             >
-              <option value="fi" selected>FI</option>
+              <option value="fi">FI</option>
               <option value="en">EN</option>
             </select>
             <select
@@ -77,17 +83,20 @@
               class="nav-link active"
               aria-current="page"
               href="#announcements-section"
-              ><i class="bi bi-bell-fill icon"></i><span>Tiedotteet</span></a
+              ><i class="bi bi-bell-fill icon"></i
+              ><span class="nav-link-name">Tiedotteet</span></a
             >
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#menus-section"
-              ><i class="bi bi-card-list icon"></i><span>Ruokalista</span></a
+              ><i class="bi bi-card-list icon"></i
+              ><span class="nav-link-name">Ruokalista</span></a
             >
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#hsl-section"
-              ><i class="bi bi-bus-front-fill icon"></i><span>HSL</span></a
+              ><i class="bi bi-bus-front-fill icon"></i
+              ><span class="nav-link-name">HSL</span></a
             >
           </li>
         </ul>
@@ -140,12 +149,12 @@
           </div>
         </div>
       </section>
-      <section id="hsl-section" class="pt-3 pb-5 pt-md-5 mb-3 mb-md-0">
+      <section id="hsl-section" class="row pt-3 pb-4 pt-md-5">
         <h2 class="pt-0 pt-md-4">HSL</h2>
-        <ul id="routes" class="list-group mt-3 mb-3"></ul>
-        <div id="route-map"></div>
+        <ul id="routes" class="list-group mt-3 mb-3 col"></ul>
+        <div id="routes-map" class="list-group mt-3 mb-3 col"></div>
       </section>
-      <section id="weather-section">
+      <section id="weather-section" class="">
         <h2>Sää</h2>
         <div id="weather-info">
           <figure>
