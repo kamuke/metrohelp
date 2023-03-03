@@ -284,7 +284,7 @@ const getWeather = async (selectedCampus, allCampuses) => {
       try {
         //start fetch
         const response = await fetch(
-          'http://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q=' +
+          'https://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q=' +
             campus.city +
             '&days=1&aqi=no&alerts=no'
         );
@@ -304,8 +304,7 @@ const getWeather = async (selectedCampus, allCampuses) => {
  * Render current weather
  *
  * @author Catrina
- * @param weather
- * @returns {Promise<void>}
+ * @param weather - current weather
  */
 const renderWeather = async (weather) => {
   const weatherImg = document.querySelector('#weather-img');
