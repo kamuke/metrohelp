@@ -59,6 +59,30 @@ let weather;
 let announcements;
 
 /**
+ * Stores user's settings into local storage
+ * @author Catrina
+ * @param userSettings
+ */
+// eslint-disable-next-line no-unused-vars
+const saveSettings = (userSettings) => {
+  localStorage.setItem('settings', JSON.stringify(userSettings));
+};
+
+/**
+ * Load user's settings from local storage
+ * TODO: make sure this one executes first?
+ * @author Catrina
+ */
+const loadSettings = () => {
+  //check if local storage is not empty
+  if(!(localStorage.length===0)){
+   //TODO: delete console log
+   console.log(JSON.parse(localStorage.getItem('settings')));
+   settings = JSON.parse(localStorage.getItem('settings'));
+  }
+};
+
+/**
  * Get menu from Sodexo or Food & Co module.
  *
  * @author Kerttu
@@ -331,6 +355,8 @@ window.addEventListener('scroll', () =>
  * App initialization.
  */
 const init = async () => {
+  //saveSettings(settings);
+  loadSettings();
   menu = await getMenu(settings.campus, campuses);
   routes = await getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
