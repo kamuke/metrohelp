@@ -55,7 +55,7 @@ const campuses = [
 // User settings
 // TODO: Save to localStorage + load from localStorage
 let settings = {
-  lang: 'en',
+  lang: 'fi',
   campus: 'Myyrmäki',
   darkmode: false,
   departures: 1,
