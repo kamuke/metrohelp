@@ -153,11 +153,22 @@ window.addEventListener('scroll', () =>
   NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
 
+/*const changeLocation = async () => {
+  routes = await HSLRender.getRoutes(settings.campus, campuses);
+  HSLRender.renderRouteInfo(routes);
+  HSLRender.renderMap(routes, settings.campus, campuses);
+};
+const testi = document.querySelector('#select-campus');
+testi.addEventListener('click', () => {
+  console.log('jee');
+});*/
+
 selectLangEl.addEventListener('change', () => {
   changeLang(selectLangEl.value);
   //save settings
   saveSettings(settings);
 });
+
 
 /**
  * App initialization.
