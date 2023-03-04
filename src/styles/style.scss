@@ -31,7 +31,6 @@
     align-items: center;
     gap: 0.5rem;
     color: custom.$dark;
-    width: 8.5rem;
 
     &:hover {
       font-weight: 600;
@@ -146,6 +145,13 @@
   .close {
     display: inline-block;
   }
+}
+
+.weather-degree{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: custom.$dark;
 }
 
 select {

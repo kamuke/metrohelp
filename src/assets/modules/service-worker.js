@@ -1,8 +1,8 @@
 /**
  * Module for registering the generated service worker.
  *
- * @module: ServiceWorker
- * @author: Kerttu
+ * @module ServiceWorker
+ * @author Kerttu
  */
 'use strict';
 

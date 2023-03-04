@@ -6,22 +6,26 @@
 import './styles/style.scss';
 import 'bootstrap';
 import ServiceWorker from './assets/modules/service-worker';
-import Sodexo from './assets/modules/sodexo-data';
-import FoodCo from './assets/modules/food-co-data';
+import NavRender from './assets/modules/navigation-render';
+import MenuRender from './assets/modules/menu-render';
 import HSLRender from './assets/modules/hsl-render';
-import Announcement from './assets/modules/announcement';
-import {renderAnnouncements} from './assets/modules/announcement-render';
-import Navigation from './assets/modules/navigation';
+import Announcement from './assets/modules/announcement-data';
+import AnnouncementRender from './assets/modules/announcement-render';
+
+// Select language and select campus node elements
+const selectLangEl = document.querySelector('#select-lang');
+const selectCampusEl = document.querySelector('#select-campus');
+// All links in navigation
+const navLinks = document.querySelectorAll('.nav-link');
+// All sections
+const sections = document.querySelectorAll('section');
 
 // Metropolia's campuses and needed info
 const campuses = [
   {
     name: 'Arabia',
     city: 'Helsinki',
-    restaurant: {
-      id: 1251,
-      chain: 'Food & Co',
-    },
+    restaurant: {id: 1251, chain: 'Food & Co'},
     location: {lat: 60.2100515020518, lon: 24.97677582883559},
   },
   {
@@ -47,7 +51,7 @@ const campuses = [
 // User settings
 let settings = {
   lang: 'fi',
-  campus: 'Myyrmäki',
+  campus: 'Karaportti',
   darkmode: false,
   departures: 1,
 };
@@ -59,120 +63,42 @@ let weather;
 let announcements;
 
 /**
- * Get menu from Sodexo or Food & Co module.
- *
- * @author Kerttu
- * @param {string} selectedCampus - Selected campus to get it's restaurant's menu.
- * @param {array} allCampuses - List of all campuses and infos.
- * @returns Object
+ * Stores user's settings into local storage
+ * @author Catrina
+ * @param userSettings - current settings made by user
  */
-const getMenu = async (selectedCampus, allCampuses) => {
-  for (const campus of allCampuses) {
-    if (selectedCampus === campus.name) {
-      if (campus.restaurant.chain === 'Sodexo') {
-        return await Sodexo.getDailyMenu(campus.restaurant.id);
-      } else if (campus.restaurant.chain === 'Food & Co') {
-        return await FoodCo.getDailyMenu(campus.restaurant.id);
-      }
-    }
+// eslint-disable-next-line no-unused-vars
+const saveSettings = (userSettings) => {
+  localStorage.setItem('settings', JSON.stringify(userSettings));
+};
+
+/**
+ * Load user's settings from local storage
+ * TODO: make sure this one executes first?
+ * @author Catrina
+ */
+const loadSettings = () => {
+  //check that settings exists in localStorage
+  if (localStorage.getItem('settings')) {
+    settings = JSON.parse(localStorage.getItem('settings'));
   }
 };
 
 /**
- * Render menu params values in list element to targeted element.
+ * Change UI language between 'fi' and 'en'
  *
  * @author Kerttu
- * @param {Object} menu - Object which values are appended to targetElement.
- * @param {Node} targetElement - Node element to append menu params values in list element.
  */
-const renderMenuListItem = async (menu, targetElement) => {
-  const menuList = document.createElement('li');
-  const menuBody = document.createElement('div');
-  const menuName = document.createElement('p');
-
-  menuList.classList = 'menu list-group-item';
-  menuBody.classList = 'menu-body';
-  menuName.classList = 'menu-name';
-
-  menuName.textContent = settings.lang === 'fi' ? menu.fi : menu.en;
-
-  menuBody.append(menuName);
-
-  if (menu.price) {
-    const menuPrice = document.createElement('p');
-    menuPrice.classList = 'menu-price';
-    menuPrice.textContent = menu.price;
-    menuBody.append(menuPrice);
-  }
-
-  menuList.append(menuBody);
-
-  if (menu.dietcodes) {
-    const menuDietcodes = document.createElement('div');
-    menuDietcodes.classList = 'menu-dietcodes';
-
-    for (const dietcode of menu.dietcodes) {
-      const dietcodeBadge = document.createElement('span');
-      dietcodeBadge.classList = 'badge rounded-pill bg-primary';
-      dietcodeBadge.textContent = dietcode;
-      menuDietcodes.append(dietcodeBadge);
-    }
-    menuList.append(menuDietcodes);
-  }
-
-  targetElement.append(menuList);
-};
-
-/**
- * Render all menu list items to menus ul element.
- *
- * @author Kerttu
- * @param {Object} menu - Menu to render.
- */
-const renderAllMenuListItems = async (menu) => {
-  const menusUl = document.querySelector('#menus-list');
-  menusUl.innerHTML = '';
-
-  // Loop menus to menusUl
-  for (const menuItem of menu.menu) {
-    renderMenuListItem(menuItem, menusUl);
-  }
-};
-
-/**
- * Render menu section: heading, date, menu ul list and dietcode explanations.
- *
- * @author Kerttu
- * @param {Object} menu - Menu to render to menu ul list.
- */
-const renderMenuSection = async (menu) => {
-  const menusHeading = document.querySelector('#menus-heading');
-  const menusDate = document.querySelector('#menus-date');
-  const dietcodeBtn = document.querySelector('#dietcode-exp-btn');
-  const dietcodeBody = document.querySelector('#dietcode-exp-body');
-
-  menusHeading.innerHTML =
-    settings.lang === 'fi'
-      ? `Ruokalista - ${menu.title}`
-      : `Menu - ${menu.title}`;
-
-  let date = `${new Date().toLocaleDateString(settings.lang, {
-    weekday: 'long',
-  })} ${new Date().toLocaleDateString(settings.lang)}`;
-
-  date = date.charAt(0).toUpperCase() + date.slice(1);
-
-  menusDate.innerHTML = date;
-
-  dietcodeBtn.innerHTML =
-    settings.lang === 'fi' ? 'Ruokavaliokoodit' : 'Dietcodes';
-
-  dietcodeBody.innerHTML =
-    settings.lang === 'fi'
-      ? menu.dietcodeExplanations.fi
-      : menu.dietcodeExplanations.en;
-
-  renderAllMenuListItems(menu);
+const changeLang = (selectedLang) => {
+  settings.lang = selectedLang;
+  NavRender.renderNav(
+    settings.lang,
+    settings.campus,
+    selectLangEl,
+    selectCampusEl
+  );
+  AnnouncementRender.renderAnnouncements(announcements, settings.lang);
+  MenuRender.renderMenuSection(menu);
 };
 
 /**
@@ -212,23 +138,19 @@ const getWeather = async (selectedCampus, allCampuses) => {
  * @param weather - current weather
  */
 const renderWeather = async (weather) => {
-  const weatherImg = document.querySelector('#weather-img');
-  const weatherCaption = document.querySelector('#weather-caption');
-  const weatherCity = document.createElement('p');
+  const weatherImg = document.querySelector('.weather-img');
+  const weatherCaption = document.querySelector('.weather-degree');
 
   //insert img and alt txt (in english) TODO: translate current condition text into finnish?
   weatherImg.src = weather.current.condition.icon;
   weatherImg.alt = weather.current.condition.text;
   //current weather
-  weatherCaption.textContent = weather.current.temp_c + ' °C';
-  //display selected campus' city
-  weatherCaption.appendChild(weatherCity);
-  weatherCity.textContent = weather.location.name;
+  weatherCaption.textContent = weather.current.temp_c + ' °C ';
 };
 
 // When window scrolls
 window.addEventListener('scroll', () =>
-  Navigation.changeActiveStateOnNavLinksWhenScrolling()
+  NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
 
 /*const changeLocation = async () => {
@@ -241,16 +163,30 @@ testi.addEventListener('click', () => {
   console.log('jee');
 });*/
 
+selectLangEl.addEventListener('change', () => {
+  changeLang(selectLangEl.value);
+  //save settings
+  saveSettings(settings);
+});
+
+
 /**
  * App initialization.
  */
 const init = async () => {
-  menu = await getMenu(settings.campus, campuses);
+  loadSettings();
+  menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
-  renderAnnouncements(announcements, settings.lang);
-  renderMenuSection(menu);
+  NavRender.renderNav(
+    settings.lang,
+    settings.campus,
+    selectLangEl,
+    selectCampusEl
+  );
+  AnnouncementRender.renderAnnouncements(announcements, settings.lang);
+  MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);
   renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
