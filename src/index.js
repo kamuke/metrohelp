@@ -138,18 +138,14 @@ const getWeather = async (selectedCampus, allCampuses) => {
  * @param weather - current weather
  */
 const renderWeather = async (weather) => {
-  const weatherImg = document.querySelector('#weather-img');
-  const weatherCaption = document.querySelector('#weather-caption');
-  const weatherCity = document.createElement('p');
+  const weatherImg = document.querySelector('.weather-img');
+  const weatherCaption = document.querySelector('.weather-degree');
 
   //insert img and alt txt (in english) TODO: translate current condition text into finnish?
   weatherImg.src = weather.current.condition.icon;
   weatherImg.alt = weather.current.condition.text;
   //current weather
-  weatherCaption.textContent = weather.current.temp_c + ' °C';
-  //display selected campus' city
-  weatherCaption.appendChild(weatherCity);
-  weatherCity.textContent = weather.location.name;
+  weatherCaption.textContent = weather.current.temp_c + ' °C ';
 };
 
 // When window scrolls
