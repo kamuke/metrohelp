@@ -19,7 +19,7 @@ const selectCampusEl = document.querySelector('#select-campus');
 const navLinks = document.querySelectorAll('.nav-link');
 // All sections
 const sections = document.querySelectorAll('section');
-
+const selectLocation = document.querySelector('#select-campus');
 // Metropolia's campuses and needed info
 const campuses = [
   {
@@ -27,24 +27,28 @@ const campuses = [
     city: 'Helsinki',
     restaurant: {id: 1251, chain: 'Food & Co'},
     location: {lat: 60.2100515020518, lon: 24.97677582883559},
+    routesRadius: 400,
   },
   {
     name: 'Karaportti',
     city: 'Espoo',
     restaurant: {id: 3208, chain: 'Food & Co'},
     location: {lat: 60.22412908302269, lon: 24.7584602544428},
+    routesRadius: 450,
   },
   {
     name: 'Myllypuro',
     city: 'Helsinki',
     restaurant: {id: 158, chain: 'Sodexo'},
     location: {lat: 60.223621756949434, lon: 25.077913869785164},
+    routesRadius: 400,
   },
   {
     name: 'Myyrmäki',
     city: 'Vantaa',
     restaurant: {id: 152, chain: 'Sodexo'},
     location: {lat: 60.258843352326785, lon: 24.84484968512866},
+    routesRadius: 300,
   },
 ];
 
@@ -99,6 +103,17 @@ const changeLang = (selectedLang) => {
   );
   AnnouncementRender.renderAnnouncements(announcements, settings.lang);
   MenuRender.renderMenuSection(menu);
+  HSLRender.renderRouteInfo(routes);
+};
+
+const changeLocation = async (selectedLocation) => {
+  settings.campus = selectedLocation;
+  routes = await HSLRender.getRoutes(settings.campus, campuses);
+  weather = await getWeather(settings.campus, campuses);
+  MenuRender.renderMenuSection(menu);
+  HSLRender.renderRouteInfo(routes);
+  HSLRender.renderMap(routes, settings.campus, campuses);
+  renderWeather(weather);
 };
 
 /**
@@ -153,28 +168,30 @@ window.addEventListener('scroll', () =>
   NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
 
-/*const changeLocation = async () => {
-  routes = await HSLRender.getRoutes(settings.campus, campuses);
-  HSLRender.renderRouteInfo(routes);
-  HSLRender.renderMap(routes, settings.campus, campuses);
-};
-const testi = document.querySelector('#select-campus');
-testi.addEventListener('click', () => {
-  console.log('jee');
-});*/
-
 selectLangEl.addEventListener('change', () => {
   changeLang(selectLangEl.value);
   //save settings
   saveSettings(settings);
 });
 
+selectLocation.addEventListener('change', () => {
+  changeLocation(selectLocation.value);
+  saveSettings(settings);
+});
+
+const updateRoutes = setInterval(async () => {
+  routes = await HSLRender.getRoutes(settings.campus, campuses);
+  HSLRender.renderRouteInfo(routes);
+  renderWeather(weather);
+  HSLRender.renderMap(routes, settings.campus, campuses);
+}, 60000);
 
 /**
  * App initialization.
  */
 const init = async () => {
   loadSettings();
+  updateRoutes;
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
