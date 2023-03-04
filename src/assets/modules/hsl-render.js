@@ -35,7 +35,8 @@ const getRoutes = async (selectedCampus, allCampuses) => {
       const routesData = await HSL.getRoutesByLocation(
         campus.location.lat,
         campus.location.lon,
-        settings.departures
+        settings.departures,
+        campus.routesRadius
       );
       let routesArray = [];
       for (const route of routesData) {
@@ -57,24 +58,26 @@ const getRoutes = async (selectedCampus, allCampuses) => {
 
 const renderRouteInfo = async (routes) => {
   const target = document.querySelector('#routes');
+  target.innerHTML = '';
   let maxRoutes = 0;
   for (const route of routes) {
     maxRoutes++;
-    if (maxRoutes <= 5) {
+    if (maxRoutes < 6) {
       const routeContainer = document.createElement('li');
-      routeContainer.classList = 'route-info';
+      const routeHeading = document.querySelector('#hsl-heading');
       const stopContainer = document.createElement('div');
-      stopContainer.classList = 'stop-info col';
       const routeDestination = document.createElement('div');
-      routeDestination.classList = 'destination-info col';
-      const stopCode = document.createElement('div');
-      stopCode.id = 'stopcode';
-      stopCode.classList = 'badge bg-secondary';
       const stopName = document.createElement('div');
-      stopName.id = 'stopname';
-      stopName.classList = 'fw-bold mb-3';
+      const stopCode = document.createElement('div');
       const routeNumber = document.createElement('div');
-      routeNumber.id = 'routenumber';
+      const destination = document.createElement('div');
+      const routeRealtimeDeparture = document.createElement('div');
+
+      routeContainer.classList = 'route-info';
+      stopContainer.classList = 'stop-info col';
+      routeDestination.classList = 'destination-info col';
+      stopName.classList = 'fw-bold mb-3';
+      stopCode.classList = 'badge bg-secondary';
       if (route.mode == 'BUS') {
         routeNumber.classList = 'badge bg-info';
       } else if (route.mode == 'SUBWAY') {
@@ -84,18 +87,25 @@ const renderRouteInfo = async (routes) => {
       } else if (route.mode == 'RAIL') {
         routeNumber.classList = 'badge bg-light';
       }
-
-      const destination = document.createElement('div');
-      destination.id = 'destination';
       destination.classList = 'fw-bold mb-3';
-      const routeRealtimeDeparture = document.createElement('div');
-      routeRealtimeDeparture.id = 'departure';
       routeRealtimeDeparture.classList = 'fw-bold mb-3';
-      stopCode.textContent = route.stopCode;
-      stopName.textContent = route.stopName;
-      routeNumber.textContent = route.routeNumber;
-      destination.textContent = route.destination;
-      routeRealtimeDeparture.textContent = convertTime(
+
+      stopCode.id = 'stopcode';
+      stopName.id = 'stopname';
+      routeNumber.id = 'routenumber';
+      destination.id = 'destination';
+      routeRealtimeDeparture.id = 'departure';
+
+      routeHeading.innerHTML =
+        settings.lang === 'fi'
+          ? `HSL - ${settings.campus} lähipysäkit ja linjat`
+          : `HSL - ${settings.campus} nearby stops and routes`;
+
+      stopCode.innerHTML = route.stopCode;
+      stopName.innerHTML = route.stopName;
+      routeNumber.innerHTML = route.routeNumber;
+      destination.innerHTML = route.destination;
+      routeRealtimeDeparture.innerHTML = convertTime(
         route.routeRealtimeDeparture
       );
 
@@ -119,6 +129,12 @@ const renderRouteInfo = async (routes) => {
  * @param {string} selectedCampus - Selected campus to get HSL routes
  * @param {array} allCampuses - List of all campuses and infos.
  */
+
+const mapContainer = document.querySelector('#routes-map');
+const map = L.map(mapContainer, {
+  zoomControl: false,
+});
+
 const renderMap = (routes, selectedCampus, allCampuses) => {
   const campusIcon = L.Icon.extend({
     options: {
@@ -137,40 +153,43 @@ const renderMap = (routes, selectedCampus, allCampuses) => {
   const subwayIcon = new hslIcon({iconUrl: './assets/subway.png'});
   const trainIcon = new hslIcon({iconUrl: './assets/train.png'});
   const tramIcon = new hslIcon({iconUrl: './assets/tram.png'});
-  const mapContainer = document.querySelector('#routes-map');
+  let maxMarkers = 0;
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
-      const map = L.map(mapContainer, {
-        zoomControl: false,
-      }).setView([campus.location.lat, campus.location.lon], 16);
+      map.setView([campus.location.lat, campus.location.lon], 16);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(map);
+
       const campusMarker = L.marker(
         [campus.location.lat, campus.location.lon],
         {
           title: campus.name,
           icon: metropoliaIcon,
-          iconSize: [25, 25],
           alt: 'Campus marker',
         }
       ).addTo(map);
-      const markers = L.featureGroup();
       campusMarker.bindTooltip(`${campus.name}`).openTooltip();
+
+      const markers = L.featureGroup();
+
       for (const route of routes) {
-        const stopMarker = L.marker([route.lat, route.lon]).addTo(map);
-        stopMarker.bindTooltip(`${route.stopCode}`).openTooltip();
-        markers.addLayer(stopMarker);
-        if (route.mode === 'BUS') {
-          stopMarker.setIcon(busIcon);
-        } else if (route.mode === 'SUBWAY') {
-          stopMarker.setIcon(subwayIcon);
-        } else if (route.mode === 'TRAIN') {
-          stopMarker.setIcon(trainIcon);
-        } else if (route.mode === 'TRAM') {
-          stopMarker.setIcon(tramIcon);
+        maxMarkers++;
+        if (maxMarkers < 6) {
+          const stopMarker = L.marker([route.lat, route.lon]).addTo(map);
+          stopMarker.bindTooltip(`${route.stopCode}`).openTooltip();
+          markers.addLayer(stopMarker);
+          if (route.mode === 'BUS') {
+            stopMarker.setIcon(busIcon);
+          } else if (route.mode === 'SUBWAY') {
+            stopMarker.setIcon(subwayIcon);
+          } else if (route.mode === 'TRAIN') {
+            stopMarker.setIcon(trainIcon);
+          } else if (route.mode === 'TRAM') {
+            stopMarker.setIcon(tramIcon);
+          }
         }
       }
       map.fitBounds(markers.getBounds());
@@ -178,5 +197,9 @@ const renderMap = (routes, selectedCampus, allCampuses) => {
   }
 };
 
-const HSLRender = {getRoutes, renderRouteInfo, renderMap};
+const removeMap = () => {
+  map.remove();
+};
+
+const HSLRender = {getRoutes, renderRouteInfo, renderMap, removeMap};
 export default HSLRender;
