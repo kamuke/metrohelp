@@ -11,6 +11,35 @@ import HSL from './hsl-data';
 import L from 'leaflet';
 import settings from '/src/index';
 
+// Leaflet.js variables
+const mapContainer = document.querySelector('#routes-map');
+const markers = L.featureGroup();
+const map = L.map(mapContainer, {
+  zoomControl: false,
+});
+const mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:
+    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+});
+
+const campusIcon = L.Icon.extend({
+  options: {
+    iconSize: [40, 40],
+  },
+});
+const hslIcon = L.Icon.extend({
+  options: {
+    iconSize: [25, 25],
+  },
+});
+const metropoliaIcon = new campusIcon({
+  iconUrl: './assets/metropolia-marker.webp',
+});
+const busIcon = new hslIcon({iconUrl: './assets/bus.webp'});
+const subwayIcon = new hslIcon({iconUrl: './assets/subway.webp'});
+const trainIcon = new hslIcon({iconUrl: './assets/train.webp'});
+const tramIcon = new hslIcon({iconUrl: './assets/tram.webp'});
+
 /**
  * Converts HSL time from seconds to 00:00 format
  * @param {number} seconds
@@ -24,7 +53,9 @@ const convertTime = (seconds) => {
 };
 
 /**
- * @author Eeli
+ * Gets data from HSL data module and convert it to and array.
+ * The array is sorted by departuretime.
+ *
  * @param {string} selectedCampus - Selected campus to get HSL routes
  * @param {array} allCampuses - List of all campuses and infos.
  * @returns Sorted array
@@ -52,6 +83,7 @@ const getRoutes = async (selectedCampus, allCampuses) => {
 };
 
 /**
+ * Renders HSL route info from sorted HSL data.
  *
  * @param {array} routes - Array of sorted routes
  */
@@ -122,68 +154,43 @@ const renderRouteInfo = async (routes) => {
 };
 
 /**
- * Render Leaflet.js map and markers for campus and stops.
+ * Renders Leaflet.js map and custom markers for campus and each stops nearby.
+ * Map gets all the marker locations and fit them in to the view.
  *
- * @author Eeli
  * @param {array} routes - Array of sorted routes
  * @param {string} selectedCampus - Selected campus to get HSL routes
  * @param {array} allCampuses - List of all campuses and infos.
  */
-
-const mapContainer = document.querySelector('#routes-map');
-const map = L.map(mapContainer, {
-  zoomControl: false,
-});
-
 const renderMap = (routes, selectedCampus, allCampuses) => {
-  const campusIcon = L.Icon.extend({
-    options: {
-      iconSize: [40, 40],
-    },
-  });
-  const hslIcon = L.Icon.extend({
-    options: {
-      iconSize: [25, 25],
-    },
-  });
-  const metropoliaIcon = new campusIcon({
-    iconUrl: './assets/metropolia-marker.webp',
-  });
-  const busIcon = new hslIcon({iconUrl: './assets/bus.webp'});
-  const subwayIcon = new hslIcon({iconUrl: './assets/subway.webp'});
-  const trainIcon = new hslIcon({iconUrl: './assets/train.webp'});
-  const tramIcon = new hslIcon({iconUrl: './assets/tram.webp'});
   let maxMarkers = 0;
+  markers.clearLayers();
+  mapLayer.remove();
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
-      map.setView([campus.location.lat, campus.location.lon], 16);
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }).addTo(map);
-
+      map.setView([campus.location.lat, campus.location.lon], 10);
+      mapLayer.addTo(map);
       const campusMarker = L.marker(
         [campus.location.lat, campus.location.lon],
         {
           title: campus.name,
           icon: metropoliaIcon,
-          alt: 'Campus marker',
+          alt: `Metropolia ${campus.name} marker`,
         }
-      ).addTo(map);
-      campusMarker.bindTooltip(`${campus.name}`).openTooltip();
-
-      const markers = L.featureGroup();
-
+      );
+      campusMarker.bindTooltip(`Metropolia ${campus.name}`, {
+        permanent: true,
+      });
+      markers.addLayer(campusMarker);
       for (const route of routes) {
         maxMarkers++;
         if (maxMarkers < 6) {
           const stopMarker = L.marker([route.lat, route.lon], {
             title: route.stopCode,
             alt: `${route.stopName} stop marker`,
-          }).addTo(map);
-          stopMarker.bindTooltip(`${route.stopCode}`).openTooltip();
-          markers.addLayer(stopMarker);
+          });
+          stopMarker.bindTooltip(route.stopCode, {
+            permanent: true,
+          });
           if (route.mode === 'BUS') {
             stopMarker.setIcon(busIcon);
           } else if (route.mode === 'SUBWAY') {
@@ -193,8 +200,10 @@ const renderMap = (routes, selectedCampus, allCampuses) => {
           } else if (route.mode === 'TRAM') {
             stopMarker.setIcon(tramIcon);
           }
+          markers.addLayer(stopMarker);
         }
       }
+      markers.addTo(map);
       map.fitBounds(markers.getBounds());
     }
   }
