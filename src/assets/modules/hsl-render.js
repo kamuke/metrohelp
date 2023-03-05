@@ -8,7 +8,7 @@
 'use strict';
 
 import HSL from './hsl-data';
-import * as L from 'leaflet';
+import L from 'leaflet';
 import settings from '/src/index';
 
 /**
@@ -147,12 +147,12 @@ const renderMap = (routes, selectedCampus, allCampuses) => {
     },
   });
   const metropoliaIcon = new campusIcon({
-    iconUrl: './assets/metropolia-marker.png',
+    iconUrl: './assets/metropolia-marker.webp',
   });
-  const busIcon = new hslIcon({iconUrl: './assets/bus.png'});
-  const subwayIcon = new hslIcon({iconUrl: './assets/subway.png'});
-  const trainIcon = new hslIcon({iconUrl: './assets/train.png'});
-  const tramIcon = new hslIcon({iconUrl: './assets/tram.png'});
+  const busIcon = new hslIcon({iconUrl: './assets/bus.webp'});
+  const subwayIcon = new hslIcon({iconUrl: './assets/subway.webp'});
+  const trainIcon = new hslIcon({iconUrl: './assets/train.webp'});
+  const tramIcon = new hslIcon({iconUrl: './assets/tram.webp'});
   let maxMarkers = 0;
   for (const campus of allCampuses) {
     if (selectedCampus === campus.name) {
@@ -178,7 +178,10 @@ const renderMap = (routes, selectedCampus, allCampuses) => {
       for (const route of routes) {
         maxMarkers++;
         if (maxMarkers < 6) {
-          const stopMarker = L.marker([route.lat, route.lon]).addTo(map);
+          const stopMarker = L.marker([route.lat, route.lon], {
+            title: route.stopCode,
+            alt: `${route.stopName} stop marker`,
+          }).addTo(map);
           stopMarker.bindTooltip(`${route.stopCode}`).openTooltip();
           markers.addLayer(stopMarker);
           if (route.mode === 'BUS') {
@@ -197,9 +200,5 @@ const renderMap = (routes, selectedCampus, allCampuses) => {
   }
 };
 
-const removeMap = () => {
-  map.remove();
-};
-
-const HSLRender = {getRoutes, renderRouteInfo, renderMap, removeMap};
+const HSLRender = {getRoutes, renderRouteInfo, renderMap};
 export default HSLRender;
