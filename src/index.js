@@ -178,6 +178,7 @@ selectCampusEl.addEventListener('change', () => {
   saveSettings(settings);
 });
 
+// Updates HSL routes data every minute
 const updateRoutes = setInterval(async () => {
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   HSLRender.renderRouteInfo(routes);
