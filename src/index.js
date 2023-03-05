@@ -160,6 +160,35 @@ selectLangEl.addEventListener('change', () => {
 });
 
 /**
+ * Rotate visibility of sections
+ * @author Catrina
+ * @param activeScreenIndex - index nmbr for the section
+ * @param delay - in seconds
+ */
+const sectionCarousel = (activeScreenIndex, delay) => {
+  const screens = document.querySelectorAll('section');
+  console.log(screens);
+  for (const screen of screens) {
+    screen.style.display = 'none';
+  }
+
+  //check if the screen is HSL, add flex as display, else inline
+  if(screens[activeScreenIndex].id==='hsl-section'){
+    screens[activeScreenIndex].style.display = 'flex';
+  }else{
+    screens[activeScreenIndex].style.display = 'inline';
+  }
+
+  setTimeout(() => {
+    let nextScreen = activeScreenIndex + 1;
+    if (activeScreenIndex == screens.length-1) {
+      nextScreen = 0;
+    }
+    sectionCarousel(nextScreen, delay);
+  }, delay * 1000);
+};
+
+/**
  * App initialization.
  */
 const init = async () => {
@@ -180,6 +209,7 @@ const init = async () => {
   renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
   ServiceWorker.register();
+  sectionCarousel(0,3);
 };
 
 init();
