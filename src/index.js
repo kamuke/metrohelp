@@ -19,7 +19,6 @@ const selectCampusEl = document.querySelector('#select-campus');
 const navLinks = document.querySelectorAll('.nav-link');
 // All sections
 const sections = document.querySelectorAll('section');
-const selectLocation = document.querySelector('#select-campus');
 // Metropolia's campuses and needed info
 const campuses = [
   {
@@ -174,8 +173,8 @@ selectLangEl.addEventListener('change', () => {
   saveSettings(settings);
 });
 
-selectLocation.addEventListener('change', () => {
-  changeLocation(selectLocation.value);
+selectCampusEl.addEventListener('change', () => {
+  changeLocation(selectCampusEl.value);
   saveSettings(settings);
 });
 
