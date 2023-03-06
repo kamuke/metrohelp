@@ -89,6 +89,7 @@ const loadSettings = () => {
  *
  * @author Kerttu
  */
+/*
 const changeLang = (selectedLang) => {
   settings.lang = selectedLang;
   NavRender.renderNav(
@@ -99,7 +100,7 @@ const changeLang = (selectedLang) => {
   );
   AnnouncementRender.renderAnnouncements(announcements, settings.lang);
   MenuRender.renderMenuSection(menu);
-};
+};*/
 
 /**
  * Get current weather from the selected campus' city
@@ -152,12 +153,12 @@ const renderWeather = async (weather) => {
 window.addEventListener('scroll', () =>
   NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
-
+/*
 selectLangEl.addEventListener('change', () => {
   changeLang(selectLangEl.value);
   //save settings
   saveSettings(settings);
-});
+});*/
 
 /**
  * Rotate visibility of sections
@@ -165,18 +166,19 @@ selectLangEl.addEventListener('change', () => {
  * @param activeScreenIndex - index nmbr for the section
  * @param delay - in seconds
  */
+// eslint-disable-next-line no-unused-vars
 const sectionCarousel = (activeScreenIndex, delay) => {
   const screens = document.querySelectorAll('section');
-  console.log(screens);
+
   for (const screen of screens) {
     screen.style.display = 'none';
   }
 
-  //check if the screen is HSL, add flex as display, else inline
+  //check if the screen is HSL, add flex as display
   if(screens[activeScreenIndex].id==='hsl-section'){
     screens[activeScreenIndex].style.display = 'flex';
   }else{
-    screens[activeScreenIndex].style.display = 'inline';
+    screens[activeScreenIndex].style.display = 'inherit';
   }
 
   setTimeout(() => {
@@ -203,13 +205,13 @@ const init = async () => {
     selectLangEl,
     selectCampusEl
   );
-  AnnouncementRender.renderAnnouncements(announcements, settings.lang);
+  AnnouncementRender.renderAnnouncements(announcements);
   MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);
   renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
   ServiceWorker.register();
-  sectionCarousel(0,3);
+  sectionCarousel(0,10);
 };
 
 init();
