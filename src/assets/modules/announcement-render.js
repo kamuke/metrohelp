@@ -115,7 +115,7 @@ const renderAnnCarouselSlide = (announcement, index, targetElement, lang) => {
     class: 'img-fluid',
     src: announcement.smallerImgUrl,
     alt: announcement.title,
-    loading: 'auto',
+    loading: index === 0 ? 'auto' : 'lazy',
     width: '866',
     height: '487',
   });
@@ -181,7 +181,7 @@ const renderAnnModal = (announcement, index, targetElement) => {
     src: announcement.smallerImgUrl,
     class: 'd-block w-100 h-100',
     alt: announcement.title,
-    loading: 'auto',
+    loading: 'lazy',
     width: '935',
     height: '526',
   });
