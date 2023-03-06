@@ -344,9 +344,6 @@ a.card {
   margin: 0;
 }
 // HSL:
-#hsl-section{
-
-}
 #routes {
   background-color: custom.$light;
   padding: 1rem 1.25rem;
@@ -372,5 +369,5 @@ a.card {
 }
 
 #routes-map {
-height: auto;
+aspect-ratio: 4/3;
 }
