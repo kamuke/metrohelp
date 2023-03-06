@@ -35,16 +35,11 @@ const renderAnnouncements = (announcements) => {
     const announcement = {announcementEN, announcementFI};
 
     const section = document.createElement('section');
-    const heading = document.createElement('h2');
-    //english section
     const sectionEN = document.createElement('section');
-    const headingEN = document.createElement('h2');
 
     const carousel = document.createElement('div');
     const carouselEN = document.createElement('div');
 
-    heading.innerHTML='Tiedotteet';
-    headingEN.innerHTML='Announcements';
 
     const img = document.createElement('img');
     const imgEN = document.createElement('img');
@@ -63,16 +58,12 @@ const renderAnnouncements = (announcements) => {
     carousel.classList.add('img-div');
     carouselEN.classList.add('img-div');
     section.class = 'announcements-section pt-3 pb-4 pt-md-5 pb-md-0';
-    heading.class = 'announcements-heading pt-0 pt-md-4';
     sectionEN.class = 'announcements-section pt-3 pb-4 pt-md-5 pb-md-0';
-    headingEN.class = 'announcements-heading pt-0 pt-md-4';
 
-    sectionEN.appendChild(headingEN);
     carouselEN.appendChild(imgEN);
     sectionEN.appendChild(carouselEN);
     parentNode.insertBefore(sectionEN, parentNode.firstChild);
 
-    section.appendChild(heading);
     carousel.appendChild(img);
     section.appendChild(carousel);
     parentNode.insertBefore(section, parentNode.firstChild);
