@@ -136,6 +136,7 @@ selectCampusEl.addEventListener('change', () => {
 // Updates HSL routes and weather data every minute
 const updateData = setInterval(async () => {
   routes = await HSLRender.getRoutes(settings.campus, campuses);
+  weather = await WeatherRender.getWeather(settings.campus, campuses);
   HSLRender.renderRouteInfo(routes);
   WeatherRender.renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);

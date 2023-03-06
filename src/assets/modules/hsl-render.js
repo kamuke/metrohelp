@@ -24,7 +24,7 @@ const mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const campusIcon = L.Icon.extend({
   options: {
-    iconSize: [40, 40],
+    iconSize: [45, 45],
   },
 });
 const hslIcon = L.Icon.extend({

@@ -2,6 +2,7 @@
 @import 'custom'; // Bootstrap customization
 @import '~bootstrap/scss/bootstrap'; // Bootstrap and its default variables
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css'); // Bootstrap icons
+@import '~leaflet/dist/leaflet.css';
 
 // Navigation:
 .navbar {
