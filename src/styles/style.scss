@@ -123,7 +123,7 @@ header {
 
   @media screen and (max-width: 767px) {
     border-radius: custom.$border-radius custom.$border-radius 0 0;
-    box-shadow: 0px 2px 8px rgba(custom.$dark, 0.15);
+    box-shadow: 0px 2px 8px rgba(custom.$dark, 0.2);
 
     select:first-child {
       margin-top: 0.5rem;
@@ -227,7 +227,6 @@ header {
   align-items: center;
   gap: 0.5rem;
   color: custom.$dark;
-  font-size: 0.875rem;
 }
 
 select {
