@@ -9,7 +9,7 @@
 
 import Sodexo from './sodexo-data';
 import FoodCo from './food-co-data';
-import settings from '/src/index';
+//import settings from '/src/index';
 
 /**
  * Get menu from Sodexo or Food & Co module.
@@ -41,15 +41,18 @@ const getMenu = async (selectedCampus, allCampuses) => {
 const renderMenuListItem = async (menu, targetElement) => {
   const menuList = document.createElement('li');
   const menuBody = document.createElement('div');
-  const menuName = document.createElement('p');
+  const menuNameFI = document.createElement('p');
+  const menuNameEN = document.createElement('p');
 
   menuList.classList = 'menu list-group-item';
   menuBody.classList = 'menu-body';
-  menuName.classList = 'menu-name';
+  menuNameFI.classList = 'menu-name';
+  menuNameEN.classList = 'menu-name';
 
-  menuName.textContent = settings.lang === 'fi' ? menu.fi : menu.en;
+  menuNameFI.textContent = menu.fi;
+  menuNameEN.textContent = menu.en;
 
-  menuBody.append(menuName);
+  menuBody.append(menuNameFI, menuNameEN);
 
   if (menu.price) {
     const menuPrice = document.createElement('p');
@@ -101,29 +104,30 @@ const renderAllMenuListItems = async (menu) => {
 const renderMenuSection = async (menu) => {
   const menusHeading = document.querySelector('#menus-heading');
   const menusDate = document.querySelector('#menus-date');
-  const dietcodeBtn = document.querySelector('#dietcode-exp-btn');
-  const dietcodeBody = document.querySelector('#dietcode-exp-body');
 
-  menusHeading.innerHTML =
-    settings.lang === 'fi'
-      ? `Ruokalista - ${menu.title}`
-      : `Menu - ${menu.title}`;
+  const dietcodeBodyFI = document.querySelector('#dietcode-exp-body-fi');
+  const dietcodeBodyEN = document.querySelector('#dietcode-exp-body-en');
 
-  let date = `${new Date().toLocaleDateString(settings.lang, {
+  const menusHeadingTitle = document.createTextNode(' - '+menu.title);
+
+  menusHeading.appendChild(menusHeadingTitle);
+
+  let dateFi = `${new Date().toLocaleDateString('fi', {
     weekday: 'long',
-  })} ${new Date().toLocaleDateString(settings.lang)}`;
+  })}`;
+  let dateEn = `${new Date().toLocaleDateString('en', {
+    weekday: 'long',
+  })}`;
 
-  date = date.charAt(0).toUpperCase() + date.slice(1);
+  let dateDate = `${new Date().toLocaleDateString('fi')}`;
 
-  menusDate.innerHTML = date;
+  dateFi = dateFi.charAt(0).toUpperCase() + dateFi.slice(1);
+  dateEn = dateEn.charAt(0).toUpperCase() + dateEn.slice(1);
 
-  dietcodeBtn.innerHTML =
-    settings.lang === 'fi' ? 'Ruokavaliokoodit' : 'Dietcodes';
+  menusDate.innerHTML = `${dateFi}`+' - '+`${dateEn}`+' '+dateDate;
 
-  dietcodeBody.innerHTML =
-    settings.lang === 'fi'
-      ? menu.dietcodeExplanations.fi
-      : menu.dietcodeExplanations.en;
+  dietcodeBodyFI.innerHTML = menu.dietcodeExplanations.fi;
+  dietcodeBodyEN.innerHTML = menu.dietcodeExplanations.en;
 
   renderAllMenuListItems(menu);
 };

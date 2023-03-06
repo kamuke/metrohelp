@@ -93,6 +93,7 @@ const loadSettings = () => {
  *
  * @author Kerttu
  */
+/*
 const changeLang = (selectedLang) => {
   settings.lang = selectedLang;
   NavRender.renderNav(
@@ -105,6 +106,8 @@ const changeLang = (selectedLang) => {
   MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);
 };
+=======
+};*/
 
 const changeLocation = async (selectedLocation) => {
   settings.campus = selectedLocation;
@@ -121,12 +124,42 @@ const changeLocation = async (selectedLocation) => {
 window.addEventListener('scroll', () =>
   NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
-
+/*
 selectLangEl.addEventListener('change', () => {
   changeLang(selectLangEl.value);
   //save settings
   saveSettings(settings);
-});
+});*/
+
+/**
+ * Rotate visibility of sections
+ * @author Catrina
+ * @param activeScreenIndex - index nmbr for the section
+ * @param delay - in seconds
+ */
+// eslint-disable-next-line no-unused-vars
+const sectionCarousel = (activeScreenIndex, delay) => {
+  const screens = document.querySelectorAll('section');
+
+  for (const screen of screens) {
+    screen.style.display = 'none';
+  }
+
+  //check if the screen is HSL, add flex as display
+  if(screens[activeScreenIndex].id==='hsl-section'){
+    screens[activeScreenIndex].style.display = 'flex';
+  }else{
+    screens[activeScreenIndex].style.display = 'inherit';
+  }
+
+  setTimeout(() => {
+    let nextScreen = activeScreenIndex + 1;
+    if (activeScreenIndex == screens.length-1) {
+      nextScreen = 0;
+    }
+    sectionCarousel(nextScreen, delay);
+  }, delay * 1000);
+};
 
 selectCampusEl.addEventListener('change', () => {
   changeLocation(selectCampusEl.value);
@@ -157,12 +190,13 @@ const init = async () => {
     selectLangEl,
     selectCampusEl
   );
-  AnnouncementRender.renderAnnouncements(announcements, settings.lang);
+  AnnouncementRender.renderAnnouncements(announcements);
   MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);
   WeatherRender.renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
   ServiceWorker.register();
+  sectionCarousel(0,10);
 };
 
 init();

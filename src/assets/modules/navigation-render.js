@@ -68,15 +68,7 @@ const renderNav = (lang, campus, selectLangEl, selectCampusEl) => {
       lang === 'fi' ? navLinkNames.fi[i] : navLinkNames.en[i];
   }
 
-  const langOptions = selectLangEl.options;
   const campusOptions = selectCampusEl.options;
-
-  for (let i = 0; i < langOptions.length; i++) {
-    if (langOptions[i].value === lang) {
-      selectLangEl.selectedIndex = i;
-      break;
-    }
-  }
 
   for (let i = 0; i < campusOptions.length; i++) {
     if (campusOptions[i].value === campus) {
