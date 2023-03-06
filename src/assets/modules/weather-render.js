@@ -46,6 +46,8 @@ const renderWeather = async (weather) => {
   //insert img and alt txt (in english) TODO: translate current condition text into finnish?
   weatherImg.src = weather.current.condition.icon;
   weatherImg.alt = weather.current.condition.text;
+  weatherImg.setAttribute('height', '35');
+  weatherImg.setAttribute('width', '35');
   //current weather
   weatherCaption.textContent = weather.current.temp_c + ' °C ';
 };

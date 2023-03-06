@@ -11,12 +11,18 @@
         <div
           class="container-lg pt-3 pb-3 pt-md-0 pb-md-0 d-md-flex justify-content-between align-items-center"
         >
-          <!-- TODO: Logo -->
-          <a class="navbar-brand" href="index.html">LOGO</a>
+          <a class="navbar-brand" href="index.html">
+            <img
+              src="./assets/metrohelp-smaller-logo.webp"
+              alt="Metro Help logo"
+              width="150"
+              height="34"
+            />
+          </a>
           <ul class="navbar-nav mb-0 me-auto">
             <li class="nav-item">
               <a
-                class="nav-link active"
+                class="nav-link"
                 aria-current="page"
                 href="#announcements-section"
               >
@@ -59,7 +65,7 @@
           </div>
           <div class="d-md-flex">
             <div class="weather-info d-flex">
-              <img src="" class="weather-img m-1" height="35px" />
+              <img src="" class="weather-img m-1" height="35" width="35" />
               <span class="weather-degree m-1"></span>
             </div>
           </div>
@@ -81,7 +87,7 @@
         <ul class="navbar-mobile-nav m-0">
           <li class="nav-item">
             <a
-              class="nav-link active"
+              class="nav-link"
               aria-current="page"
               href="#announcements-section"
               ><i class="bi bi-bell-fill icon"></i
@@ -103,9 +109,31 @@
         </ul>
       </div>
     </nav>
+    <header>
+      <div class="container-lg header-inner">
+        <h1 class="display-3">Metro Help</h1>
+        <p id="slogan" class="fs-4 text-center">
+          Tiedotteet, ruokalistat ja joukkoliikenne helposti
+        </p>
+        <img
+          id="metropolia-logo"
+          src="./assets/metropolia-smaller-logo.webp"
+          alt="Metropolian logo"
+          width="160"
+          height="36"
+        />
+        <img
+          id="metropolia-mobile-logo"
+          src="./assets/metropolia-mobile-logo.webp"
+          alt="Metropolian logo"
+          width="65"
+          height="65"
+        />
+      </div>
+    </header>
     <main class="container-lg">
-      <section id="announcements-section" class="pt-3 pb-4 pt-md-5 pb-md-0">
-        <h2 id="announcements-heading" class="pt-0 pt-md-4">Tiedotteet</h2>
+      <section id="announcements-section">
+        <h2 id="announcements-heading">Tiedotteet</h2>
         <div id="announcements-carousel" class="carousel slide mt-4">
           <div id="announcements-carousel-inner" class="carousel-inner"></div>
           <nav
@@ -120,8 +148,8 @@
         </div>
         <div id="announcement-modals"></div>
       </section>
-      <section id="menus-section" class="pt-3 pb-4 pt-md-5 pb-md-0">
-        <h2 id="menus-heading" class="pt-0 pt-md-4">Ruokalista</h2>
+      <section id="menus-section">
+        <h2 id="menus-heading">Ruokalista</h2>
         <p id="menus-date" class="fw-bold mb-3"></p>
         <ul id="menus-list" class="list-group mt-4 mb-4"></ul>
         <div id="dietcode-explanations" class="accordion">
@@ -150,10 +178,12 @@
           </div>
         </div>
       </section>
-      <section id="hsl-section" class="row pt-3 pb-5 pt-md-5">
-        <h2 id="hsl-heading" class="pt-0 pt-md-4">HSL</h2>
-        <ul id="routes" class="list-group mt-3 mb-3 col-sm"></ul>
-        <div id="routes-map" class="list-group mt-3 mb-3 col-sm"></div>
+      <section id="hsl-section">
+        <h2 id="hsl-heading">HSL</h2>
+        <div class="row g-1 mt-4 mb-4 route-container">
+          <ul id="routes" class="list-group col-md-6"></ul>
+          <div id="routes-map" class="list-group col-md-6"></div>
+        </div>
       </section>
     </main>
   </body>

@@ -113,8 +113,11 @@ const renderAnnCarouselSlide = (announcement, index, targetElement, lang) => {
 
   setAttributes(img, {
     class: 'img-fluid',
-    src: announcement.imgUrl,
+    src: announcement.smallerImgUrl,
     alt: announcement.title,
+    loading: 'auto',
+    width: '866',
+    height: '487',
   });
 
   rowDiv.classList = 'row g-1';
@@ -175,9 +178,12 @@ const renderAnnModal = (announcement, index, targetElement) => {
   });
 
   setAttributes(img, {
-    src: announcement.imgUrl,
-    class: 'd-block w-100',
+    src: announcement.smallerImgUrl,
+    class: 'd-block w-100 h-100',
     alt: announcement.title,
+    loading: 'auto',
+    width: '935',
+    height: '526',
   });
 
   article.classList = 'modal-dialog';

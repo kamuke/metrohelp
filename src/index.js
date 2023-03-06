@@ -20,6 +20,8 @@ const selectCampusEl = document.querySelector('#select-campus');
 const navLinks = document.querySelectorAll('.nav-link');
 // All sections
 const sections = document.querySelectorAll('section');
+// Slogan
+const sloganParagraphEl = document.querySelector('#slogan');
 // Metropolia's campuses and needed info
 const campuses = [
   {
@@ -55,7 +57,7 @@ const campuses = [
 // User settings
 let settings = {
   lang: 'fi',
-  campus: 'Karaportti',
+  campus: 'Arabia',
   darkmode: false,
   departures: 1,
 };
@@ -65,6 +67,22 @@ let menu;
 let routes;
 let weather;
 let announcements;
+
+/**
+ * Check if given string is in JSON format.
+ *
+ * @author Kerttu
+ * @param {String} str
+ * @returns boolean
+ */
+const checkIfJSON = (str) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 /**
  * Stores user's settings into local storage
@@ -82,9 +100,20 @@ const saveSettings = (userSettings) => {
  * @author Catrina
  */
 const loadSettings = () => {
-  //check that settings exists in localStorage
-  if (localStorage.getItem('settings')) {
-    settings = JSON.parse(localStorage.getItem('settings'));
+  //check that settings exists in localStorage and the settings are in JSON format
+  if (
+    localStorage.getItem('settings') &
+    checkIfJSON(localStorage.getItem('settings'))
+  ) {
+    const tmpSettings = JSON.parse(localStorage.getItem('settings'));
+    if (
+      tmpSettings.lang &
+      tmpSettings.campus &
+      tmpSettings.darkmode &
+      tmpSettings.departures
+    ) {
+      settings = tmpSettings;
+    }
   }
 };
 
@@ -101,6 +130,10 @@ const changeLang = (selectedLang) => {
     selectLangEl,
     selectCampusEl
   );
+  sloganParagraphEl.innerHTML =
+    settings.lang === 'fi'
+      ? 'Tiedotteet, ruokalistat ja joukkoliikenne helposti'
+      : 'Find announcements, menus and public transportation easily';
   AnnouncementRender.renderAnnouncements(announcements, settings.lang);
   MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);

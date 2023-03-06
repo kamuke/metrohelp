@@ -108,7 +108,7 @@ const renderRouteInfo = async (routes) => {
       routeContainer.classList = 'route-info';
       stopContainer.classList = 'stop-info col';
       routeDestination.classList = 'destination-info col';
-      stopName.classList = 'fw-bold mb-3';
+      stopName.classList = 'fw-bold';
       stopCode.classList = 'badge bg-secondary';
       if (route.mode == 'BUS') {
         routeNumber.classList = 'badge bg-info';
@@ -119,14 +119,8 @@ const renderRouteInfo = async (routes) => {
       } else if (route.mode == 'RAIL') {
         routeNumber.classList = 'badge bg-light';
       }
-      destination.classList = 'fw-bold mb-3';
-      routeRealtimeDeparture.classList = 'fw-bold mb-3';
-
-      stopCode.id = 'stopcode';
-      stopName.id = 'stopname';
-      routeNumber.id = 'routenumber';
-      destination.id = 'destination';
-      routeRealtimeDeparture.id = 'departure';
+      destination.classList = 'fw-bold';
+      routeRealtimeDeparture.classList = 'fw-bold';
 
       routeHeading.innerHTML =
         settings.lang === 'fi'
