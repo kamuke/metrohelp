@@ -23,22 +23,16 @@
           </ul>
 
           <div class="d-md-flex">
-            <select
-              id="select-campus"
-              class="form-select"
-              aria-label="Valitse kampus/Select campus"
-            >
-              <option value="Karaportti" selected>Karaportti</option>
-              <option value="Arabia">Arabia</option>
-              <option value="Myllypuro">Myllypuro</option>
-              <option value="Myyrmäki">Myyrmäki</option>
-            </select>
+            <span id="select-campus" class="navi-txt m-1">Karaportti</span>
           </div>
           <div class="d-md-flex">
             <div class="weather-info d-flex">
               <img src="" class="weather-img m-1" height="35px" />
-              <span class="weather-degree m-1"></span>
+              <span id="weather-degree" class="navi-txt m-1"></span>
             </div>
+          </div>
+          <div class="d-md-flex">
+            <span id="navi-clock" class="navi-txt m-1"></span>
           </div>
         </div>
       </div>
@@ -80,7 +74,7 @@
         </ul>
       </div>
     </nav>
-    <main class="container-lg">
+    <main class="container-xxl">
       <section id="menus-section" class="pt-3 pb-4 pt-md-5 pb-md-0">
         <h2 id="menus-heading" class="pt-0 pt-md-4">Ruokalista / Menu</h2>
         <p id="menus-date" class="fw-bold mb-3"></p>

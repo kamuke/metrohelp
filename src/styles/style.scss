@@ -16,6 +16,7 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background: var(--bs-body-bg);
 }
 
 // Navigation:
@@ -29,7 +30,7 @@ main {
   left: 0;
   z-index: 1030;
   padding: 0;
-  height: 3.5rem;
+  height: 5.5rem;
 
   @media screen and (max-width: 767px) {
     height: auto;
@@ -162,11 +163,12 @@ main {
   }
 }
 
-.weather-degree{
+.navi-txt {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   color: custom.$dark;
+  font-size: 1.5rem;
 }
 
 select {
@@ -227,69 +229,6 @@ select {
   opacity: 1;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
   border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-// Cards:
-/*
-a.card {
-  text-decoration: none;
-  color: custom.$dark;
-  overflow: hidden;
-  min-height: 280px;
-  max-height: 480.5px;
-
-  @media screen and (max-width: 767px) {
-    min-height: 100%;
-    max-height: 100%;
-  }
-
-  .card-content {
-    align-items: center;
-    display: flex;
-
-    @media screen and (max-width: 767px) {
-      align-items: start;
-    }
-
-    @media screen and (max-width: 575px) {
-      height: 148px;
-    }
-  }
-
-  .card-body {
-    width: 100%;
-    padding: 0.75rem 1.25rem;
-  }
-
-  @media screen and (max-width: 1199px) {
-    hyphens: auto;
-  }
-}
-
-.card-img-container {
-  overflow: hidden;
-  padding: 0;
-}*/
-
-// Modal:
-.modal-dialog {
-  @media screen and (max-width: 991px) {
-    margin-right: 0.75rem;
-    margin-left: 0.75rem;
-  }
-}
-
-.modal-header {
-  align-items: start;
-}
-
-.modal-title {
-  font-size: 1.25rem;
-}
-
-.modal-body p {
-  margin-top: 1rem;
-  margin-bottom: 0;
 }
 
 // Menus:
@@ -370,4 +309,30 @@ a.card {
 
 #routes-map {
 aspect-ratio: 4/3;
+}
+
+//fade in animation - change the duration to the same as the delay for the slide
+.fade-in {
+  animation: fade 10s;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: scale(1.01);
+    filter: blur(2px);
+  }
+  5%{
+    opacity:1;
+  }
+  20% {
+    transform: rotate3d(0, 0, 0, 10deg);
+    filter: blur(0px);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

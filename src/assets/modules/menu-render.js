@@ -124,7 +124,7 @@ const renderMenuSection = async (menu) => {
   dateFi = dateFi.charAt(0).toUpperCase() + dateFi.slice(1);
   dateEn = dateEn.charAt(0).toUpperCase() + dateEn.slice(1);
 
-  menusDate.innerHTML = `${dateFi}`+' - '+`${dateEn}`+' '+dateDate;
+  menusDate.innerHTML = `${dateFi}`+' / '+`${dateEn}`+' '+dateDate;
 
   dietcodeBodyFI.innerHTML = menu.dietcodeExplanations.fi;
   dietcodeBodyEN.innerHTML = menu.dietcodeExplanations.en;

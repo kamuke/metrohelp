@@ -13,13 +13,6 @@ import WeatherRender from './assets/modules/weather-render';
 import Announcement from './assets/modules/announcement-data';
 import AnnouncementRender from './assets/modules/announcement-render';
 
-// Select language and select campus node elements
-const selectLangEl = document.querySelector('#select-lang');
-const selectCampusEl = document.querySelector('#select-campus');
-// All links in navigation
-const navLinks = document.querySelectorAll('.nav-link');
-// All sections
-const sections = document.querySelectorAll('section');
 // Metropolia's campuses and needed info
 const campuses = [
   {
@@ -81,55 +74,13 @@ const saveSettings = (userSettings) => {
  * TODO: make sure this one executes first?
  * @author Catrina
  */
+// eslint-disable-next-line no-unused-vars
 const loadSettings = () => {
   //check that settings exists in localStorage
   if (localStorage.getItem('settings')) {
     settings = JSON.parse(localStorage.getItem('settings'));
   }
 };
-
-/**
- * Change UI language between 'fi' and 'en'
- *
- * @author Kerttu
- */
-/*
-const changeLang = (selectedLang) => {
-  settings.lang = selectedLang;
-  NavRender.renderNav(
-    settings.lang,
-    settings.campus,
-    selectLangEl,
-    selectCampusEl
-  );
-  AnnouncementRender.renderAnnouncements(announcements, settings.lang);
-  MenuRender.renderMenuSection(menu);
-  HSLRender.renderRouteInfo(routes);
-};
-=======
-};*/
-
-const changeLocation = async (selectedLocation) => {
-  settings.campus = selectedLocation;
-  menu = await MenuRender.getMenu(settings.campus, campuses);
-  routes = await HSLRender.getRoutes(settings.campus, campuses);
-  weather = await WeatherRender.getWeather(settings.campus, campuses);
-  MenuRender.renderMenuSection(menu);
-  HSLRender.renderRouteInfo(routes);
-  HSLRender.renderMap(routes, settings.campus, campuses);
-  WeatherRender.renderWeather(weather);
-};
-
-// When window scrolls
-window.addEventListener('scroll', () =>
-  NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
-);
-/*
-selectLangEl.addEventListener('change', () => {
-  changeLang(selectLangEl.value);
-  //save settings
-  saveSettings(settings);
-});*/
 
 /**
  * Rotate visibility of sections
@@ -152,6 +103,9 @@ const sectionCarousel = (activeScreenIndex, delay) => {
     screens[activeScreenIndex].style.display = 'inherit';
   }
 
+  //add css animation styling
+  screens[activeScreenIndex].classList.add('fade-in');
+
   setTimeout(() => {
     let nextScreen = activeScreenIndex + 1;
     if (activeScreenIndex == screens.length-1) {
@@ -160,11 +114,6 @@ const sectionCarousel = (activeScreenIndex, delay) => {
     sectionCarousel(nextScreen, delay);
   }, delay * 1000);
 };
-
-selectCampusEl.addEventListener('change', () => {
-  changeLocation(selectCampusEl.value);
-  saveSettings(settings);
-});
 
 // Updates HSL routes and weather data every minute
 const updateData = setInterval(async () => {
@@ -185,10 +134,7 @@ const init = async () => {
   weather = await WeatherRender.getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
   NavRender.renderNav(
-    settings.lang,
-    settings.campus,
-    selectLangEl,
-    selectCampusEl
+    settings.campus
   );
   AnnouncementRender.renderAnnouncements(announcements);
   MenuRender.renderMenuSection(menu);

@@ -45,13 +45,13 @@ const renderAnnouncements = (announcements) => {
     const imgEN = document.createElement('img');
 
     setAttributes(img, {
-      class: 'img-fluid img-carousel',
+      class: 'img-carousel img-fluid rounded',
       src: announcement.announcementFI.imgUrl,
       alt: announcement.announcementFI.title,
     });
 
     setAttributes(imgEN, {
-      class: 'img-fluid img-carousel',
+      class: 'img-carousel img-fluid rounded',
       src: announcement.announcementEN.imgUrl,
       alt: announcement.announcementEN.title,
     });

@@ -41,13 +41,13 @@ const getWeather = async (selectedCampus, allCampuses) => {
  */
 const renderWeather = async (weather) => {
   const weatherImg = document.querySelector('.weather-img');
-  const weatherCaption = document.querySelector('.weather-degree');
+  const weatherCaption = document.querySelector('#weather-degree');
 
   //insert img and alt txt (in english) TODO: translate current condition text into finnish?
   weatherImg.src = weather.current.condition.icon;
   weatherImg.alt = weather.current.condition.text;
   //current weather
-  weatherCaption.textContent = weather.current.temp_c + ' °C ';
+  weatherCaption.textContent = weather.current.temp_c + ' °C | ';
 };
 
 const WeatherRender = {getWeather, renderWeather};

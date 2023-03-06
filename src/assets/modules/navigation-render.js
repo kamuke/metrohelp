@@ -36,47 +36,42 @@ const changeActiveStateOnNavLinksWhenScrolling = (navLinks, sections) => {
 };
 
 /**
- * Render navigation link names, selected language and selected campus.
+ * Render navigation selected campus.
  *
- * @param {String} lang
  * @param {String} campus
- * @param {Node} selectLangEl - Language select node element
- * @param {Node} selectCampusEl - Language select node element
  */
-const renderNav = (lang, campus, selectLangEl, selectCampusEl) => {
-  // Navigation's link names
-  const navLinkNames = {
-    fi: ['Tiedotteet', 'Ruokalista', 'HSL'],
-    en: ['Announcements', 'Menu', 'HSL'],
-  };
+const renderNav = (campus) => {
 
-  // Desktop nav links
-  const desNavLinks = document.querySelectorAll(
-    '#navbar-toggler .nav-link-name'
-  );
+  const selectCampusEl = document.querySelector('#select-campus');
+  selectCampusEl.innerHTML = campus+' | ';
 
-  // Mobile nav links
-  const mobNavLinks = document.querySelectorAll(
-    '.navbar-mobile .nav-link-name'
-  );
+  getTime();
 
-  // Loop link names to links
-  for (let i = 0; i < desNavLinks.length; i++) {
-    desNavLinks[i].innerHTML =
-      lang === 'fi' ? navLinkNames.fi[i] : navLinkNames.en[i];
-    mobNavLinks[i].innerHTML =
-      lang === 'fi' ? navLinkNames.fi[i] : navLinkNames.en[i];
-  }
-
-  const campusOptions = selectCampusEl.options;
-
-  for (let i = 0; i < campusOptions.length; i++) {
-    if (campusOptions[i].value === campus) {
-      selectCampusEl.selectedIndex = i;
-      break;
-    }
-  }
 };
+
+/**
+ * Get current time in Helsinki, update per minute
+ */
+const getTime = () => {
+  const d = new Date();
+  d.toLocaleString('fi', { timeZone: 'Europe/Helsinki' });
+  let h = d.getHours();
+  let m = d.getMinutes();
+  m = checkTime(m);
+  document.querySelector('#navi-clock').innerHTML =  h + ':' + m;
+  setTimeout(getTime, 1000);
+};
+
+/**
+ *
+ * @param m - check minutes, if below 10 add a zero in front of minute nbmr
+ * @returns {m} - minute
+ */
+const checkTime = (m) => {
+  if (m < 10) {m = '0'+ m;}
+  return m;
+};
+
 const NavRender = {
   changeActiveStateOnNavLinksWhenScrolling,
   renderNav,
