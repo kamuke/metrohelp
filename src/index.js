@@ -9,6 +9,7 @@ import ServiceWorker from './assets/modules/service-worker';
 import NavRender from './assets/modules/navigation-render';
 import MenuRender from './assets/modules/menu-render';
 import HSLRender from './assets/modules/hsl-render';
+import WeatherRender from './assets/modules/weather-render';
 import Announcement from './assets/modules/announcement-data';
 import AnnouncementRender from './assets/modules/announcement-render';
 
@@ -109,58 +110,11 @@ const changeLocation = async (selectedLocation) => {
   settings.campus = selectedLocation;
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
-  weather = await getWeather(settings.campus, campuses);
+  weather = await WeatherRender.getWeather(settings.campus, campuses);
   MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);
   HSLRender.renderMap(routes, settings.campus, campuses);
-  renderWeather(weather);
-};
-
-/**
- * Get current weather from the selected campus' city
- *
- * @author Catrina
- * @param {string} selectedCampus - Selected campus to get it's city
- * @param {array} allCampuses - List of all campuses and infos.
- * @returns Selected campus' weather
- */
-const getWeather = async (selectedCampus, allCampuses) => {
-  for (const campus of allCampuses) {
-    if (selectedCampus === campus.name) {
-      try {
-        //start fetch
-        const response = await fetch(
-          'https://api.weatherapi.com/v1/forecast.json?key=70ce88e5c2634487b5675944232702&q=' +
-            campus.city +
-            '&days=1&aqi=no&alerts=no'
-        );
-        //If error
-        if (!response.ok) throw new Error('Something went wrong.');
-        const weather = await response.json();
-        //return weather json
-        return weather;
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-  }
-};
-
-/**
- * Render current weather
- *
- * @author Catrina
- * @param weather - current weather
- */
-const renderWeather = async (weather) => {
-  const weatherImg = document.querySelector('.weather-img');
-  const weatherCaption = document.querySelector('.weather-degree');
-
-  //insert img and alt txt (in english) TODO: translate current condition text into finnish?
-  weatherImg.src = weather.current.condition.icon;
-  weatherImg.alt = weather.current.condition.text;
-  //current weather
-  weatherCaption.textContent = weather.current.temp_c + ' °C ';
+  WeatherRender.renderWeather(weather);
 };
 
 // When window scrolls
@@ -179,11 +133,11 @@ selectCampusEl.addEventListener('change', () => {
   saveSettings(settings);
 });
 
-// Updates HSL routes data every minute
-const updateRoutes = setInterval(async () => {
+// Updates HSL routes and weather data every minute
+const updateData = setInterval(async () => {
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   HSLRender.renderRouteInfo(routes);
-  renderWeather(weather);
+  WeatherRender.renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
 }, 60000);
 
@@ -192,10 +146,10 @@ const updateRoutes = setInterval(async () => {
  */
 const init = async () => {
   loadSettings();
-  updateRoutes;
+  updateData;
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
-  weather = await getWeather(settings.campus, campuses);
+  weather = await WeatherRender.getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
   NavRender.renderNav(
     settings.lang,
@@ -206,7 +160,7 @@ const init = async () => {
   AnnouncementRender.renderAnnouncements(announcements, settings.lang);
   MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);
-  renderWeather(weather);
+  WeatherRender.renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
   ServiceWorker.register();
 };
