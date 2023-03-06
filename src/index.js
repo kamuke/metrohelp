@@ -107,6 +107,7 @@ const changeLang = (selectedLang) => {
 
 const changeLocation = async (selectedLocation) => {
   settings.campus = selectedLocation;
+  menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await getWeather(settings.campus, campuses);
   MenuRender.renderMenuSection(menu);
