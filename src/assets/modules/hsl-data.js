@@ -1,8 +1,8 @@
 /**
  * Module for HSL data
  *
- * @module: HSL
- * @author: Eeli
+ * @module HSL
+ * @author Eeli
  */
 
 'use strict';

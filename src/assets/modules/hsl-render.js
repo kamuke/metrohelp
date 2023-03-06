@@ -1,8 +1,8 @@
 /**
  * Module for HSL data rendering
  *
- * @module: HSLRender
- * @author: Eeli
+ * @module HSLRender
+ * @author Eeli
  */
 
 'use strict';
