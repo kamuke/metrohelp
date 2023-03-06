@@ -459,6 +459,11 @@ a.card {
   }
 }
 
+.stop-name,
+.destination-name {
+  font-family: 'Roboto Slab', serif;
+}
+
 #routes-map {
   aspect-ratio: 4/3;
   border-radius: 0 custom.$border-radius custom.$border-radius 0;

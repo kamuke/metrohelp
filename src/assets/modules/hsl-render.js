@@ -108,18 +108,18 @@ const renderRouteInfo = async (routes) => {
       routeContainer.classList = 'route-info';
       stopContainer.classList = 'stop-info col';
       routeDestination.classList = 'destination-info col';
-      stopName.classList = 'fw-bold';
-      stopCode.classList = 'badge bg-secondary';
+      stopName.classList = 'stop-name';
+      stopCode.classList = 'badge bg-secondary mb-2';
       if (route.mode == 'BUS') {
-        routeNumber.classList = 'badge bg-info';
+        routeNumber.classList = 'badge bg-info mb-2';
       } else if (route.mode == 'SUBWAY') {
-        routeNumber.classList = 'badge bg-primary';
+        routeNumber.classList = 'badge bg-primary mb-2';
       } else if (route.mode == 'TRAM') {
-        routeNumber.classList = 'badge bg-success';
+        routeNumber.classList = 'badge bg-success mb-2';
       } else if (route.mode == 'RAIL') {
-        routeNumber.classList = 'badge bg-light';
+        routeNumber.classList = 'badge bg-light mb-2';
       }
-      destination.classList = 'fw-bold';
+      destination.classList = 'destination-name';
       routeRealtimeDeparture.classList = 'fw-bold';
 
       routeHeading.innerHTML =
