@@ -214,6 +214,7 @@ darkModeBtn.addEventListener('click', () => {
  * App initialization.
  */
 const init = async () => {
+  ServiceWorker.register();
   loadSettings();
   changeUIMode();
   updateData;
@@ -237,7 +238,6 @@ const init = async () => {
   HSLRender.renderRouteInfo(routes);
   WeatherRender.renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
-  ServiceWorker.register();
 };
 
 init();

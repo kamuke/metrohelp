@@ -25,7 +25,6 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       APP_CONF: {
         productionMode: true,
-        skipWaiting: true,
       },
     }),
     new WorkboxPlugin.GenerateSW({
@@ -37,7 +36,8 @@ module.exports = merge(common, {
     new WebpackPwaManifest({
       name: 'Metro Help Application',
       short_name: 'Metro Help',
-      description: 'Find Metropolia UAS student lunch menus, public transport timetables and local weather.',
+      description:
+        'Find Metropolia UAS student lunch menus, public transport timetables and local weather.',
       background_color: '#ffffff',
       crossorigin: 'use-credentials',
       publicPath: '.',
