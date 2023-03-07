@@ -20,8 +20,10 @@ const selectCampusEl = document.querySelector('#select-campus');
 const navLinks = document.querySelectorAll('.nav-link');
 // All sections
 const sections = document.querySelectorAll('section');
-// Slogan
+// Slogan paragraph in header
 const sloganParagraphEl = document.querySelector('#slogan');
+// Dark mode toggler button
+const darkModeBtn = document.querySelector('#darkmode-btn');
 // Metropolia's campuses and needed info
 const campuses = [
   {
@@ -53,7 +55,6 @@ const campuses = [
     routesRadius: 300,
   },
 ];
-
 // User settings
 let settings = {
   lang: 'fi',
@@ -61,12 +62,26 @@ let settings = {
   darkmode: false,
   departures: 1,
 };
-
 // To store menu, routes, weather and announcements
 let menu;
 let routes;
 let weather;
 let announcements;
+
+/**
+ * Change UI mode between dark and light mode.
+ *
+ * @author Kerttu
+ */
+const changeUIMode = () => {
+  if (settings.darkmode) {
+    console.log('darkmode true');
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
+  } else {
+    console.log('darkmode false');
+    document.documentElement.setAttribute('data-bs-theme', '');
+  }
+};
 
 /**
  * Check if given string is in JSON format.
@@ -89,31 +104,29 @@ const checkIfJSON = (str) => {
  * @author Catrina
  * @param userSettings - current settings made by user
  */
-// eslint-disable-next-line no-unused-vars
 const saveSettings = (userSettings) => {
   localStorage.setItem('settings', JSON.stringify(userSettings));
 };
 
 /**
  * Load user's settings from local storage
- * TODO: make sure this one executes first?
+ *
  * @author Catrina
  */
 const loadSettings = () => {
   //check that settings exists in localStorage and the settings are in JSON format
-  if (
-    localStorage.getItem('settings') &
-    checkIfJSON(localStorage.getItem('settings'))
-  ) {
+  if (checkIfJSON(localStorage.getItem('settings'))) {
     const tmpSettings = JSON.parse(localStorage.getItem('settings'));
-    if (
-      tmpSettings.lang &
-      tmpSettings.campus &
-      tmpSettings.darkmode &
-      tmpSettings.departures
-    ) {
-      settings = tmpSettings;
-    }
+    settings = {
+      lang: tmpSettings.lang ? tmpSettings.lang : 'fi',
+      campus: tmpSettings.campus ? tmpSettings.campus : 'Arabia',
+      darkmode:
+        typeof tmpSettings.darkmode === 'boolean'
+          ? tmpSettings.darkmode
+          : false,
+      departures:
+        typeof tmpSettings.departures === 'number' ? tmpSettings.departures : 1,
+    };
   }
 };
 
@@ -150,7 +163,6 @@ const changeLocation = async (selectedLocation) => {
   WeatherRender.renderWeather(weather);
 };
 
-// When window scrolls
 window.addEventListener('scroll', () =>
   NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
@@ -166,7 +178,17 @@ selectCampusEl.addEventListener('change', () => {
   saveSettings(settings);
 });
 
-// Updates HSL routes and weather data every minute
+darkModeBtn.addEventListener('click', () => {
+  settings.darkmode = settings.darkmode ? false : true;
+  changeUIMode();
+  saveSettings(settings);
+});
+
+/**
+ * Updates HSL routes and weather data every minute
+ *
+ * @author Eeli
+ */
 const updateData = setInterval(async () => {
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await WeatherRender.getWeather(settings.campus, campuses);
@@ -180,6 +202,8 @@ const updateData = setInterval(async () => {
  */
 const init = async () => {
   loadSettings();
+  console.log('settings', settings);
+  changeUIMode();
   updateData;
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
