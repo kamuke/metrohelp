@@ -25,7 +25,6 @@ section {
 // Header:
 header {
   height: 24rem;
-  background-color: custom.$white;
   background-image: url('../assets/header.webp');
   background-size: 100% auto;
   background-position: center;
@@ -136,6 +135,14 @@ header {
   }
 }
 
+.vr {
+  margin: 0.5rem 1rem;
+}
+
+#metrohelp-darkmode-logo {
+  display: none;
+}
+
 #select-lang {
   width: 5rem;
 
@@ -143,6 +150,11 @@ header {
     width: 100%;
     margin-bottom: 0.5rem;
   }
+}
+
+#darkmode-btn {
+  background-color: transparent;
+  border: none;
 }
 
 .navbar-mobile {
@@ -473,3 +485,94 @@ a.card {
     border-radius: 0 0 custom.$border-radius custom.$border-radius;
   }
 }
+
+// Darkmode
+[data-bs-theme='dark'] {
+  body {
+    background-color: rgb(28, 33, 41);
+  }
+
+  #metrohelp-darkmode-logo {
+    display: inline-block;
+  }
+
+  #metrohelp-logo {
+    display: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  #menus-date,
+  .menu-name,
+  .menu-price,
+  .stop-name,
+  .destination-name,
+  .departure-time,
+  #diet-exp-button,
+  #dietcode-exp-body,
+  #navbar-toggler .nav-link,
+  .form-select,
+  .weather-degree,
+  .pagination,
+  .accordion-button {
+    color: custom.$white;
+  }
+
+  .navbar,
+  #menus-list,
+  #routes,
+  .card,
+  .accordion,
+  .accordion-item,
+  .form-select {
+    background-color: rgb(34, 39, 46);
+  }
+
+  .vr {
+    background-color: custom.$white;
+  }
+
+  .form-select,
+  .pagination,
+  #menus-list .menu,
+  .route-info,
+  .accordion-item {
+    border-color: rgb(68, 76, 86);
+  }
+
+  header {
+    background-image: url('../assets/header-darkmode.webp');
+
+    @media screen and (max-width: 767px) {
+      background-image: none;
+    }
+  }
+
+  .pagination {
+    --bs-pagination-bg: rgb(34, 39, 46);
+    --bs-pagination-border-color: rgb(68, 76, 86);
+  }
+
+  .modal {
+    --bs-modal-bg: rgb(34, 39, 46);
+  }
+
+  .accordion {
+    --bs-accordion-border-color: rgb(68, 76, 86);
+    --bs-accordion-bg: rgb(34, 39, 46);
+    --bs-accordion-active-bg: rgb(34, 39, 46);
+  }
+
+  .accordion {
+    --bs-accordion-btn-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='rgb(255,255,255)'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+  }
+
+  .btn-close {
+    background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{custom.$white}'><path d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/></svg>");
+  }
+}
+
+// rgb(34, 39, 46)
+// rgb(68, 76, 86)

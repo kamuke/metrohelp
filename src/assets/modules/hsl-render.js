@@ -120,7 +120,7 @@ const renderRouteInfo = async (routes) => {
         routeNumber.classList = 'badge bg-light mb-2';
       }
       destination.classList = 'destination-name';
-      routeRealtimeDeparture.classList = 'fw-bold';
+      routeRealtimeDeparture.classList = 'fw-bold departure-time';
 
       routeHeading.innerHTML =
         settings.lang === 'fi'

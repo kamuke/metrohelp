@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="fi" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <title><%= htmlWebpackPlugin.options.title %></title>
@@ -17,7 +17,15 @@
         >
           <a class="navbar-brand" href="index.html">
             <img
+              id="metrohelp-logo"
               src="./assets/metrohelp-smaller-logo.webp"
+              alt="Metro Help logo"
+              width="150"
+              height="34"
+            />
+            <img
+              id="metrohelp-darkmode-logo"
+              src="./assets/metrohelp-smaller-darkmode-logo.webp"
               alt="Metro Help logo"
               width="150"
               height="34"
@@ -48,6 +56,21 @@
             </li>
           </ul>
           <div class="d-md-flex">
+            <div class="weather-info d-flex">
+              <img src="" class="weather-img m-1" height="35" width="35" />
+              <span class="weather-degree m-1 fw-bold"></span>
+            </div>
+          </div>
+          <div class="vr"></div>
+          <button
+            id="darkmode-btn"
+            class="text-primary fs-4"
+            aria-label="Tumman teeman vaihtaminen/Dark mode toggler"
+          >
+            <i class="bi bi-circle-half"></i>
+          </button>
+          <div class="vr"></div>
+          <div class="d-md-flex">
             <select
               id="select-lang"
               class="form-select me-md-2"
@@ -66,12 +89,6 @@
               <option value="Myllypuro">Myllypuro</option>
               <option value="Myyrmäki">Myyrmäki</option>
             </select>
-          </div>
-          <div class="d-md-flex">
-            <div class="weather-info d-flex">
-              <img src="" class="weather-img m-1" height="35" width="35" />
-              <span class="weather-degree m-1"></span>
-            </div>
           </div>
         </div>
       </div>
