@@ -1,5 +1,5 @@
 /**
- * @author Kerttu
+ * @author Kerttu, Eeli & Catrina
  */
 'use strict';
 
