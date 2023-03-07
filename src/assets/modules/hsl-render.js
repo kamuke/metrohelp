@@ -8,26 +8,29 @@
 'use strict';
 
 import HSL from './hsl-data';
-import L from 'leaflet';
+import {FeatureGroup, Map, Icon, TileLayer, Marker} from 'leaflet';
 import settings from '/src/index';
 
 // Leaflet.js variables
 const mapContainer = document.querySelector('#routes-map');
-const markers = L.featureGroup();
-const map = L.map(mapContainer, {
+const markers = new FeatureGroup();
+const map = new Map(mapContainer, {
   zoomControl: false,
 });
-const mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution:
-    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-});
+const mapLayer = new TileLayer(
+  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }
+);
 
-const campusIcon = L.Icon.extend({
+const campusIcon = Icon.extend({
   options: {
     iconSize: [45, 45],
   },
 });
-const hslIcon = L.Icon.extend({
+const hslIcon = Icon.extend({
   options: {
     iconSize: [25, 25],
   },
@@ -163,7 +166,7 @@ const renderMap = (routes, selectedCampus, allCampuses) => {
     if (selectedCampus === campus.name) {
       map.setView([campus.location.lat, campus.location.lon], 10);
       mapLayer.addTo(map);
-      const campusMarker = L.marker(
+      const campusMarker = new Marker(
         [campus.location.lat, campus.location.lon],
         {
           title: campus.name,
@@ -178,7 +181,7 @@ const renderMap = (routes, selectedCampus, allCampuses) => {
       for (const route of routes) {
         maxMarkers++;
         if (maxMarkers < 6) {
-          const stopMarker = L.marker([route.lat, route.lon], {
+          const stopMarker = new Marker([route.lat, route.lon], {
             title: route.stopCode,
             alt: `${route.stopName} stop marker`,
           });
