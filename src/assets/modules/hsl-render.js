@@ -94,6 +94,17 @@ const getRoutes = async (selectedCampus, allCampuses) => {
 const renderRouteInfo = async (routes) => {
   const target = document.querySelector('#routes');
   target.innerHTML = '';
+
+  if (routes.length === 0) {
+    const paragraph = document.createElement('p');
+    paragraph.classList = 'no-hsl';
+    paragraph.textContent =
+      settings.lang === 'fi'
+        ? 'HSL tietoja ei ole saatavilla.'
+        : 'No HSL information available.';
+    target.append(paragraph);
+    return;
+  }
   let maxRoutes = 0;
   for (const route of routes) {
     maxRoutes++;

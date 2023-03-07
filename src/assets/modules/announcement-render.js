@@ -24,6 +24,18 @@ const renderAnnouncements = (announcements, lang) => {
   carouselNavBtns.innerHTML = '';
   modalContainer.innerHTML = '';
 
+  // If announcements is empty and there is no announcements
+  if (announcements.length === 0) {
+    const paragraph = document.createElement('p');
+    paragraph.classList = 'p-3 m-0 no-announcements';
+    paragraph.textContent =
+      lang === 'fi'
+        ? 'Tiedotteita ei ole saatavilla.'
+        : 'No announcements available.';
+    carousel.append(paragraph);
+    return;
+  }
+
   for (let i = 0; i < announcements.length; i++) {
     const announcement =
       lang === 'fi' ? announcements[i].fi : announcements[i].en;

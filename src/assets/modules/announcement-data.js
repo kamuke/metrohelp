@@ -21,7 +21,8 @@ const getAnnouncements = async () => {
     const announcements = await doFetch(url, true);
     return announcements;
   } catch (e) {
-    throw new Error('getAnnoucements error: ' + e);
+    console.error('getAnnoucements error: ' + e);
+    return [];
   }
 };
 

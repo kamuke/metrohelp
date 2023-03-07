@@ -52,28 +52,33 @@ const getQueryRoutesByLocation = (lat, lon, maxDepartures, radius) => {
  * @returns Route data
  */
 const getRoutesByLocation = async (lat, lon, maxDepartures, radius) => {
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/graphql',
-    },
-    body: getQueryRoutesByLocation(lat, lon, maxDepartures, radius),
-  };
-  const routeData = await doFetch(apiUrl, false, options);
-  return routeData.data.stopsByRadius.edges.map((stops) => {
-    return stops.node.stop.stoptimesWithoutPatterns.map((routes) => {
-      return {
-        mode: routes.trip.route.mode,
-        stopCode: stops.node.stop.code,
-        stopName: stops.node.stop.name,
-        routeNumber: routes.trip.route.shortName,
-        destination: routes.headsign,
-        routeRealtimeDeparture: routes.realtimeDeparture,
-        lat: stops.node.stop.lat,
-        lon: stops.node.stop.lon,
-      };
+  try {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/graphql',
+      },
+      body: getQueryRoutesByLocation(lat, lon, maxDepartures, radius),
+    };
+    const routeData = await doFetch(apiUrl, false, options);
+    return routeData.data.stopsByRadius.edges.map((stops) => {
+      return stops.node.stop.stoptimesWithoutPatterns.map((routes) => {
+        return {
+          mode: routes.trip.route.mode,
+          stopCode: stops.node.stop.code,
+          stopName: stops.node.stop.name,
+          routeNumber: routes.trip.route.shortName,
+          destination: routes.headsign,
+          routeRealtimeDeparture: routes.realtimeDeparture,
+          lat: stops.node.stop.lat,
+          lon: stops.node.stop.lon,
+        };
+      });
     });
-  });
+  } catch (e) {
+    console.error('getRoutesByLocation error:', e);
+    return [];
+  }
 };
 
 const HSL = {getRoutesByLocation};

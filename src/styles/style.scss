@@ -311,6 +311,10 @@ select {
   border-radius: custom.$border-radius;
 }
 
+.no-announcements {
+  font-family: 'Roboto Slab', serif;
+}
+
 .carousel-indicators {
   position: static;
   box-shadow: 0 2px 24px rgba(custom.$dark, 0.15);
@@ -543,6 +547,10 @@ a.card {
   @media screen and (max-width: 767px) {
     border-radius: 0 0 custom.$border-radius custom.$border-radius;
   }
+}
+
+.no-hsl {
+  font-family: 'Roboto Slab', serif;
 }
 
 // Darkmode:

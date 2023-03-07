@@ -104,10 +104,10 @@ const renderMenuSection = async (menu) => {
   const dietcodeBtn = document.querySelector('#dietcode-exp-btn');
   const dietcodeBody = document.querySelector('#dietcode-exp-body');
 
+  const title = menu.title ? `- ${menu.title}` : '';
+
   menusHeading.innerHTML =
-    settings.lang === 'fi'
-      ? `Ruokalista - ${menu.title}`
-      : `Menu - ${menu.title}`;
+    settings.lang === 'fi' ? `Ruokalista ${title}` : `Menu ${title}`;
 
   let date = `${new Date().toLocaleDateString(settings.lang, {
     weekday: 'long',
@@ -116,6 +116,20 @@ const renderMenuSection = async (menu) => {
   date = date.charAt(0).toUpperCase() + date.slice(1);
 
   menusDate.innerHTML = date;
+
+  // If menu is empty
+  if (menu.length === 0) {
+    renderAllMenuListItems({
+      menu: [
+        {
+          fi: 'Ruokalistatietoja ei ole saatavilla.',
+          en: 'No menu information available.',
+        },
+      ],
+    });
+    document.querySelector('#dietcode-explanations').remove();
+    return;
+  }
 
   dietcodeBtn.innerHTML =
     settings.lang === 'fi' ? 'Ruokavaliokoodit' : 'Dietcodes';

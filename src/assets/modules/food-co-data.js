@@ -103,7 +103,8 @@ const getDailyMenu = async (restaurantId) => {
       dietcodeExplanations: dietExplanations,
     };
   } catch (e) {
-    throw new Error('getDailyMenu error: ' + e);
+    console.error('getDailyMenu error: ' + e);
+    return [];
   }
 };
 
