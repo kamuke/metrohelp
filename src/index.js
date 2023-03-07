@@ -105,7 +105,7 @@ const checkIfJSON = (str) => {
  * @param userSettings - current settings made by user
  */
 const saveSettings = (userSettings) => {
-  localStorage.setItem('settings', JSON.stringify(userSettings));
+  localStorage.setItem('metrohelp_settings', JSON.stringify(userSettings));
 };
 
 /**
@@ -115,20 +115,14 @@ const saveSettings = (userSettings) => {
  */
 const loadSettings = () => {
   //check that settings exists in localStorage and the settings are in JSON format
-  if (
-    localStorage.getItem('settings') &
-    checkIfJSON(localStorage.getItem('settings'))
-  ) {
-    const tmpSettings = JSON.parse(localStorage.getItem('settings'));
+  let tmp = localStorage.getItem('metrohelp_settings');
+  if (tmp && checkIfJSON(tmp)) {
+    tmp = JSON.parse(tmp);
     settings = {
-      lang: tmpSettings.lang ? tmpSettings.lang : 'fi',
-      campus: tmpSettings.campus ? tmpSettings.campus : 'Arabia',
-      darkmode:
-        typeof tmpSettings.darkmode === 'boolean'
-          ? tmpSettings.darkmode
-          : false,
-      departures:
-        typeof tmpSettings.departures === 'number' ? tmpSettings.departures : 1,
+      lang: tmp.lang ? tmp.lang : 'fi',
+      campus: tmp.campus ? tmp.campus : 'Arabia',
+      darkmode: typeof tmp.darkmode === 'boolean' ? tmp.darkmode : false,
+      departures: typeof tmp.departures === 'number' ? tmp.departures : 1,
     };
   }
 };
