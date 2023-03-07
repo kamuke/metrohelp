@@ -1,4 +1,4 @@
-// Bootstrap variables etc. customization
+// Bootstrap variable customization
 
 // Fonts:
 @font-face {
@@ -72,8 +72,11 @@ $danger: $red;
 $warning: $yellow;
 $info: $cyan;
 
-// Card;
-$card-bg: $white;
+// Navbar:
+$navbar-toggler-padding-y: 0;
+$navbar-toggler-padding-x: 0;
+$navbar-toggler-focus-width: 0;
+$navbar-light-toggler-icon-bg: none;
 
 // Modal:
 $modal-md: 967px;
@@ -85,9 +88,3 @@ $modal-header-border-width: 0;
 // Other:
 $border-radius: 0.75rem;
 $form-select-indicator-color: $primary;
-
-// Navbar:
-$navbar-toggler-padding-y: 0;
-$navbar-toggler-padding-x: 0;
-$navbar-toggler-focus-width: 0;
-$navbar-light-toggler-icon-bg: none;

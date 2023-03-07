@@ -88,7 +88,7 @@ const getDailyMenu = async (restaurantId) => {
       }
     } else {
       // If there is no menu for the day
-      menu = [{fi: 'Ei menua tälle päivälle.', en: 'No menu for today.'}];
+      menu = [{fi: 'Ei ruokalistaa tälle päivälle.', en: 'No menu for today.'}];
     }
 
     // Dietcode explanations from Food & Co's site

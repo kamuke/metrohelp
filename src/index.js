@@ -4,7 +4,9 @@
 'use strict';
 
 import './styles/style.scss';
-import 'bootstrap';
+import 'bootstrap/js/dist/collapse';
+import 'bootstrap/js/dist/carousel';
+import 'bootstrap/js/dist/modal';
 import ServiceWorker from './assets/modules/service-worker';
 import NavRender from './assets/modules/navigation-render';
 import MenuRender from './assets/modules/menu-render';
@@ -134,6 +136,7 @@ const loadSettings = () => {
  * Change UI language between 'fi' and 'en'
  *
  * @author Kerttu
+ * @param {string} selectedLang - 'fi'/'en
  */
 const changeLang = (selectedLang) => {
   settings.lang = selectedLang;
@@ -143,15 +146,17 @@ const changeLang = (selectedLang) => {
     selectLangEl,
     selectCampusEl
   );
-  sloganParagraphEl.innerHTML =
-    settings.lang === 'fi'
-      ? 'Tiedotteet, ruokalistat ja joukkoliikenne helposti'
-      : 'Find announcements, menus and public transportation easily';
+  renderHeaderSlogan(settings.lang);
   AnnouncementRender.renderAnnouncements(announcements, settings.lang);
   MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);
 };
 
+/**
+ * Change locaion and render site.
+ * @author Eeli
+ * @param {string} selectedLocation
+ */
 const changeLocation = async (selectedLocation) => {
   settings.campus = selectedLocation;
   menu = await MenuRender.getMenu(settings.campus, campuses);
@@ -163,9 +168,35 @@ const changeLocation = async (selectedLocation) => {
   WeatherRender.renderWeather(weather);
 };
 
+/**
+ * Updates HSL routes and weather data every minute
+ *
+ * @author Eeli
+ */
+const updateData = setInterval(async () => {
+  routes = await HSLRender.getRoutes(settings.campus, campuses);
+  weather = await WeatherRender.getWeather(settings.campus, campuses);
+  HSLRender.renderRouteInfo(routes);
+  WeatherRender.renderWeather(weather);
+  HSLRender.renderMap(routes, settings.campus, campuses);
+}, 60000);
+
 window.addEventListener('scroll', () =>
   NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
+
+/**
+ * Render header's slogan according to selected language.
+ *
+ * @author Kerttu
+ * @param {String} selectedLang - 'fi'/'en'
+ */
+const renderHeaderSlogan = (selectedLang) => {
+  sloganParagraphEl.innerHTML =
+    selectedLang === 'fi'
+      ? 'Tiedotteet, ruokalistat ja joukkoliikenne helposti'
+      : 'Find announcements, menus and public transportation easily';
+};
 
 selectLangEl.addEventListener('change', () => {
   changeLang(selectLangEl.value);
@@ -185,30 +216,21 @@ darkModeBtn.addEventListener('click', () => {
 });
 
 /**
- * Updates HSL routes and weather data every minute
- *
- * @author Eeli
- */
-const updateData = setInterval(async () => {
-  routes = await HSLRender.getRoutes(settings.campus, campuses);
-  weather = await WeatherRender.getWeather(settings.campus, campuses);
-  HSLRender.renderRouteInfo(routes);
-  WeatherRender.renderWeather(weather);
-  HSLRender.renderMap(routes, settings.campus, campuses);
-}, 60000);
-
-/**
  * App initialization.
  */
 const init = async () => {
   loadSettings();
-  console.log('settings', settings);
   changeUIMode();
   updateData;
+  sloganParagraphEl.innerHTML =
+    settings.lang === 'fi'
+      ? 'Tiedotteet, ruokalistat ja joukkoliikenne helposti'
+      : 'Find announcements, menus and public transportation easily';
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await WeatherRender.getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
+  renderHeaderSlogan(settings.lang);
   NavRender.renderNav(
     settings.lang,
     settings.campus,
