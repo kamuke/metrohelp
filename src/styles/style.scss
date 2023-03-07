@@ -19,6 +19,10 @@ main {
   background: var(--bs-body-bg);
 }
 
+.img-div img{
+  min-width: 100%;
+}
+
 // Navigation:
 .navbar {
   background-color: custom.$white;

@@ -85,3 +85,11 @@ $navbar-toggler-padding-y: 0;
 $navbar-toggler-padding-x: 0;
 $navbar-toggler-focus-width: 0;
 $navbar-light-toggler-icon-bg: none;
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1520px
+);
