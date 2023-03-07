@@ -12,112 +12,67 @@
     />
   </head>
   <body>
-    <nav class="navbar navbar-expand-md">
-      <div class="collapse navbar-collapse" id="navbar-toggler">
-        <div
-          class="container-xxl pt-3 pb-3 pt-md-0 pb-md-0 d-md-flex justify-content-between align-items-center"
-        >
-          <img
-            id="metrohelp-logo"
-            src="./assets/metrohelp-smaller-logo.webp"
-            alt="Metro Help logo"
-            width="150"
-            height="34"
-          />
-          <ul class="navbar-nav mb-0 me-auto">
-          </ul>
-
-          <div class="d-md-flex">
-            <span id="select-campus" class="navi-txt m-1">Karaportti</span>
-          </div>
-          <div class="d-md-flex">
-            <div class="weather-info d-flex">
-              <img src="" class="weather-img m-1" height="35px" />
-              <span id="weather-degree" class="navi-txt m-1"></span>
-            </div>
-          </div>
-          <div class="d-md-flex">
-            <span id="navi-clock" class="navi-txt m-1"></span>
-          </div>
+    <nav
+      class="navbar d-flex justify-content-between align-items-center w-100 ps-5 pe-5 pt-3 pb-3"
+    >
+      <img
+        id="metrohelp-logo"
+        src="./assets/metrohelp-smaller-logo.webp"
+        alt="Metro Help logo"
+        width="242"
+        height="55"
+      />
+      <div class="d-flex">
+        <span id="select-campus" class="navi-txt m-1">Karaportti</span>
+        <div class="vr ms-3 me-3"></div>
+        <div class="weather-info d-flex align-items-center">
+          <img src="" class="weather-img m-1" height="35px" />
+          <span id="weather-degree" class="navi-txt m-1"></span>
         </div>
-      </div>
-      <div class="navbar-mobile">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbar-toggler"
-          aria-controls="navbar-toggler"
-          aria-expanded="false"
-          aria-label="Näytä tai sulje navigaatio/Toggle navigation"
-        >
-          <i class="bi bi-list open"></i>
-          <i class="bi bi-x-lg close"></i>
-        </button>
-        <ul class="navbar-mobile-nav m-0">
-          <li class="nav-item">
-            <a
-              class="nav-link active"
-              aria-current="page"
-              href="#announcements-section"
-              ><i class="bi bi-bell-fill icon"></i
-              ><span class="nav-link-name">Tiedotteet</span></a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#menus-section"
-              ><i class="bi bi-card-list icon"></i
-              ><span class="nav-link-name">Ruokalista</span></a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#hsl-section"
-              ><i class="bi bi-bus-front-fill icon"></i
-              ><span class="nav-link-name">HSL</span></a
-            >
-          </li>
-        </ul>
+        <div class="vr ms-3 me-3"></div>
+        <span id="navi-date" class="navi-txt m-1"></span>
+        <div class="vr ms-3 me-3"></div>
+        <span id="navi-clock" class="navi-txt m-1"></span>
       </div>
     </nav>
-    <main class="container-xxl">
-      <section id="menus-section" class="pt-3 pb-4 pt-md-5 pb-md-0">
-        <h2 id="menus-heading" class="pt-0 pt-md-4">Ruokalista / Menu</h2>
-        <p id="menus-date" class="fw-bold mb-3"></p>
-        <ul id="menus-list" class="list-group mt-4 mb-4"></ul>
-        <div id="dietcode-explanations" class="accordion">
-          <div class="accordion-item p-1">
-            <h3 id="dietcode-exp-heading" class="accordion-header">
-              <button
-                id="dietcode-exp-btn"
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#dietcode-collapse"
-                aria-expanded="true"
-                aria-controls="dietcode-collapse"
-              >
-                Ruokavaliokoodit / Dietcodes
-              </button>
-            </h3>
-            <div
-              id="dietcode-collapse"
-              class="accordion-collapse collapse.show"
-              aria-labelledby="dietcode-exp-heading"
-              data-bs-parent="#dietcode-explanations"
-            >
-              <p id="dietcode-exp-body-fi" class="accordion-body">
-              </p>
-              <p id="dietcode-exp-body-en" class="accordion-body">
-              </p>
-            </div>
-          </div>
+    <main class="p-5 w-100">
+      <div
+        class="row g-4 h-100 d-flex align-items-center justify-content-between"
+      >
+        <div
+          class="col-3 h-100 d-flex flex-column align-items-center justify-content-center qr-code p-4"
+        >
+          <h2 class="text-center mb-4">
+            Lataa Metro Help / Download Metro Help
+          </h2>
+          <img
+            src="./assets/qr-code.png"
+            alt="Metro Help QR"
+            class="w-100 rounded"
+          />
         </div>
-      </section>
-      <section id="hsl-section" class="row pt-3 pb-5 pt-md-5">
-        <h2 id="hsl-heading" class="pt-0 pt-md-4">HSL</h2>
-        <ul id="routes" class="list-group mt-3 mb-3 col-sm"></ul>
-        <div id="routes-map" class="list-group mt-3 mb-3 col-sm"></div>
-      </section>
+        <div id="carousel" class="col-9 h-100">
+          <section id="menus-section" class="h-100">
+            <h2 id="menus-heading" class="fs-2 mb-4">Ruokalista / Menu</h2>
+            <div class="menus d-flex flex-column justify-content-between">
+              <ul id="menus-list" class="list-group mb-4"></ul>
+              <div id="dietcode-explanations">
+                <p id="dietcode-exp-body-fi" class="accordion-body"></p>
+                <p id="dietcode-exp-body-en" class="accordion-body"></p>
+              </div>
+            </div>
+          </section>
+          <section id="hsl-section" class="h-100">
+            <h2 id="hsl-heading" class="fs-2 mb-4">HSL</h2>
+            <div class="row g-1 content">
+              <div class="col-6 routes-info">
+                <ul id="routes" class="list-group"></ul>
+              </div>
+              <div id="routes-map" class="col-6"></div>
+            </div>
+          </section>
+        </div>
+      </div>
     </main>
   </body>
 </html>

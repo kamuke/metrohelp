@@ -2,7 +2,7 @@
  * Module for Sodexo/Food & Co data rendering.
  *
  * @module MenuRender
- * @author Kerttu
+ * @author Kerttu & Catrina
  */
 
 'use strict';
@@ -103,28 +103,13 @@ const renderAllMenuListItems = async (menu) => {
  */
 const renderMenuSection = async (menu) => {
   const menusHeading = document.querySelector('#menus-heading');
-  const menusDate = document.querySelector('#menus-date');
 
   const dietcodeBodyFI = document.querySelector('#dietcode-exp-body-fi');
   const dietcodeBodyEN = document.querySelector('#dietcode-exp-body-en');
 
-  const menusHeadingTitle = document.createTextNode(' - '+menu.title);
+  const menusHeadingTitle = document.createTextNode(' - ' + menu.title);
 
   menusHeading.appendChild(menusHeadingTitle);
-
-  let dateFi = `${new Date().toLocaleDateString('fi', {
-    weekday: 'long',
-  })}`;
-  let dateEn = `${new Date().toLocaleDateString('en', {
-    weekday: 'long',
-  })}`;
-
-  let dateDate = `${new Date().toLocaleDateString('fi')}`;
-
-  dateFi = dateFi.charAt(0).toUpperCase() + dateFi.slice(1);
-  dateEn = dateEn.charAt(0).toUpperCase() + dateEn.slice(1);
-
-  menusDate.innerHTML = `${dateFi}`+' / '+`${dateEn}`+' '+dateDate;
 
   dietcodeBodyFI.innerHTML = menu.dietcodeExplanations.fi;
   dietcodeBodyEN.innerHTML = menu.dietcodeExplanations.en;

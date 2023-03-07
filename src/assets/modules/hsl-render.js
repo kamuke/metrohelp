@@ -108,25 +108,19 @@ const renderRouteInfo = async (routes) => {
       routeContainer.classList = 'route-info';
       stopContainer.classList = 'stop-info col';
       routeDestination.classList = 'destination-info col';
-      stopName.classList = 'fw-bold mb-3';
-      stopCode.classList = 'badge bg-secondary';
+      stopName.classList = 'stopname';
+      stopCode.classList = 'badge bg-secondary stopcode';
       if (route.mode == 'BUS') {
-        routeNumber.classList = 'badge bg-info';
+        routeNumber.classList = 'badge bg-info routenumber';
       } else if (route.mode == 'SUBWAY') {
-        routeNumber.classList = 'badge bg-primary';
+        routeNumber.classList = 'badge bg-primary routenumber';
       } else if (route.mode == 'TRAM') {
-        routeNumber.classList = 'badge bg-success';
+        routeNumber.classList = 'badge bg-success routenumber';
       } else if (route.mode == 'RAIL') {
-        routeNumber.classList = 'badge bg-light';
+        routeNumber.classList = 'badge bg-light routenumber';
       }
-      destination.classList = 'fw-bold mb-3';
-      routeRealtimeDeparture.classList = 'fw-bold mb-3';
-
-      stopCode.id = 'stopcode';
-      stopName.id = 'stopname';
-      routeNumber.id = 'routenumber';
-      destination.id = 'destination';
-      routeRealtimeDeparture.id = 'departure';
+      destination.classList = 'destinationname';
+      routeRealtimeDeparture.classList = 'fw-bold departure';
 
       routeHeading.innerHTML =
         settings.lang === 'fi'

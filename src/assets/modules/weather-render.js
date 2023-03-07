@@ -47,7 +47,7 @@ const renderWeather = async (weather) => {
   weatherImg.src = weather.current.condition.icon;
   weatherImg.alt = weather.current.condition.text;
   //current weather
-  weatherCaption.textContent = weather.current.temp_c + ' °C | ';
+  weatherCaption.textContent = weather.current.temp_c + ' °C';
 };
 
 const WeatherRender = {getWeather, renderWeather};

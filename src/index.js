@@ -45,12 +45,12 @@ const campuses = [
   },
 ];
 
-// User settings
+// Settings
 let settings = {
   lang: 'fi',
   campus: 'Karaportti',
   darkmode: false,
-  departures: 1,
+  departures: 5,
 };
 
 // To store menu, routes, weather and announcements
@@ -60,35 +60,11 @@ let weather;
 let announcements;
 
 /**
- * Stores user's settings into local storage
- * @author Catrina
- * @param userSettings - current settings made by user
- */
-// eslint-disable-next-line no-unused-vars
-const saveSettings = (userSettings) => {
-  localStorage.setItem('settings', JSON.stringify(userSettings));
-};
-
-/**
- * Load user's settings from local storage
- * TODO: make sure this one executes first?
- * @author Catrina
- */
-// eslint-disable-next-line no-unused-vars
-const loadSettings = () => {
-  //check that settings exists in localStorage
-  if (localStorage.getItem('settings')) {
-    settings = JSON.parse(localStorage.getItem('settings'));
-  }
-};
-
-/**
  * Rotate visibility of sections
  * @author Catrina
  * @param activeScreenIndex - index nmbr for the section
  * @param delay - in seconds
  */
-// eslint-disable-next-line no-unused-vars
 const sectionCarousel = (activeScreenIndex, delay) => {
   const screens = document.querySelectorAll('section');
 
@@ -96,10 +72,10 @@ const sectionCarousel = (activeScreenIndex, delay) => {
     screen.style.display = 'none';
   }
 
-  //check if the screen is HSL, add flex as display
-  if(screens[activeScreenIndex].id==='hsl-section'){
+  //check if the screen is announcement, add flex as display
+  if (screens[activeScreenIndex].classList.contains('announcement-section')) {
     screens[activeScreenIndex].style.display = 'flex';
-  }else{
+  } else {
     screens[activeScreenIndex].style.display = 'inherit';
   }
 
@@ -108,14 +84,18 @@ const sectionCarousel = (activeScreenIndex, delay) => {
 
   setTimeout(() => {
     let nextScreen = activeScreenIndex + 1;
-    if (activeScreenIndex == screens.length-1) {
+    if (activeScreenIndex == screens.length - 1) {
       nextScreen = 0;
     }
     sectionCarousel(nextScreen, delay);
   }, delay * 1000);
 };
 
-// Updates HSL routes and weather data every minute
+/**
+ * Updates HSL routes and weather data every minute
+ *
+ * @author Eeli
+ */
 const updateData = setInterval(async () => {
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   HSLRender.renderRouteInfo(routes);
@@ -127,22 +107,19 @@ const updateData = setInterval(async () => {
  * App initialization.
  */
 const init = async () => {
-  loadSettings();
+  ServiceWorker.register();
   updateData;
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await WeatherRender.getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
-  NavRender.renderNav(
-    settings.campus
-  );
+  NavRender.renderNav(settings.campus);
   AnnouncementRender.renderAnnouncements(announcements);
   MenuRender.renderMenuSection(menu);
   HSLRender.renderRouteInfo(routes);
   WeatherRender.renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
-  ServiceWorker.register();
-  sectionCarousel(0,10);
+  sectionCarousel(0, 10);
 };
 
 init();

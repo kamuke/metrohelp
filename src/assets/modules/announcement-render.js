@@ -2,7 +2,7 @@
  * Rendering functions for announcements.
  *
  * @module AnnouncementRender
- * @author Kerttu
+ * @author Kerttu & Catrina
  */
 
 'use strict';
@@ -25,10 +25,9 @@ const setAttributes = (element, attrs) => {
  * @param {Array} announcements
  */
 const renderAnnouncements = (announcements) => {
-  const parentNode = document.querySelector('main');
+  const parentNode = document.querySelector('#carousel');
   //loop through announcements in reverse so that imgs print in correct order
-  for(let i = announcements.length-1; i>=0; i--) {
-
+  for (let i = announcements.length - 1; i >= 0; i--) {
     const announcementEN = announcements[i].en;
     const announcementFI = announcements[i].fi;
 
@@ -37,39 +36,30 @@ const renderAnnouncements = (announcements) => {
     const section = document.createElement('section');
     const sectionEN = document.createElement('section');
 
-    const carousel = document.createElement('div');
-    const carouselEN = document.createElement('div');
-
-
     const img = document.createElement('img');
     const imgEN = document.createElement('img');
 
     setAttributes(img, {
-      class: 'img-carousel img-fluid rounded',
       src: announcement.announcementFI.imgUrl,
       alt: announcement.announcementFI.title,
     });
 
     setAttributes(imgEN, {
-      class: 'img-carousel img-fluid rounded',
       src: announcement.announcementEN.imgUrl,
       alt: announcement.announcementEN.title,
     });
-    carousel.classList.add('img-div');
-    carouselEN.classList.add('img-div');
-    section.class = 'announcements-section pt-3 pb-4 pt-md-5 pb-md-0';
-    sectionEN.class = 'announcements-section pt-3 pb-4 pt-md-5 pb-md-0';
 
-    carouselEN.appendChild(imgEN);
-    sectionEN.appendChild(carouselEN);
+    section.classList =
+      'h-100 announcement-section align-items-center justify-content-end';
+    sectionEN.classList =
+      'h-100 announcement-section align-items-center justify-content-end';
+
+    sectionEN.appendChild(imgEN);
     parentNode.insertBefore(sectionEN, parentNode.firstChild);
 
-    carousel.appendChild(img);
-    section.appendChild(carousel);
+    section.appendChild(img);
     parentNode.insertBefore(section, parentNode.firstChild);
-
   }
-
 };
 
 const AnnouncementRender = {
