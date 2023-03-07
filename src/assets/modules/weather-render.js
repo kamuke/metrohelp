@@ -43,7 +43,7 @@ const renderWeather = async (weather) => {
   const weatherImg = document.querySelector('.weather-img');
   const weatherCaption = document.querySelector('.weather-degree');
 
-  //insert img and alt txt (in english) TODO: translate current condition text into finnish?
+  //insert img and alt txt (in english)
   weatherImg.src = 'https:' + weather.current.condition.icon;
   weatherImg.alt = weather.current.condition.text;
   weatherImg.setAttribute('height', '35');

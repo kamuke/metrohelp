@@ -77,10 +77,8 @@ let announcements;
  */
 const changeUIMode = () => {
   if (settings.darkmode) {
-    console.log('darkmode true');
     document.documentElement.setAttribute('data-bs-theme', 'dark');
   } else {
-    console.log('darkmode false');
     document.documentElement.setAttribute('data-bs-theme', '');
   }
 };
@@ -117,7 +115,10 @@ const saveSettings = (userSettings) => {
  */
 const loadSettings = () => {
   //check that settings exists in localStorage and the settings are in JSON format
-  if (checkIfJSON(localStorage.getItem('settings'))) {
+  if (
+    localStorage.getItem('settings') &
+    checkIfJSON(localStorage.getItem('settings'))
+  ) {
     const tmpSettings = JSON.parse(localStorage.getItem('settings'));
     settings = {
       lang: tmpSettings.lang ? tmpSettings.lang : 'fi',
