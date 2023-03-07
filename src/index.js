@@ -148,7 +148,7 @@ const changeLang = (selectedLang) => {
 };
 
 /**
- * Change locaion and render site.
+ * Change location and render site.
  * @author Eeli
  * @param {string} selectedLocation
  */
