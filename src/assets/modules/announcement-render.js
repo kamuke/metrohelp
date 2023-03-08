@@ -2,7 +2,7 @@
  * Rendering functions for announcements.
  *
  * @module AnnouncementRender
- * @author Kerttu
+ * @author Kerttu & Catrina
  */
 
 'use strict';

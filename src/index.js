@@ -60,32 +60,9 @@ let weather;
 let announcements;
 
 /**
- * Stores user's settings into local storage
- * @author Catrina
- * @param userSettings - current settings made by user
- */
-// eslint-disable-next-line no-unused-vars
-const saveSettings = (userSettings) => {
-  localStorage.setItem('settings', JSON.stringify(userSettings));
-};
-
-/**
- * Load user's settings from local storage
- * TODO: make sure this one executes first?
- * @author Catrina
- */
-// eslint-disable-next-line no-unused-vars
-const loadSettings = () => {
-  //check that settings exists in localStorage
-  if (localStorage.getItem('settings')) {
-    settings = JSON.parse(localStorage.getItem('settings'));
-  }
-};
-
-/**
  * Rotate visibility of sections
  * @author Catrina
- * @param activeScreenIndex - index nmbr for the section
+ * @param activeScreenIndex - index nmbr for section
  * @param delay - in seconds
  */
 // eslint-disable-next-line no-unused-vars
@@ -106,6 +83,7 @@ const sectionCarousel = (activeScreenIndex, delay) => {
   //add css animation styling
   screens[activeScreenIndex].classList.add('fade-in');
 
+  //loop
   setTimeout(() => {
     let nextScreen = activeScreenIndex + 1;
     if (activeScreenIndex == screens.length-1) {
@@ -127,7 +105,6 @@ const updateData = setInterval(async () => {
  * App initialization.
  */
 const init = async () => {
-  loadSettings();
   updateData;
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
