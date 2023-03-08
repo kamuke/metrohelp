@@ -101,6 +101,7 @@ const checkIfJSON = (str) => {
 
 /**
  * Stores user's settings into local storage
+ *
  * @author Catrina
  * @param userSettings - current settings made by user
  */
@@ -219,14 +220,11 @@ const init = async () => {
   loadSettings();
   changeUIMode();
   updateData;
-  sloganParagraphEl.innerHTML =
-    settings.lang === 'fi'
-      ? 'Tiedotteet, ruokalistat ja joukkoliikenne helposti'
-      : 'Find announcements, menus and public transportation easily';
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await WeatherRender.getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
+  renderHeaderSlogan();
   renderHeaderSlogan(settings.lang);
   NavRender.renderNav(
     settings.lang,

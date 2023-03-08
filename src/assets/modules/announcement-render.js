@@ -215,7 +215,7 @@ const renderAnnModal = (announcement, index, targetElement) => {
 };
 
 /**
- * Set multipleattributes to a node element.
+ * Set multiple attributes to a node element.
  *
  * @param {Node} element
  * @param {Object} attrs

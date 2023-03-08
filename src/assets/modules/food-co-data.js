@@ -17,7 +17,7 @@ const weeklyUrl = 'https://www.compass-group.fi/menuapi/week-menus?costCenter=';
  * Get daily menu from Food & Co API.
  *
  * @param {Number} restaurantId - The id of the restaurant to get daily menu from
- * @returns Object
+ * @returns Object or an empty array if something went wrong.
  */
 const getDailyMenu = async (restaurantId) => {
   try {

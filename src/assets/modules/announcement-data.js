@@ -14,7 +14,7 @@ const url =
 /**
  * Get announcements from annoucements url.
  *
- * @returns Array of objects
+ * @returns Array of objects or an empty array if something went wrong.
  */
 const getAnnouncements = async () => {
   try {

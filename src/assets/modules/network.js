@@ -10,7 +10,7 @@
  * Fetch request to a given API url.
  *
  * @param {String} url - API url
- * @param {Noolean} useProxy - Use allorigins proxy
+ * @param {Boolean} useProxy - Use allorigins proxy
  * @param {Object} options - Fetch options
  * @returns JSON data
  */
@@ -33,14 +33,4 @@ const doFetch = async (url, useProxy = false, options) => {
   }
 };
 
-/**
- * Get index of weekday.
- *
- * @returns int - API friendly index of weekday. 0 as monday
- */
-const getWeeklyIndex = () => {
-  const index = new Date().getDay() - 1;
-  return index === -1 ? 6 : index;
-};
-
-export {doFetch, getWeeklyIndex};
+export {doFetch};

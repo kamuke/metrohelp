@@ -16,7 +16,7 @@ const dailyUrl = 'https://www.sodexo.fi/ruokalistat/output/daily_json/';
  * Get daily menu from Sodexo API.
  *
  * @param {Number} restaurantId - The id of the restaurant to get daily menu from
- * @returns Object
+ * @returns Object or an empty array if something went wrong.
  */
 const getDailyMenu = async (restaurantId) => {
   try {
