@@ -15,15 +15,11 @@ main {
 .announcement-section img {
   box-shadow: 0 2px 24px rgba(custom.$dark, 0.15);
   border-radius: custom.$border-radius;
-  height: 100%;
+  width: 100%;
 }
 
 .badge {
   font-size: 1rem;
-}
-
-.content {
-  height: calc(100% - 3.5rem);
 }
 
 // Navigation:
@@ -44,7 +40,6 @@ main {
 
 // Menus:
 .menus {
-  min-height: calc(100% - 3.5rem);
   box-shadow: 0 2px 24px rgba(custom.$dark, 0.15);
   padding: 1rem 1.25rem;
   border-radius: custom.$border-radius;
@@ -53,6 +48,7 @@ main {
 
 #menus-list {
   background-color: custom.$white;
+  border-radius: 0;
 
   .menu {
     display: flex;
@@ -66,11 +62,6 @@ main {
 
     &:first-child {
       padding-top: 0;
-    }
-
-    &:last-child {
-      padding-bottom: 0;
-      border: 0;
     }
 
     &-name {
@@ -98,10 +89,6 @@ main {
 }
 
 .menu-name {
-  font-size: 1.25rem;
-}
-
-.menu-price {
   font-size: 1.15rem;
 }
 
@@ -146,12 +133,12 @@ main {
 
 .stopname,
 .destinationname {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-family: 'Roboto Slab', serif;
 }
 
 .departure {
-  font-size: 1.5rem;
+  font-size: 1.15rem;
 }
 
 #routes-map {

@@ -72,12 +72,7 @@ const sectionCarousel = (activeScreenIndex, delay) => {
     screen.style.display = 'none';
   }
 
-  //check if the screen is announcement, add flex as display
-  if (screens[activeScreenIndex].classList.contains('announcement-section')) {
-    screens[activeScreenIndex].style.display = 'flex';
-  } else {
-    screens[activeScreenIndex].style.display = 'inherit';
-  }
+  screens[activeScreenIndex].style.display = 'flex';
 
   //add css animation styling
   screens[activeScreenIndex].classList.add('fade-in');
