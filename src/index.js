@@ -148,9 +148,10 @@ const changeLang = (selectedLang) => {
 };
 
 /**
- * Change location and render site.
+ * Change location and render data from it
+ *
  * @author Eeli
- * @param {string} selectedLocation
+ * @param {string} selectedLocation - Selected campus
  */
 const changeLocation = async (selectedLocation) => {
   settings.campus = selectedLocation;

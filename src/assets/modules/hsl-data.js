@@ -11,9 +11,13 @@ const apiUrl =
   'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql';
 
 /**
+ * Query to get all the stops from campus with radius and next departures from every stop.
  *
- * @param {number} lat Campus latitude value
- * @param {number} lon Campus longitude value
+ * @param {number} lat - Campus latitude value
+ * @param {number} lon - Campus longitude value
+ * @param {number} maxDepartures - Max departures from stop
+ * @param {number} radius - Radius in meters from campus
+ * @returns GraphQl query
  */
 const getQueryRoutesByLocation = (lat, lon, maxDepartures, radius) => {
   return `{
@@ -46,10 +50,13 @@ const getQueryRoutesByLocation = (lat, lon, maxDepartures, radius) => {
 };
 
 /**
+ * Fetch data from api.digitransit.fi
  *
- * @param {number} lat Campus latitude value
- * @param {number} lon Campus longitude value
- * @returns Route data
+ * @param {number} lat - Campus latitude value
+ * @param {number} lon - Campus longitude value
+ * @param {number} maxDepartures - Max departures from stop
+ * @param {number} radius - Radius in meters from campus
+ * @returns Object
  */
 const getRoutesByLocation = async (lat, lon, maxDepartures, radius) => {
   try {
