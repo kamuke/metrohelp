@@ -12,23 +12,24 @@ import FoodCo from './food-co-data';
 import settings from '/src/index';
 
 /**
- * Get menu from Sodexo or Food & Co module.
+ * Get menus from Sodexo and Food & Co module.
  *
  * @author Kerttu
- * @param {string} selectedCampus - Selected campus to get it's restaurant's menu.
  * @param {array} allCampuses - List of all campuses and infos.
- * @returns Object
+ * @returns Array of objects
  */
-const getMenu = async (selectedCampus, allCampuses) => {
+const getMenus = async (allCampuses) => {
+  const menus = [];
   for (const campus of allCampuses) {
-    if (selectedCampus === campus.name) {
-      if (campus.restaurant.chain === 'Sodexo') {
-        return await Sodexo.getDailyMenu(campus.restaurant.id);
-      } else if (campus.restaurant.chain === 'Food & Co') {
-        return await FoodCo.getDailyMenu(campus.restaurant.id);
-      }
+    if (campus.restaurant.chain === 'Sodexo') {
+      const sodexo = await Sodexo.getDailyMenu(campus.restaurant.id);
+      menus.push({campusName: campus.name, menu: sodexo});
+    } else if (campus.restaurant.chain === 'Food & Co') {
+      const foodCo = await FoodCo.getDailyMenu(campus.restaurant.id);
+      menus.push({campusName: campus.name, menu: foodCo});
     }
   }
+  return menus;
 };
 
 /**
@@ -143,7 +144,7 @@ const renderMenuSection = async (menu) => {
 };
 
 const MenuRender = {
-  getMenu,
+  getMenus,
   renderMenuListItem,
   renderAllMenuListItems,
   renderMenuSection,

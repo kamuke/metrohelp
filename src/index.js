@@ -7,13 +7,13 @@ import './styles/style.scss';
 import 'bootstrap/js/dist/collapse';
 import 'bootstrap/js/dist/carousel';
 import 'bootstrap/js/dist/modal';
-import ServiceWorker from './assets/modules/service-worker';
-import NavRender from './assets/modules/navigation-render';
-import MenuRender from './assets/modules/menu-render';
-import HSLRender from './assets/modules/hsl-render';
-import WeatherRender from './assets/modules/weather-render';
-import Announcement from './assets/modules/announcement-data';
-import AnnouncementRender from './assets/modules/announcement-render';
+import ServiceWorker from './modules/service-worker';
+import NavRender from './modules/navigation-render';
+import MenuRender from './modules/menu-render';
+import HSLRender from './modules/hsl-render';
+import WeatherRender from './modules/weather-render';
+import Announcement from './modules/announcement-data';
+import AnnouncementRender from './modules/announcement-render';
 
 // Select language and select campus node elements
 const selectLangEl = document.querySelector('#select-lang');
@@ -60,12 +60,13 @@ const campuses = [
 // User settings
 let settings = {
   lang: 'fi',
-  campus: 'Arabia',
+  campus: 'Myyrmäki',
   darkmode: false,
   departures: 1,
 };
 // To store menu, routes, weather and announcements
-let menu;
+let menus;
+let activeMenu;
 let routes;
 let weather;
 let announcements;
@@ -144,7 +145,7 @@ const changeLang = (selectedLang) => {
   );
   renderHeaderSlogan(settings.lang);
   AnnouncementRender.renderAnnouncements(announcements, settings.lang);
-  MenuRender.renderMenuSection(menu);
+  MenuRender.renderMenuSection(activeMenu);
   HSLRender.renderRouteInfo(routes);
 };
 
@@ -156,10 +157,10 @@ const changeLang = (selectedLang) => {
  */
 const changeLocation = async (selectedLocation) => {
   settings.campus = selectedLocation;
-  menu = await MenuRender.getMenu(settings.campus, campuses);
+  activeMenu = getCampusMenu(menus, settings.campus);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await WeatherRender.getWeather(settings.campus, campuses);
-  MenuRender.renderMenuSection(menu);
+  MenuRender.renderMenuSection(activeMenu);
   HSLRender.renderRouteInfo(routes);
   HSLRender.renderMap(routes, settings.campus, campuses);
   WeatherRender.renderWeather(weather);
@@ -178,9 +179,50 @@ const updateData = setInterval(async () => {
   HSLRender.renderMap(routes, settings.campus, campuses);
 }, 60000);
 
-window.addEventListener('scroll', () =>
-  NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
-);
+/**
+ * Update menus and start new iteration on timeoutTo7AM()
+ *
+ * @author Kerttu
+ */
+const updateMenus = async () => {
+  // Start a new iteration of the timer
+  timeoutTo7AM();
+  // Update menus
+  menus = await MenuRender.getMenus(campuses);
+  activeMenu = getCampusMenu(menus, settings.campus);
+  MenuRender.renderMenuSection(activeMenu);
+};
+
+/**
+ * Create timeout at 7AM
+ *
+ * @author Kerttu
+ */
+const timeoutTo7AM = () => {
+  let millisecondsTill7AM;
+  const timeCurrent = new Date();
+  // Create date and set time to 7AM
+  const time7AM = new Date(
+    timeCurrent.getFullYear(),
+    timeCurrent.getMonth(),
+    timeCurrent.getDate(),
+    7,
+    0,
+    0,
+    0
+  );
+
+  // If current time is after 7am
+  if (timeCurrent.getTime() > time7AM.getTime()) {
+    // Add +1 day to date
+    time7AM.setDate(time7AM.getDate() + 1);
+  }
+
+  // Count millisecond between time7AM and timeCurrent
+  millisecondsTill7AM = time7AM.getTime() - timeCurrent.getTime();
+  // Timeout with the relevant duration
+  setTimeout(updateMenus, millisecondsTill7AM);
+};
 
 /**
  * Render header's slogan according to selected language.
@@ -195,9 +237,25 @@ const renderHeaderSlogan = (selectedLang) => {
       : 'Find announcements, menus and public transportation easily';
 };
 
+/**
+ * Filter menu from menus array depending on which campus is selected, and return the menu.
+ *
+ * @author Kerttu
+ * @param {Array} menus
+ * @param {String} selectedCampus
+ * @returns
+ */
+const getCampusMenu = (menus, selectedCampus) => {
+  const menu = menus.filter((menu) => menu.campusName === selectedCampus);
+  return menu[0].menu;
+};
+
+window.addEventListener('scroll', () =>
+  NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
+);
+
 selectLangEl.addEventListener('change', () => {
   changeLang(selectLangEl.value);
-  //save settings
   saveSettings(settings);
 });
 
@@ -220,11 +278,12 @@ const init = async () => {
   loadSettings();
   changeUIMode();
   updateData;
-  menu = await MenuRender.getMenu(settings.campus, campuses);
+  timeoutTo7AM();
+  menus = await MenuRender.getMenus(campuses);
+  activeMenu = getCampusMenu(menus, settings.campus);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await WeatherRender.getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
-  renderHeaderSlogan();
   renderHeaderSlogan(settings.lang);
   NavRender.renderNav(
     settings.lang,
@@ -233,7 +292,7 @@ const init = async () => {
     selectCampusEl
   );
   AnnouncementRender.renderAnnouncements(announcements, settings.lang);
-  MenuRender.renderMenuSection(menu);
+  MenuRender.renderMenuSection(activeMenu);
   HSLRender.renderRouteInfo(routes);
   WeatherRender.renderWeather(weather);
   HSLRender.renderMap(routes, settings.campus, campuses);
