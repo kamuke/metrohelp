@@ -256,7 +256,12 @@ const getCampusMenu = (menus, selectedCampus) => {
  * @author Kerttu
  */
 const loadAndSaveMenusToLocalStorage = (menus) => {
-  if (menus.length === 0) {
+  if (
+    menus[0].menu.length === 0 ||
+    menus[1].menu.length === 0 ||
+    menus[2].menu.length === 0 ||
+    menus[3].menu.length === 0
+  ) {
     let tmp = localStorage.getItem('metrohelp_menus');
     if (tmp && checkIfJSON(tmp)) {
       return JSON.parse(tmp);
