@@ -127,7 +127,7 @@ const renderAnnCarouselSlide = (announcement, index, targetElement, lang) => {
     class: 'img-fluid',
     src: announcement.smallerImgUrl,
     alt: announcement.title,
-    loading: index === 0 ? 'auto' : 'lazy',
+    // loading: index === 0 ? 'auto' : 'lazy',
     width: '866',
     height: '487',
   });

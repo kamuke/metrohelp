@@ -188,7 +188,7 @@ const updateMenus = async () => {
   // Start a new iteration of the timer
   timeoutTo7AM();
   // Update menus
-  menus = await MenuRender.getMenus(campuses);
+  menus = loadAndSaveMenusToLocalStorage(await MenuRender.getMenus(campuses));
   activeMenu = getCampusMenu(menus, settings.campus);
   MenuRender.renderMenuSection(activeMenu);
 };
@@ -250,6 +250,23 @@ const getCampusMenu = (menus, selectedCampus) => {
   return menu[0].menu;
 };
 
+/**
+ * If menus are empty, load them from localStorage and save menus to localStorage.
+ *
+ * @author Kerttu
+ */
+const loadAndSaveMenusToLocalStorage = (menus) => {
+  if (menus.length === 0) {
+    let tmp = localStorage.getItem('metrohelp_menus');
+    if (tmp && checkIfJSON(tmp)) {
+      return JSON.parse(tmp);
+    }
+  }
+
+  localStorage.setItem('metrohelp_menus', JSON.stringify(menus));
+  return menus;
+};
+
 window.addEventListener('scroll', () =>
   NavRender.changeActiveStateOnNavLinksWhenScrolling(navLinks, sections)
 );
@@ -279,11 +296,11 @@ const init = async () => {
   changeUIMode();
   updateData;
   timeoutTo7AM();
-  menus = await MenuRender.getMenus(campuses);
-  activeMenu = getCampusMenu(menus, settings.campus);
+  menus = loadAndSaveMenusToLocalStorage(await MenuRender.getMenus(campuses));
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await WeatherRender.getWeather(settings.campus, campuses);
   announcements = await Announcement.getAnnouncements();
+  activeMenu = getCampusMenu(menus, settings.campus);
   renderHeaderSlogan(settings.lang);
   NavRender.renderNav(
     settings.lang,

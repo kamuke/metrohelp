@@ -16,20 +16,24 @@ import settings from '/src/index';
  *
  * @author Kerttu
  * @param {array} allCampuses - List of all campuses and infos.
- * @returns Array of objects
+ * @returns Array of objects or an empty array
  */
 const getMenus = async (allCampuses) => {
-  const menus = [];
-  for (const campus of allCampuses) {
-    if (campus.restaurant.chain === 'Sodexo') {
-      const sodexo = await Sodexo.getDailyMenu(campus.restaurant.id);
-      menus.push({campusName: campus.name, menu: sodexo});
-    } else if (campus.restaurant.chain === 'Food & Co') {
-      const foodCo = await FoodCo.getDailyMenu(campus.restaurant.id);
-      menus.push({campusName: campus.name, menu: foodCo});
+  try {
+    const menus = [];
+    for (const campus of allCampuses) {
+      if (campus.restaurant.chain === 'Sodexo') {
+        const sodexo = await Sodexo.getDailyMenu(campus.restaurant.id);
+        menus.push({campusName: campus.name, menu: sodexo});
+      } else if (campus.restaurant.chain === 'Food & Co') {
+        const foodCo = await FoodCo.getDailyMenu(campus.restaurant.id);
+        menus.push({campusName: campus.name, menu: foodCo});
+      }
     }
+    return menus;
+  } catch (e) {
+    return [];
   }
-  return menus;
 };
 
 /**
@@ -128,9 +132,11 @@ const renderMenuSection = async (menu) => {
         },
       ],
     });
-    document.querySelector('#dietcode-explanations').remove();
+    document.querySelector('#dietcode-explanations').style.display = 'none';
     return;
   }
+
+  document.querySelector('#dietcode-explanations').style.display = 'inline';
 
   dietcodeBtn.innerHTML =
     settings.lang === 'fi' ? 'Ruokavaliokoodit' : 'Dietcodes';
