@@ -99,11 +99,57 @@ const updateData = setInterval(async () => {
 }, 60000);
 
 /**
+ * Update menus and start new iteration on timeoutTo7AM()
+ *
+ * @author Kerttu
+ */
+const updateMenus = async () => {
+  // Start a new iteration of the timer
+  timeoutTo7AM();
+  // Update menus
+  menu = await MenuRender.getMenu(settings.campus, campuses);
+  MenuRender.renderMenuSection(menu);
+};
+
+/**
+ * Create timeout at 7AM
+ *
+ * @author Kerttu
+ */
+const timeoutTo7AM = () => {
+  let millisecondsTill7AM;
+  const timeCurrent = new Date();
+  // Create date and set time to 7AM
+  const time7AM = new Date(
+    timeCurrent.getFullYear(),
+    timeCurrent.getMonth(),
+    timeCurrent.getDate(),
+    7,
+    0,
+    0,
+    0
+  );
+
+  // If current time is after 7am
+  if (timeCurrent.getTime() > time7AM.getTime()) {
+    // Add +1 day to date
+    time7AM.setDate(time7AM.getDate() + 1);
+  }
+
+  // Count millisecond between time7AM and timeCurrent
+  millisecondsTill7AM = time7AM.getTime() - timeCurrent.getTime();
+
+  // Timeout with the relevant duration
+  setTimeout(updateMenus, millisecondsTill7AM);
+};
+
+/**
  * App initialization.
  */
 const init = async () => {
   ServiceWorker.register();
   updateData;
+  timeoutTo7AM();
   menu = await MenuRender.getMenu(settings.campus, campuses);
   routes = await HSLRender.getRoutes(settings.campus, campuses);
   weather = await WeatherRender.getWeather(settings.campus, campuses);
